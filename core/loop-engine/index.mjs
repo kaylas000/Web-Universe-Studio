@@ -43,6 +43,33 @@ export { UniversalLoopRunner } from "./runner.mjs";
 export { renderTemplate, renderTemplateDetailed } from "./template.mjs";
 
 export {
+  SKILL_ERROR,
+  SkillError,
+  executeSkill,
+  findSkill,
+  listSkills,
+  loadSkill,
+  loadSkills,
+  renderSkillTemplate,
+  runSkillHook,
+} from "./skills.mjs";
+
+export {
+  ERR,
+  SEVERITY,
+  codeScope,
+  defineGate,
+  defineTool,
+  defineVertical,
+  isTool,
+  isVerificationGate,
+  isVertical,
+  toAgentFeedback,
+  validationError,
+  verificationResult,
+} from "./protocols.mjs";
+
+export {
   extractJson,
   humanDuration,
   humanNumber,

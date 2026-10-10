@@ -122,6 +122,7 @@ export function buildRunnerFromConfig(config, studioRoot, opts = {}) {
     workspaceDir,
     logger,
     persistContext: Boolean(getFirst(raw, ["persist_context", "persistContext"], false)),
+    onIteration: typeof opts.onIteration === "function" ? opts.onIteration : null,
   });
 }
 

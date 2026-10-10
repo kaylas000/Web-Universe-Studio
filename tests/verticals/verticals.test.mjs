@@ -54,3 +54,30 @@ test("RAG-индекс покрывает архив каждой вертика
     assert.ok(data.documents.every((d) => d.takeaway && d.takeaway.length > 0), `${meta.name}: запись без takeaway (К-04)`);
   }
 });
+
+test("у каждой вертикали есть реестр приёмов skills/SKILL-INDEX.md (§11)", () => {
+  for (const dir of listVerticals()) {
+    const meta = readVerticalMeta(dir);
+    const index = join(dir, "skills", "SKILL-INDEX.md");
+    assert.ok(existsSync(index), `${meta.name}: нет skills/SKILL-INDEX.md`);
+    assert.ok(readFileSync(index, "utf8").trim().length > 0, `${meta.name}: пустой SKILL-INDEX.md`);
+  }
+});
+
+test("загрузчик скиллов ядра (§4.6) исполняет приёмы всех вертикалей", async () => {
+  const { listSkills, loadSkill, executeSkill } = await import("../../core/loop-engine/skills.mjs");
+  for (const dir of listVerticals()) {
+    const meta = readVerticalMeta(dir);
+    const dirs = listSkills(dir);
+    assert.ok(dirs.length > 0, `${meta.name}: нет каталогов приёмов`);
+    // вертикали, порождённые bootstrap'ом, имеют исполняемые приёмы (skill.yaml + шаблоны + крючки);
+    // эталон web_studio использует SKILL.md — проверяем только то, что скиллы видны.
+    const executable = dirs.filter((d) => existsSync(join(d, "skill.yaml")));
+    for (const skillDir of executable) {
+      const skill = loadSkill(skillDir);
+      assert.ok(skill.templates.length > 0, `${meta.name}/${skill.id}: нет шаблонов`);
+      const res = await executeSkill(skill, { template: "planner", context: { deliverable: meta.deliverable, brief: "тест" } });
+      assert.equal(typeof res.output, "string", `${meta.name}/${skill.id}: пустой рендер`);
+    }
+  }
+});

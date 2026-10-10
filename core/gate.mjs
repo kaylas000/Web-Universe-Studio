@@ -22,6 +22,7 @@ import { fileURLToPath } from "node:url";
 import { parseSimpleYaml } from "./loop-engine/config.mjs";
 import { createLogger, silentLogger } from "./loop-engine/logger.mjs";
 import { buildRunnerFromConfig, saveResult } from "./loop-engine/registry.mjs";
+import { makeTraceHook } from "./loop-engine/trace.mjs";
 import { VERTICAL_CHECKS } from "./loop-engine/validators/index.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -148,6 +149,7 @@ export async function runProject(vertical, projectName, { logger = silentLogger,
       configPath,
       logger,
       overrides: { dryRun: true, validator: "vertical_project", checks, iterations: 1 },
+      onIteration: makeTraceHook(workspaceDir, { runId: label }),
     });
   } catch (error) {
     entry.codes = [String(error?.code ?? "E-GATE-RUNNER")];

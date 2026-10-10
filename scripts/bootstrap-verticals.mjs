@@ -205,6 +205,24 @@ T.skill = (s) =>
     s.skill.steps.map((step) => `  - ${JSON.stringify(step)}`),
   );
 
+T.skillIndex = (s) =>
+  L(
+    `# SKILL-INDEX — приёмы студии «${s.title}»`,
+    "",
+    `Реестр приёмов вертикали \`${s.slug}\` (§11 ТЗ). Один приём = директория`,
+    "`skills/<id>/`: `skill.yaml` (метаданные) + `templates/*.j2` (шаблоны ролей) +",
+    "`hooks/*.mjs` (ESM-крючки `pre_execute`/`post_execute`).",
+    "",
+    "| Приём | Назначение | Шаги |",
+    "|---|---|---|",
+    ...s.skills.map((k) => {
+      const spec = k === s.skill.slug ? s.skill : { title: k, description: `Приём студии «${s.title}»: ${k}.`, steps: [] };
+      return `| \`${k}\` | ${spec.description.replace(/\n/g, " ")} | ${spec.steps.join(" → ") || "—"} |`;
+    }),
+    "",
+    "Загрузчик — `core/loop-engine/skills.mjs`; рендер шаблонов — `core/loop-engine/template.mjs`.",
+  );
+
 T.validate = (s) =>
   L(
     "#!/usr/bin/env node",
@@ -428,6 +446,7 @@ T.writeVertical = (s) => {
     write(join(dir, "skills", k, "hooks", "pre_execute.mjs"), `/* Крючок перед исполнением: студия «${s.title}», приём «${k}». */\nexport default async function preExecute(ctx) {\n  return { ...ctx, vertical: ${JSON.stringify(s.slug)}, skill: ${JSON.stringify(k)} };\n}\n`);
     write(join(dir, "skills", k, "hooks", "post_execute.mjs"), `/* Крючок после исполнения: фиксирует артефакт студии «${s.title}». */\nexport default async function postExecute(ctx) {\n  return { ...ctx, done: true };\n}\n`);
   }
+  write(join(dir, "skills", "SKILL-INDEX.md"), T.skillIndex(s));
   const pdir = join(dir, "projects", s.demo.slug);
   write(join(pdir, "loop.config.yaml"), L(
     `project_name: ${s.demo.slug}`,

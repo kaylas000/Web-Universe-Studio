@@ -22,7 +22,9 @@ node core/gate.mjs                     # гейт К-21 по всем 7 верт
 
 ```
 core/
-  loop-engine/     ядро цикла К-21 (Runner/Orchestrator/валидаторы/sandbox/генераторы)
+  loop-engine/     ядро цикла К-21 (Runner/Orchestrator/валидаторы/sandbox/генераторы,
+                   skills.mjs — загрузчик приёмов §4.6, protocols.mjs — контракты §5–§6,
+                   trace.mjs — трейсинг §4.8)
   gate.mjs         платформенный гейт: все вертикали, валидатор vertical_project
   orchestrator/    CEO-агент + композиции (DAG): composition.mjs, ceo.mjs, cli.mjs
   api/             HTTP Gateway (node:http)

@@ -34,6 +34,17 @@ node core/loop-engine/gate.mjs                                         # гей�
 `exit 1` возвращает `feedback.codes` (`V-xx`/`B-xx`/`M-xx`) — это **список точечных правок** (К-10),
 а не повод начинать заново.
 
+Дополнительно в ядре:
+
+- **Skills Engine** (`core/loop-engine/skills.mjs`, §4.6) — загрузчик приёмов: `skill.yaml` +
+  `templates/*.j2` + ESM-крючки `pre_execute`/`post_execute`; рендер — `template.mjs`.
+- **Протоколы** (`core/loop-engine/protocols.mjs`, §5–§6) — структурные контракты `IVertical` /
+  `IVerificationGate` / `ITool`, фабрики `define*`, проверки `is*`, стандарт кодов и severity,
+  нормализация фидбека `toAgentFeedback`.
+- **Трейсинг** (`core/loop-engine/trace.mjs`, §4.8) — `makeTraceHook(workspaceDir)` пишет
+  `workspace/trace.jsonl` (`{ts, runId, node, iteration, durationMs, ok}`) через `onIteration` раннера.
+
+
 ## Платформенный гейт (`core/gate.mjs`)
 
 Отличие от ядрового гейта: валидатор — `vertical_project` (у каждой студии свой `scripts/validate.mjs`),
