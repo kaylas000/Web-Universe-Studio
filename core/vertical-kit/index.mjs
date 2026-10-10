@@ -141,9 +141,217 @@ export function evalRule(projectDir, rule) {
         .filter((n) => n > 0);
       return sentences.length > 0 && sentences.every((n) => n <= Number(rule.max ?? 40));
     }
+    case "regexCount": {
+      const text = read(rule.path);
+      if (text === null) return false;
+      const n = count(text, rule.pattern);
+      const min = rule.min === undefined ? 0 : Number(rule.min);
+      const max = rule.max === undefined ? Infinity : Number(rule.max);
+      return n >= min && n <= max;
+    }
+    case "regexAtMost": {
+      const text = read(rule.path);
+      return text !== null && count(text, rule.pattern) <= Number(rule.max ?? 0);
+    }
+    case "jsonStringLength": {
+      const text = read(rule.path);
+      if (text === null) return false;
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        return false;
+      }
+      return (rule.fields ?? []).every((field) => {
+        let cur = data;
+        for (const part of String(field.key).split(".")) {
+          if (cur === null || typeof cur !== "object" || !(part in cur)) return false;
+          cur = cur[part];
+        }
+        if (typeof cur !== "string") return false;
+        return cur.length >= Number(field.min ?? 0) && cur.length <= Number(field.max ?? Infinity);
+      });
+    }
+    case "keywordDensity": {
+      const text = read(rule.path);
+      if (text === null) return false;
+      const lower = String(text).toLowerCase();
+      const keyword = String(rule.keyword ?? "").toLowerCase().trim();
+      if (!keyword) return false;
+      const words = lower.split(/\s+/).filter(Boolean).length;
+      if (words === 0) return false;
+      const hits = lower.split(keyword).length - 1;
+      const pct = (hits / words) * 100;
+      return pct >= Number(rule.min ?? 0) && pct <= Number(rule.max ?? 100);
+    }
+    case "linesMatchAtLeast": {
+      const text = read(rule.path);
+      if (text === null) return false;
+      const n = String(text)
+        .split("\n")
+        .filter((line) => new RegExp(rule.pattern).test(line)).length;
+      return n >= Number(rule.min ?? 1);
+    }
+    case "anyOf": {
+      return (rule.rules ?? []).some((sub) => evalRule(projectDir, sub));
+    }
+    case "allOf": {
+      return (rule.rules ?? []).every((sub) => evalRule(projectDir, sub));
+    }
+    case "textHasAny": {
+      const text = read(rule.path);
+      return text !== null && (rule.patterns ?? []).some((p) => new RegExp(p, "m").test(text));
+    }
+    case "headingCount": {
+      const text = read(rule.path);
+      if (text === null) return false;
+      const level = Number(rule.level ?? 1);
+      const n = String(text)
+        .split("\n")
+        .filter((line) => new RegExp(`^#{${level}}\\s+\\S`).test(line)).length;
+      return n >= Number(rule.min ?? 0) && n <= Number(rule.max ?? Infinity);
+    }
+    case "jsonArrayMinItems": {
+      const data = readJson(read(rule.path));
+      const arr = data === null ? null : getPath(data, rule.key);
+      return Array.isArray(arr) && arr.length >= Number(rule.min ?? 1);
+    }
+    case "jsonArrayEveryHas": {
+      const data = readJson(read(rule.path));
+      const arr = data === null ? null : getPath(data, rule.key);
+      if (!Array.isArray(arr) || arr.length === 0) return false;
+      return arr.every((item) => (rule.fields ?? []).every((f) => hasPath(item, f)));
+    }
+    case "jsonArrayEveryMinItems": {
+      const data = readJson(read(rule.path));
+      const arr = data === null ? null : getPath(data, rule.key);
+      if (!Array.isArray(arr) || arr.length === 0) return false;
+      return arr.every((item) => {
+        const value = item && typeof item === "object" ? item[rule.field] : undefined;
+        return Array.isArray(value) && value.length >= Number(rule.min ?? 1);
+      });
+    }
+    case "jsonArrayFieldPatterns": {
+      // каждый элемент массива rule.key обязан содержать rule.name с текстом, покрывающим все patterns
+      const data = readJson(read(rule.path));
+      const arr = data === null ? null : getPath(data, rule.key);
+      if (!Array.isArray(arr) || arr.length === 0) return false;
+      return arr.every((item) => {
+        const text = item && typeof item === "object" ? String(item[rule.name] ?? "") : "";
+        return (rule.patterns ?? []).every((p) => new RegExp(p, "m").test(text));
+      });
+    }
+    case "uniqueShingles": {
+      // доля уникальных шинглов (окно size слов) — прокси уникальности текста (V-01 контент-студии)
+      const text = read(rule.path);
+      if (text === null) return false;
+      const words = String(text).toLowerCase().split(/\s+/).filter(Boolean);
+      const size = Number(rule.size ?? 5);
+      if (words.length < size) return false;
+      const seen = new Set();
+      let total = 0;
+      for (let i = 0; i + size <= words.length; i += 1) {
+        seen.add(words.slice(i, i + size).join(" "));
+        total += 1;
+      }
+      return total > 0 && seen.size / total >= Number(rule.min ?? 0.9);
+    }
+    case "readabilityMin": {
+      // адаптированный Flesch Reading Ease (рус.): 206.835 − 1.3·ASL − 60.1·ASW, масштаб на слоги
+      const text = read(rule.path);
+      if (text === null) return false;
+      const sentences = String(text)
+        .replace(/^#.*$/gm, "")
+        .split(/[.!?…]+/)
+        .map((s) => s.trim())
+        .filter((s) => s.split(/\s+/).filter(Boolean).length > 1);
+      const words = String(text)
+        .replace(/^#.*$/gm, "")
+        .split(/[^\p{L}\p{N}]+/u)
+        .filter((w) => w.length > 0);
+      if (sentences.length === 0 || words.length === 0) return false;
+      const asl = words.length / sentences.length;
+      const syllables = words.reduce((sum, w) => sum + countRuSyllables(w), 0);
+      const asw = syllables / words.length;
+      const score = 206.835 - 1.3 * asl - 60.1 * asw;
+      return score >= Number(rule.min ?? 60);
+    }
+    case "innChecksum": {
+      const text = read(rule.path);
+      if (text === null) return false;
+      const candidates = [...String(text).matchAll(/(?<!\d)(\d{10}|\d{12})(?!\d)/g)].map((m) => m[1]);
+      const valid = candidates.filter(isValidInn);
+      return valid.length >= Number(rule.min ?? 1);
+    }
+    case "ogrnChecksum": {
+      const text = read(rule.path);
+      if (text === null) return false;
+      const candidates = [...String(text).matchAll(/(?<!\d)(\d{13}|\d{15})(?!\d)/g)].map((m) => m[1]);
+      const valid = candidates.filter(isValidOgrn);
+      return valid.length >= Number(rule.min ?? 1);
+    }
+    case "implies": {
+      // условное правило: если в тексте есть if-pattern, обязаны присутствовать все then-patterns
+      const text = read(rule.path);
+      if (text === null) return false;
+      if (!new RegExp(rule.if, "m").test(text)) return true;
+      return (rule.then ?? []).every((p) => new RegExp(p, "m").test(text));
+    }
     default:
       return false;
   }
+}
+
+/** Парсит JSON, возвращает null при ошибке. */
+function readJson(text) {
+  if (text === null) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
+
+/** Значение по пути «a.b», где массивы индексируются как есть (rule.key — имя поля). */
+function getPath(obj, path) {
+  let cur = obj;
+  for (const part of String(path).split(".")) {
+    if (cur === null || typeof cur !== "object") return undefined;
+    cur = cur[part];
+  }
+  return cur;
+}
+
+/** Проверка контрольной суммы ИНН (10 или 12 цифр). */
+export function isValidInn(value) {
+  const s = String(value);
+  const digits = s.split("").map((c) => c.charCodeAt(0) - 48);
+  if (digits.some((d) => d < 0 || d > 9)) return false;
+  const check = (weights) => weights.reduce((sum, w, i) => sum + w * digits[i], 0) % 11 % 10;
+  if (s.length === 10) return check([2, 4, 10, 3, 5, 9, 4, 6, 8]) === digits[9];
+  if (s.length === 12) {
+    const n11 = check([7, 2, 4, 10, 3, 5, 9, 4, 6, 8]);
+    const n12 = check([3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8]);
+    return n11 === digits[10] && n12 === digits[11];
+  }
+  return false;
+}
+
+/** Проверка контрольной суммы ОГРН (13 цифр) / ОГРНИП (15 цифр). */
+export function isValidOgrn(value) {
+  const s = String(value);
+  if (!/^\d+$/.test(s)) return false;
+  if (s.length === 13) return Number(s.slice(0, 12)) % 11 % 10 === Number(s[12]);
+  if (s.length === 15) return Number(s.slice(0, 14)) % 13 % 10 === Number(s[14]);
+  return false;
+}
+
+/** Количество слогов в русском слове (эвристика по числу гласных). */
+function countRuSyllables(word) {
+  const vowels = String(word)
+    .toLowerCase()
+    .match(/[аеёиоуыэюя]/g);
+  return Math.max(1, vowels ? vowels.length : Math.ceil(String(word).length / 3));
 }
 
 /** Проверка вложенного ключа «a.b.c» (массивы считаются присутствующими, если непусты). */

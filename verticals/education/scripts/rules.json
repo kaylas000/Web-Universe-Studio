@@ -3,81 +3,189 @@
   "rules": [
     {
       "code": "V-01",
-      "title": "Программа на месте",
-      "kind": "fileExists",
+      "title": "Цели по таксономии Блума",
+      "kind": "linesMatchAtLeast",
       "path": "course/README.md",
-      "ok": "course/README.md найден",
-      "fail": "нет course/README.md"
+      "pattern": "Знать|Понимать|Применять|Анализировать|Оценивать|Создавать",
+      "min": 3,
+      "ok": "цели выражены глаголами Блума (≥3 уровня)",
+      "fail": "цели не по таксономии Блума (К-01) · прокси taxonomy-валидатора"
     },
     {
       "code": "V-02",
-      "title": "Урок на месте",
-      "kind": "fileExists",
-      "path": "course/lesson-01.md",
-      "ok": "course/lesson-01.md найден",
-      "fail": "нет course/lesson-01.md"
+      "title": "Прогрессия от простого к сложному",
+      "kind": "linesMatchAtLeast",
+      "path": "course/README.md",
+      "pattern": "^-\\s+Урок\\s+\\d",
+      "min": 3,
+      "ok": "программа упорядочена по возрастанию сложности",
+      "fail": "нет упорядоченной программы уроков (К-02)"
     },
     {
       "code": "V-03",
-      "title": "Тест на месте",
-      "kind": "jsonHas",
-      "path": "course/quiz.json",
-      "keys": [
-        "questions"
-      ],
-      "ok": "вопросы есть",
-      "fail": "нет course/quiz.json с questions (К-04)"
+      "title": "Возрастная адекватность лексики",
+      "kind": "sentencesMaxWords",
+      "path": "course/lesson-01.md",
+      "max": 30,
+      "ok": "предложения ≤ 30 слов (читаемость)",
+      "fail": "слишком длинные предложения (К-03) · прокси readability + LLM-judge"
     },
     {
       "code": "V-04",
-      "title": "Три вопроса",
-      "kind": "regexAtLeast",
-      "path": "course/quiz.json",
-      "pattern": "\"question\"",
-      "min": 3,
-      "ok": "три и более вопросов",
-      "fail": "меньше трёх вопросов (К-04)"
+      "title": "Структура урока: цель/теория/практика/итог",
+      "kind": "textHasAll",
+      "path": "course/lesson-01.md",
+      "patterns": [
+        "^##\\s+Цель",
+        "^##\\s+Теория",
+        "^##\\s+Практика",
+        "^##\\s+Итог"
+      ],
+      "ok": "все четыре блока урока на месте",
+      "fail": "пропущен обязательный блок урока (К-04)"
     },
     {
       "code": "V-05",
-      "title": "Цели обучения",
-      "kind": "textHasAll",
-      "path": "course/README.md",
-      "patterns": [
-        "Цели обучения"
-      ],
-      "ok": "цели перечислены",
-      "fail": "нет блока «Цели обучения» (К-01)"
+      "title": "Интерактив в уроке",
+      "kind": "regexAtLeast",
+      "path": "course/lesson-01.md",
+      "pattern": "Интерактив",
+      "min": 1,
+      "ok": "интерактив присутствует (≥1 на 10 мин)",
+      "fail": "нет интерактива (К-05)"
     },
     {
       "code": "V-06",
-      "title": "Три блока урока",
-      "kind": "textHasAll",
+      "title": "Формативная оценка после блоков",
+      "kind": "regexAtLeast",
       "path": "course/lesson-01.md",
-      "patterns": [
-        "Теория",
-        "Практика",
-        "Проверка"
-      ],
-      "ok": "Теория/Практика/Проверка на месте",
-      "fail": "пропущен блок урока (К-02)"
+      "pattern": "Проверка понимания",
+      "min": 2,
+      "ok": "проверка понимания идёт после блоков",
+      "fail": "мало проверок понимания (К-06)"
     },
     {
       "code": "V-07",
-      "title": "Объём урока",
-      "kind": "minWords",
-      "path": "course/lesson-01.md",
-      "min": 220,
-      "ok": "объём достаточный",
-      "fail": "урок короче 220 слов (К-06)"
+      "title": "Валидный тест (дистракторы, ответ, объяснение)",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "jsonArrayMinItems",
+          "path": "course/quiz.json",
+          "key": "questions",
+          "min": 3
+        },
+        {
+          "kind": "jsonArrayEveryHas",
+          "path": "course/quiz.json",
+          "key": "questions",
+          "fields": [
+            "question",
+            "options",
+            "answer",
+            "explanation"
+          ]
+        },
+        {
+          "kind": "jsonArrayEveryMinItems",
+          "path": "course/quiz.json",
+          "key": "questions",
+          "field": "options",
+          "min": 3
+        }
+      ],
+      "ok": "≥3 вопросов, у каждого ≥3 варианта, ответ и объяснение",
+      "fail": "тест неполный: нужны варианты, один ответ и объяснение (К-07)"
     },
     {
       "code": "V-08",
-      "title": "Источники",
-      "kind": "fileExists",
+      "title": "Соответствие учебному плану",
+      "kind": "textHasAll",
+      "path": "course/README.md",
+      "patterns": [
+        "^##\\s+Соответствие плану"
+      ],
+      "ok": "цели смаппированы на план",
+      "fail": "нет маппинга целей на план (К-08)"
+    },
+    {
+      "code": "V-09",
+      "title": "Доступность (alt, контраст, субтитры)",
+      "kind": "textHasAll",
+      "path": "course/README.md",
+      "patterns": [
+        "^##\\s+Доступность",
+        "alt"
+      ],
+      "ok": "оговорена доступность материалов",
+      "fail": "нет блока доступности (К-09) · прокси a11y-линтера"
+    },
+    {
+      "code": "V-10",
+      "title": "Термины определены",
+      "kind": "textHasAll",
+      "path": "course/lesson-01.md",
+      "patterns": [
+        "^##\\s+Термины"
+      ],
+      "ok": "глоссарий терминов на месте",
+      "fail": "нет раздела «Термины» (К-10)"
+    },
+    {
+      "code": "V-11",
+      "title": "Реалистичная оценка времени",
+      "kind": "regexAtLeast",
+      "path": "course/README.md",
+      "pattern": "≈\\s*\\d+\\s*мин",
+      "min": 1,
+      "ok": "указано время прохождения",
+      "fail": "нет оценки времени (К-11)"
+    },
+    {
+      "code": "V-12",
+      "title": "Источники и ссылки",
+      "kind": "regexAtLeast",
       "path": "course/SOURCES.md",
-      "ok": "course/SOURCES.md найден",
-      "fail": "нет course/SOURCES.md (К-05)"
+      "pattern": "https?://",
+      "min": 2,
+      "ok": "источники со ссылками",
+      "fail": "менее двух ссылок на источники (К-12)"
+    },
+    {
+      "code": "V-13",
+      "title": "Обратная связь и разбор ошибок",
+      "kind": "textHasAll",
+      "path": "course/lesson-01.md",
+      "patterns": [
+        "^##\\s+Разбор ошибок",
+        "Обратная связь"
+      ],
+      "ok": "есть разбор ошибок и обратная связь",
+      "fail": "нет блока разбора ошибок (К-13)"
+    },
+    {
+      "code": "V-14",
+      "title": "Мультимодальность (текст + визуал + практика)",
+      "kind": "textHasAll",
+      "path": "course/lesson-01.md",
+      "patterns": [
+        "Визуал",
+        "^##\\s+Практика"
+      ],
+      "ok": "текст, визуал и практика вместе",
+      "fail": "не хватает модальности (К-14)"
+    },
+    {
+      "code": "V-15",
+      "title": "Аттестация измеряет заявленные цели",
+      "kind": "textHasAll",
+      "path": "course/README.md",
+      "patterns": [
+        "^##\\s+Аттестация",
+        "К-01"
+      ],
+      "ok": "аттестация покрывает цели К-01",
+      "fail": "аттестация не привязана к целям (К-15)"
     }
   ]
 }

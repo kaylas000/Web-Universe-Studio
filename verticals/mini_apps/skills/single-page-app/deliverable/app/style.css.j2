@@ -1,0 +1,37 @@
+.timer {
+  max-width: 22rem;
+  margin: 15vh auto;
+  font-family: system-ui, sans-serif;
+  text-align: center;
+}
+
+.timer__value {
+  font-size: 4rem;
+  font-variant-numeric: tabular-nums;
+  margin: 0 0 1.5rem;
+}
+
+.timer__controls {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.timer__button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid #123;
+  border-radius: 0.5rem;
+  background: #fff;
+  transition: background-color 120ms ease;
+}
+
+.timer__button:hover {
+  background: #eef;
+}
+
+.timer__button:focus-visible {
+  outline: 3px solid #36c;
+  outline-offset: 2px;
+}

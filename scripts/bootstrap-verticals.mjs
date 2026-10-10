@@ -10,6 +10,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { TZ_OVERRIDES } from "./tz-verticals.mjs";
+import { TZ_ARTIFACTS } from "./tz-artifacts.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const V = join(ROOT, "verticals");
@@ -504,6 +505,12 @@ T.writeVertical = (s) => {
     "",
   ));
   for (const [rel, content] of Object.entries(s.demo.files)) write(join(pdir, rel), content);
+  // Шаблоны генератора (P4 ТЗ): приём студии умеет воспроизвести артефакт из брифа.
+  // Артефакт генерации = файлы демо (эталон приёмки); токены {{ }}/{% %} рендерятся, остальное — как есть.
+  const genSkill = (s.artifactSkill ?? s.skill.slug);
+  for (const [rel, content] of Object.entries(s.artifact ?? s.demo.files)) {
+    write(join(dir, "skills", genSkill, "deliverable", `${rel}.j2`), content);
+  }
   return dir;
 };
 
@@ -1219,7 +1226,7 @@ export default { createState, render, addItem, removeItem };
 /*__SPECS__*/
 
 const main = () => {
-  const dirs = SPECS.map((s) => T.writeVertical({ ...s, ...(TZ_OVERRIDES[s.slug] ?? {}) }));
+  const dirs = SPECS.map((s) => T.writeVertical({ ...s, ...(TZ_OVERRIDES[s.slug] ?? {}), ...(TZ_ARTIFACTS[s.slug] ?? {}) }));
   for (const dir of dirs) process.stdout.write(`вертикаль создана: ${dir}\n`);
   process.stdout.write(`готово: ${dirs.length} вертикалей\n`);
 };

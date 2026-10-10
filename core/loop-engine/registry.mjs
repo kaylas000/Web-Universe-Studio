@@ -165,6 +165,8 @@ function buildGenerator(norm, di) {
   const base = {
     studioRoot: di.studioRoot,
     projectName: di.projectName,
+    projectDir: di.projectDir,
+    workspaceDir: di.workspaceDir,
     logger: di.logger,
     systemPrompt: DEFAULT_SYSTEM_PROMPT,
     systemPromptTemplate,

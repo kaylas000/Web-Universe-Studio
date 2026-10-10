@@ -4,6 +4,7 @@
 import { ConfigError, getFirst } from "../base.mjs";
 import { LlmGenerator } from "./llm.mjs";
 import { MockGenerator } from "./mock.mjs";
+import { StudioGenerator } from "./studio.mjs";
 
 /** @type {Record<string, any>} */
 export const GENERATORS = Object.freeze({
@@ -11,6 +12,8 @@ export const GENERATORS = Object.freeze({
   openai: LlmGenerator,
   anthropic: LlmGenerator,
   mock: MockGenerator,
+  studio: StudioGenerator,
+  template: StudioGenerator,
 });
 
 /**
@@ -29,6 +32,20 @@ export function createGeneratorFromConfig(config = {}, ctx = {}) {
       cycle: Boolean(getFirst(config, ["cycle"], false)),
       latencyMs: Number(getFirst(config, ["latencyMs", "latency_ms"], 0)),
       systemPrompt: ctx.systemPrompt ?? "mock",
+    });
+  }
+
+  if (type === "studio" || type === "template") {
+    return new StudioGenerator({
+      model: getFirst(config, ["model"], "studio-template"),
+      skill: getFirst(config, ["skill"], null),
+      templatesDir: getFirst(config, ["templatesDir", "templates_dir"], null),
+      output: getFirst(config, ["output", "output_dir"], null),
+      writeToProject: getFirst(config, ["writeToProject", "write_to_project"], true) !== false,
+      vars: getFirst(config, ["vars"], {}) ?? {},
+      vertical: getFirst(config, ["vertical"], null),
+      projectDir: ctx.projectDir ?? null,
+      once: Boolean(getFirst(config, ["once"], false)),
     });
   }
 
