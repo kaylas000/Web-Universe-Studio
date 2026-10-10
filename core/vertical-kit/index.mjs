@@ -300,6 +300,33 @@ export function evalRule(projectDir, rule) {
       if (!new RegExp(rule.if, "m").test(text)) return true;
       return (rule.then ?? []).every((p) => new RegExp(p, "m").test(text));
     }
+    case "balancedDelimiters": {
+      // баланс скобок (после снятия строк и комментариев) — прокси SQL-парсера (V-01 data)
+      const text = read(rule.path);
+      if (text === null) return false;
+      const stripped = String(text)
+        .replace(/'(?:[^'\\]|\\.)*'/g, "''")
+        .replace(/--[^\n]*/g, "")
+        .replace(/\/\*[\s\S]*?\*\//g, "");
+      return (rule.pairs ?? [["(", ")"]]).every(([open, close]) => {
+        let depth = 0;
+        for (const ch of stripped) {
+          if (ch === open) depth += 1;
+          else if (ch === close) {
+            depth -= 1;
+            if (depth < 0) return false;
+          }
+        }
+        return depth === 0;
+      });
+    }
+    case "planExecutionTimeUnder": {
+      // максимум времени из EXPLAIN ANALYZE («Execution Time: N ms») ≤ бюджета (V-13 data)
+      const text = read(rule.path);
+      if (text === null) return false;
+      const m = String(text).match(/Execution Time:\s*([\d.]+)\s*ms/);
+      return m !== null && Number(m[1]) <= Number(rule.maxMs ?? Infinity);
+    }
     case "uniqueNumbering": {
       // нет дублей нумерации пунктов «N.M» и их не меньше min (К-04 legal: cross-reference)
       const text = read(rule.path);

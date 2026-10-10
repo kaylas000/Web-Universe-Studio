@@ -51,7 +51,7 @@ export const vertical = {
   buildConfig(projectName) {
     return {
       project_name: projectName,
-      task: "разобрать продажи за квартал и предложить решение по ассортименту",
+      task: "посчитать метрики продаж за IV квартал 2025 и оформить разбор",
       loop: { max_iterations: 1 },
       generator: { type: "mock" },
       context_builder: { type: "studio_default" },

@@ -512,6 +512,151 @@ Tone of voice: спокойный и конкретный, без штампов
       },
     },
   },
+  /* ———————————————————————————— 9.4 Data Analytics ———————————————————————————— */
+  data_analytics: {
+    rules: [
+      { code: "V-01", title: "SQL синтаксически валиден", kind: "allOf", rules: [
+        { kind: "balancedDelimiters", path: "analysis/queries.sql", pairs: [["(", ")"]] },
+        { kind: "regexAtLeast", path: "analysis/queries.sql", pattern: "SELECT", min: 1 },
+        { kind: "regexAtLeast", path: "analysis/queries.sql", pattern: "FROM", min: 1 },
+      ], ok: "скобки сбалансированы, SELECT/FROM на месте", fail: "SQL не проходит базовый разбор (К-01) · прокси парсера + песочницы" },
+      { code: "V-02", title: "Нет SELECT *", kind: "regexAbsent", path: "analysis/queries.sql", pattern: "SELECT\\s+\\*", ok: "колонки перечислены явно", fail: "найден SELECT * (К-02) · regex-линтер" },
+      { code: "V-03", title: "JOIN вместо коррелированных подзапросов", kind: "regexAbsent", path: "analysis/queries.sql", pattern: "\\(\\s*SELECT", ok: "нет вложенных SELECT (коррелированных подзапросов)", fail: "коррелированный подзапрос вместо JOIN (К-03) · эвристика" },
+      { code: "V-04", title: "EXPLAIN ANALYZE без Seq Scan по большим таблицам", kind: "allOf", rules: [
+        { kind: "fileExists", path: "analysis/plan.txt" },
+        { kind: "regexAbsent", path: "analysis/plan.txt", pattern: "Seq Scan on (payments|refunds)" },
+      ], ok: "план без Seq Scan по крупным таблицам", fail: "Seq Scan по большой таблице или нет плана (К-04) · песочница" },
+      { code: "V-05", title: "Обработаны ошибки и пустой результат", kind: "allOf", rules: [
+        { kind: "regexAtLeast", path: "analysis/etl.py", pattern: "try:", min: 1 },
+        { kind: "regexAtLeast", path: "analysis/etl.py", pattern: "except", min: 1 },
+        { kind: "regexAtLeast", path: "analysis/etl.py", pattern: "if not |if len\\(", min: 1 },
+      ], ok: "try/except и проверка пустого результата на месте", fail: "нет обработки ошибок/пустого результата (К-05)" },
+      { code: "V-06", title: "Документация скриптов", kind: "allOf", rules: [
+        { kind: "regexAtLeast", path: "analysis/etl.py", pattern: "\"\"\"", min: 1 },
+        { kind: "regexAtLeast", path: "analysis/queries.sql", pattern: "^--", min: 1 },
+      ], ok: "есть docstring и комментарии к запросам", fail: "нет документации назначения (К-06) · AST-линтер" },
+      { code: "V-07", title: "Воспроизводимость", kind: "allOf", rules: [
+        { kind: "fileExists", path: "analysis/requirements.txt" },
+        { kind: "regexAtLeast", path: "analysis/requirements.txt", pattern: "==", min: 2 },
+        { kind: "regexAtLeast", path: "analysis/etl.py", pattern: "[Ss]eed", min: 1 },
+      ], ok: "pinned-версии и фиксированный seed", fail: "нет pinned-версий/seed (К-07) · чек-лист" },
+      { code: "V-08", title: "Параметризация против инъекций", kind: "allOf", rules: [
+        { kind: "regexAbsent", path: "analysis/etl.py", pattern: "f[\"']?\\s*(SELECT|INSERT|UPDATE|DELETE)" },
+        { kind: "regexAtLeast", path: "analysis/etl.py", pattern: "%\\(\\w+\\)s|:\\w+", min: 1 },
+      ], ok: "запросы параметризованы, без f-string SQL", fail: "SQL собирается строкой (К-08) · regex-линтер" },
+      { code: "V-09", title: "Идемпотентность ETL", kind: "regexAtLeast", path: "analysis/etl.py", pattern: "ON CONFLICT|INSERT OR REPLACE|MERGE", min: 1, ok: "повторный запуск не дублирует данные", fail: "нет upsert/идемпотентного ключа (К-09)" },
+      { code: "V-10", title: "Входные данные валидируются по схеме", kind: "fileExists", path: "analysis/schema.json", ok: "схема входных данных объявлена", fail: "нет schema-валидации входа (К-10) · schema-валидатор" },
+      { code: "V-11", title: "Метрики качества данных", kind: "jsonHas", path: "analysis/profile.json", keys: ["nulls", "duplicates", "types"], ok: "профиль покрывает nulls/дубликаты/типы", fail: "нет профиля качества данных (К-11) · профилировщик" },
+      { code: "V-12", title: "Контроль стоимости сканирования", kind: "regexAtLeast", path: "analysis/queries.sql", pattern: "WHERE|LIMIT|PARTITION", min: 1, ok: "есть фильтры/лимит/партиции", fail: "запрос без ограничения сканирования (К-12)" },
+      { code: "V-13", title: "Время выполнения в бюджете", kind: "planExecutionTimeUnder", path: "analysis/plan.txt", maxMs: 5000, ok: "Execution Time ≤ 5 с", fail: "запрос выходит за бюджет песочницы (К-13) · замер" },
+      { code: "V-14", title: "PII маскируется/хешируется", kind: "implies", path: "analysis/etl.py", if: "PII|email|phone", then: ["sha256|hashlib|mask|хеш"], ok: "PII не хранится в открытом виде", fail: "PII без маскирования (К-14) · regex по чувствительным полям" },
+      { code: "V-15", title: "Результаты воспроизводимы", kind: "allOf", rules: [
+        { kind: "jsonArrayMinItems", path: "analysis/metrics.json", key: "metrics", min: 1 },
+        { kind: "jsonArrayEveryHas", path: "analysis/metrics.json", key: "metrics", fields: ["name", "formula", "value"] },
+      ], ok: "каждая метрика с формулой и значением", fail: "метрики неполны (К-15) · прогон в песочнице" },
+    ],
+    demo: {
+      slug: "sales-dashboard",
+      task: "посчитать метрики продаж за IV квартал 2025 и оформить разбор",
+      files: {
+        "analysis/queries.sql": `-- Выручка по месяцам
+SELECT date_trunc('month', paid_at) AS month, SUM(amount) AS revenue
+FROM payments WHERE status = 'paid' GROUP BY 1 ORDER BY 1;
+
+-- Средний чек (только оплаченные заказы)
+SELECT date_trunc('month', paid_at) AS month, AVG(amount) AS avg_check
+FROM payments WHERE status = 'paid' GROUP BY 1 ORDER BY 1;
+
+-- Возвраты по месяцам, не больше 1000 строк для превью
+SELECT date_trunc('month', refunded_at) AS month, SUM(amount) AS refunds
+FROM refunds WHERE refunded_at >= '2025-10-01' GROUP BY 1 ORDER BY 1 LIMIT 1000;
+`,
+        "analysis/etl.py": `"""ETL: загрузка платежей в витрину sales. Идемпотентно через ON CONFLICT.
+
+PII не хранится: пользователь представлен хешем (sha256).
+"""
+import hashlib
+
+import psycopg
+
+SEED = 42  # фиксированный seed для воспроизводимых сэмплов
+
+UPSERT = """
+INSERT INTO sales_payments (id, paid_at, amount, status)
+VALUES (%(id)s, %(paid_at)s, %(amount)s, %(status)s)
+ON CONFLICT (id) DO UPDATE SET amount = EXCLUDED.amount;
+"""
+
+
+def mask_user(user):
+    """Псевдонимизация пользователя: PII заменяем хешем, исходник не сохраняем."""
+    return hashlib.sha256(str(user).encode()).hexdigest()
+
+
+def load(rows):
+    if not rows:
+        return 0
+    loaded = 0
+    with psycopg.connect("dbname=sales") as conn:
+        try:
+            with conn.cursor() as cur:
+                for row in rows:
+                    cur.execute(UPSERT, row)
+                    loaded += 1
+            conn.commit()
+        except psycopg.Error:
+            conn.rollback()
+            return 0
+    return loaded
+`,
+        "analysis/requirements.txt": `psycopg==3.2.3
+pandas==2.2.3
+`,
+        "analysis/plan.txt": `EXPLAIN ANALYZE
+Index Scan using payments_paid_at_idx on payments  (cost=0.42..8123.10 rows=250000 width=48) (actual time=0.03..42.10 rows=250000 loops=1)
+Planning Time: 0.29 ms
+Execution Time: 42.10 ms
+`,
+        "analysis/schema.json": `{
+  "table": "payments",
+  "columns": [
+    { "name": "id", "type": "uuid", "nullable": false },
+    { "name": "paid_at", "type": "timestamp", "nullable": false },
+    { "name": "amount", "type": "numeric", "nullable": false },
+    { "name": "status", "type": "text", "nullable": false }
+  ]
+}
+`,
+        "analysis/profile.json": `{
+  "nulls": { "id": 0, "amount": 2, "paid_at": 0 },
+  "duplicates": { "id": 0 },
+  "types": { "amount": "numeric", "paid_at": "timestamp", "status": "text" }
+}
+`,
+        "analysis/metrics.json": `{
+  "period": { "from": "2025-10-01", "to": "2025-12-31" },
+  "metrics": [
+    { "name": "Выручка", "formula": "SUM(amount) WHERE status='paid'", "value": 12840000 },
+    { "name": "Средний чек", "formula": "SUM(amount)/COUNT(order_id) WHERE status='paid'", "value": 6420 },
+    { "name": "Доля возвратов", "formula": "SUM(refunds)/SUM(amount)", "value": 0.031 }
+  ]
+}
+`,
+        "analysis/report.md": `# Продажи за IV квартал 2025
+
+Источник данных: таблицы payments и refunds, срез на 31.12.2025.
+
+## Что видно
+
+Выручка выросла на 12 % к прошлому кварталу, но средний чек почти не менялся. Рост дал объём заказов, а не цена. Доля возвратов — 3,1 %.
+
+## Вывод
+
+Расти за счёт объёма дороже, чем поднять чек: возвраты растут вместе с числом мелких заказов. Решение: собрать набор из трёх позиций в один заказ и протестировать на двух категориях в январе.
+`,
+      },
+    },
+  },
 };
 
 export default TZ_ARTIFACTS;

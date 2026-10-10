@@ -1,0 +1,9 @@
+{
+  "table": "payments",
+  "columns": [
+    { "name": "id", "type": "uuid", "nullable": false },
+    { "name": "paid_at", "type": "timestamp", "nullable": false },
+    { "name": "amount", "type": "numeric", "nullable": false },
+    { "name": "status", "type": "text", "nullable": false }
+  ]
+}
