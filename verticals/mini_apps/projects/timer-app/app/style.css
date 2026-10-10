@@ -1,8 +1,19 @@
+:root {
+  --bg: var(--tg-theme-bg-color, #ffffff);
+  --text: var(--tg-theme-text-color, #111111);
+  --button: var(--tg-theme-button-color, #2b6cff);
+  --vh: 100vh;
+}
+
 .timer {
+  min-height: var(--vh);
   max-width: 22rem;
-  margin: 15vh auto;
+  margin: 0 auto;
+  padding: 10vh 1rem calc(1rem + env(safe-area-inset-bottom));
   font-family: system-ui, sans-serif;
   text-align: center;
+  color: var(--text);
+  background: var(--bg);
 }
 
 .timer__value {
@@ -21,17 +32,20 @@
   min-height: 44px;
   min-width: 44px;
   padding: 0.5rem 1.25rem;
-  border: 1px solid #123;
+  border: 1px solid var(--button);
   border-radius: 0.5rem;
-  background: #fff;
-  transition: background-color 120ms ease;
+  background: var(--bg);
+  color: var(--text);
 }
 
-.timer__button:hover {
-  background: #eef;
+@media (max-width: 420px) {
+  .timer__value { font-size: 3rem; }
 }
 
-.timer__button:focus-visible {
-  outline: 3px solid #36c;
-  outline-offset: 2px;
+@media (max-width: 375px) {
+  .timer__value { font-size: 2.5rem; }
+}
+
+@media (max-width: 320px) {
+  .timer__value { font-size: 2rem; }
 }

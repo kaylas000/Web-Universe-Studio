@@ -1,16 +1,16 @@
-/* Логика помодоро-таймера: без var, без alert, обработчики через addEventListener. */
-const TOTAL = 25 * 60;
-const value = document.querySelector("#value");
-const start = document.querySelector("#start");
-const reset = document.querySelector("#reset");
+/* Помодоро на Telegram WebApp: нативные кнопки, тема, haptic, состояние. */
+const tg = window.Telegram ? window.Telegram.WebApp : null;
 
+const TOTAL = 25 * 60;
+const root = document.documentElement;
+const value = document.querySelector("#value");
 let left = TOTAL;
 let tick = null;
 
 const render = () => {
-  const minutes = String(Math.floor(left / 60)).padStart(2, "0");
-  const seconds = String(left % 60).padStart(2, "0");
-  value.textContent = `${minutes}:${seconds}`;
+  const m = String(Math.floor(left / 60)).padStart(2, "0");
+  const s = String(left % 60).padStart(2, "0");
+  value.textContent = m + ":" + s;
 };
 
 const stop = () => {
@@ -18,32 +18,62 @@ const stop = () => {
     clearInterval(tick);
     tick = null;
   }
-  start.textContent = "Старт";
 };
 
-const run = () => {
-  stop();
-  tick = setInterval(() => {
-    left -= 1;
-    render();
-    if (left <= 0) {
-      stop();
-      left = TOTAL;
+const toggle = () => {
+  if (tick === null) {
+    tick = setInterval(() => {
+      left -= 1;
       render();
-    }
-  }, 1000);
-  start.textContent = "Пауза";
+      if (left <= 0) {
+        stop();
+        left = TOTAL;
+        render();
+      }
+    }, 1000);
+  } else {
+    stop();
+  }
 };
 
-start.addEventListener("click", () => {
-  if (tick === null) run();
-  else stop();
+const persist = () => {
+  if (!tg) return;
+  tg.CloudStorage.setItem("left", String(left));
+  tg.sendData(JSON.stringify({ left: left }));
+};
+
+if (tg) {
+  tg.ready();
+  tg.expand();
+  tg.MainButton.setText("Старт");
+  tg.MainButton.onClick(toggle);
+  tg.BackButton.show();
+  tg.BackButton.onClick(() => tg.close());
+  tg.HapticFeedback.impactOccurred("light");
+  tg.onEvent("viewportChanged", (e) => root.style.setProperty("--vh", e.height + "px"));
+  tg.onEvent("mainButtonClicked", persist);
+}
+
+window.addEventListener("message", (e) => {
+  if (e.data === "web_app_data") persist();
 });
 
-reset.addEventListener("click", () => {
+/* Ссылки открываем только через SDK, без target=_blank. */
+const open = (url) => {
+  if (tg) tg.openLink(url);
+  else window.open(url, "_blank", "noopener");
+};
+
+const pay = () => {
+  if (tg) tg.openInvoice("https://t.me/invoice/demo");
+};
+
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
+
+document.querySelector("#start").addEventListener("click", toggle);
+document.querySelector("#reset").addEventListener("click", () => {
   stop();
   left = TOTAL;
   render();
 });
-
 render();

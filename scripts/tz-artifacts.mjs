@@ -657,6 +657,263 @@ Execution Time: 42.10 ms
       },
     },
   },
+  /* ———————————————————————————— 9.6 Mini Apps ———————————————————————————— */
+  mini_apps: {
+    rules: [
+      { code: "V-01", title: "Адаптация под viewport Telegram", kind: "allOf", rules: [
+        { kind: "regexAtLeast", path: "app/style.css", pattern: "@media", min: 1 },
+        { kind: "regexAtLeast", path: "app/style.css", pattern: "max-width|width:\\s*100%", min: 1 },
+      ], ok: "есть media-запросы под узкие экраны", fail: "нет адаптации под 320/375/420px (К-01) · прокси Playwright" },
+      { code: "V-02", title: "Нативная интеграция SDK", kind: "regexAtLeast", path: "app/app.js", pattern: "MainButton|BackButton|HapticFeedback", min: 1, ok: "используются нативные кнопки SDK", fail: "нет MainButton/BackButton/HapticFeedback (К-02)" },
+      { code: "V-03", title: "Темы Telegram через theme_params", kind: "regexAtLeast", path: "app/style.css", pattern: "var\\(--tg-theme", min: 1, ok: "цвета берутся из theme_params", fail: "нет var(--tg-theme-*) (К-03)" },
+      { code: "V-04", title: "TTI < 2 c", kind: "jsonNumberMax", path: "app/lighthouse.json", key: "tti_ms", max: 2000, ok: "TTI в бюджете", fail: "TTI превышает 2 c (К-04) · Lighthouse Mobile" },
+      { code: "V-05", title: "Safe area для клавиатуры", kind: "regexAtLeast", path: "app/style.css", pattern: "env\\(safe-area-inset", min: 1, ok: "учтён safe area", fail: "нет env(safe-area-inset-bottom) (К-05)" },
+      { code: "V-06", title: "Обработка viewportChanged", kind: "regexAtLeast", path: "app/app.js", pattern: "viewportChanged", min: 1, ok: "высота обновляется по событию", fail: "нет подписки на viewportChanged (К-06)" },
+      { code: "V-07", title: "Оплата через Telegram Payments", kind: "regexAtLeast", path: "app/app.js", pattern: "openInvoice|sendData", min: 1, ok: "оплата/данные идут через SDK", fail: "нет openInvoice/sendData (К-07)" },
+      { code: "V-08", title: "JS-бандл < 300KB gzip", kind: "jsonNumberMax", path: "app/bundle-size.json", key: "gzip_kb", max: 300, ok: "бандл в бюджете", fail: "бандл больше 300KB (К-08) · bundle-analyzer" },
+      { code: "V-09", title: "Навигация BackButton и web_app_data", kind: "allOf", rules: [
+        { kind: "regexAtLeast", path: "app/app.js", pattern: "BackButton", min: 1 },
+        { kind: "regexAtLeast", path: "app/app.js", pattern: "web_app_data", min: 1 },
+      ], ok: "BackButton и web_app_data обработаны", fail: "нет обработки BackButton/web_app_data (К-09)" },
+      { code: "V-10", title: "Ссылки внутри WebView/openLink", kind: "allOf", rules: [
+        { kind: "regexAtLeast", path: "app/app.js", pattern: "openLink", min: 1 },
+        { kind: "regexAbsent", path: "app/index.html", pattern: "target=\"_blank\"" },
+      ], ok: "ссылки открываются через SDK", fail: "target=_blank без SDK (К-10)" },
+      { code: "V-11", title: "Тач-таргеты ≥ 44×44px", kind: "regexAtLeast", path: "app/style.css", pattern: "min-height:\\s*(4[4-9]|[5-9][0-9]|[1-9][0-9]{2,})px", min: 1, ok: "тач-таргеты не меньше 44px", fail: "мелкие тач-таргеты (К-11)" },
+      { code: "V-12", title: "Базовый offline через Service Worker", kind: "allOf", rules: [
+        { kind: "fileExists", path: "app/sw.js" },
+        { kind: "regexAtLeast", path: "app/app.js", pattern: "serviceWorker", min: 1 },
+      ], ok: "Service Worker зарегистрирован", fail: "нет offline-кэша (К-12) · Lighthouse PWA" },
+      { code: "V-13", title: "Сохранение состояния при закрытии", kind: "regexAtLeast", path: "app/app.js", pattern: "CloudStorage|sendData|mainButtonClicked", min: 1, ok: "состояние сохраняется", fail: "нет сохранения состояния (К-13)" },
+      { code: "V-14", title: "Запрет alert/confirm/prompt", kind: "regexAbsent", path: "app/app.js", pattern: "\\balert\\(|\\bconfirm\\(|\\bprompt\\(", ok: "нативных popup нет, заглушек нет", fail: "использован alert/confirm/prompt (К-14)" },
+      { code: "V-15", title: "Валидация initData (HMAC-SHA256)", kind: "regexAtLeast", path: "app/server.mjs", pattern: "createHmac|HMAC|sha256", min: 1, ok: "подпись initData проверяется", fail: "нет HMAC-проверки initData (К-15)" },
+      { code: "V-16", title: "VK Bridge для VK-продуктов", kind: "implies", path: "README.md", if: "VK|ВКонтакте", then: ["vk-bridge|@vkontakte"], ok: "для VK подключён vk-bridge (или продукт не VK)", fail: "VK без vk-bridge (К-16)" },
+      { code: "V-17", title: "Тесты на реальных устройствах", kind: "fileExists", path: "app/devices.md", ok: "зафиксированы устройства iOS/Android", fail: "нет матрицы устройств (К-17) · скриншоты" },
+      { code: "V-18", title: "Нет утечек памяти", kind: "regexAtLeast", path: "app/app.js", pattern: "clearInterval|clearTimeout|removeEventListener", min: 1, ok: "таймеры/слушатели снимаются", fail: "нет очистки таймеров/слушателей (К-18) · Memory profiler" },
+    ],
+    demo: {
+      slug: "timer-app",
+      task: "сделать помодоро-таймер как Telegram Mini App",
+      files: {
+        "README.md": `# Таймер «Помодоро»
+
+Telegram Mini App без сборщика: разметка, скрипт и стиль.
+
+## Платформа
+
+Telegram WebApp SDK (MainButton, BackButton, HapticFeedback, CloudStorage).
+
+## Запуск
+
+Откройте app/index.html в браузере; в Telegram — через бота.
+`,
+        "app/index.html": `<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Таймер «Помодоро»</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  </head>
+  <body>
+    <main class="timer">
+      <p class="timer__value" id="value" role="timer" aria-live="polite">25:00</p>
+      <div class="timer__controls">
+        <button class="timer__button" id="start" type="button">Старт</button>
+        <button class="timer__button" id="reset" type="button">Сброс</button>
+      </div>
+    </main>
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
+`,
+        "app/style.css": `:root {
+  --bg: var(--tg-theme-bg-color, #ffffff);
+  --text: var(--tg-theme-text-color, #111111);
+  --button: var(--tg-theme-button-color, #2b6cff);
+  --vh: 100vh;
+}
+
+.timer {
+  min-height: var(--vh);
+  max-width: 22rem;
+  margin: 0 auto;
+  padding: 10vh 1rem calc(1rem + env(safe-area-inset-bottom));
+  font-family: system-ui, sans-serif;
+  text-align: center;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.timer__value {
+  font-size: 4rem;
+  font-variant-numeric: tabular-nums;
+  margin: 0 0 1.5rem;
+}
+
+.timer__controls {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.timer__button {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.5rem 1.25rem;
+  border: 1px solid var(--button);
+  border-radius: 0.5rem;
+  background: var(--bg);
+  color: var(--text);
+}
+
+@media (max-width: 420px) {
+  .timer__value { font-size: 3rem; }
+}
+
+@media (max-width: 375px) {
+  .timer__value { font-size: 2.5rem; }
+}
+
+@media (max-width: 320px) {
+  .timer__value { font-size: 2rem; }
+}
+`,
+        "app/app.js": `/* Помодоро на Telegram WebApp: нативные кнопки, тема, haptic, состояние. */
+const tg = window.Telegram ? window.Telegram.WebApp : null;
+
+const TOTAL = 25 * 60;
+const root = document.documentElement;
+const value = document.querySelector("#value");
+let left = TOTAL;
+let tick = null;
+
+const render = () => {
+  const m = String(Math.floor(left / 60)).padStart(2, "0");
+  const s = String(left % 60).padStart(2, "0");
+  value.textContent = m + ":" + s;
+};
+
+const stop = () => {
+  if (tick !== null) {
+    clearInterval(tick);
+    tick = null;
+  }
+};
+
+const toggle = () => {
+  if (tick === null) {
+    tick = setInterval(() => {
+      left -= 1;
+      render();
+      if (left <= 0) {
+        stop();
+        left = TOTAL;
+        render();
+      }
+    }, 1000);
+  } else {
+    stop();
+  }
+};
+
+const persist = () => {
+  if (!tg) return;
+  tg.CloudStorage.setItem("left", String(left));
+  tg.sendData(JSON.stringify({ left: left }));
+};
+
+if (tg) {
+  tg.ready();
+  tg.expand();
+  tg.MainButton.setText("Старт");
+  tg.MainButton.onClick(toggle);
+  tg.BackButton.show();
+  tg.BackButton.onClick(() => tg.close());
+  tg.HapticFeedback.impactOccurred("light");
+  tg.onEvent("viewportChanged", (e) => root.style.setProperty("--vh", e.height + "px"));
+  tg.onEvent("mainButtonClicked", persist);
+}
+
+window.addEventListener("message", (e) => {
+  if (e.data === "web_app_data") persist();
+});
+
+/* Ссылки открываем только через SDK, без target=_blank. */
+const open = (url) => {
+  if (tg) tg.openLink(url);
+  else window.open(url, "_blank", "noopener");
+};
+
+const pay = () => {
+  if (tg) tg.openInvoice("https://t.me/invoice/demo");
+};
+
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
+
+document.querySelector("#start").addEventListener("click", toggle);
+document.querySelector("#reset").addEventListener("click", () => {
+  stop();
+  left = TOTAL;
+  render();
+});
+render();
+`,
+        "app/sw.js": `/* Базовый offline: кэш оболочки мини-приложения. */
+const CACHE = "pomodoro-v1";
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(
+    caches.open(CACHE).then((cache) => cache.addAll(["./index.html", "./style.css", "./app.js"])),
+  );
+});
+
+self.addEventListener("fetch", (event) => {
+  event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request)));
+});
+`,
+        "app/server.mjs": `/* Проверка подписи initData Telegram через HMAC-SHA256. */
+import { createHmac } from "node:crypto";
+
+export function verifyInitData(initData, botToken) {
+  const params = new URLSearchParams(initData);
+  const hash = params.get("hash");
+  params.delete("hash");
+  const dataCheckString = [...params.entries()]
+    .sort()
+    .map((pair) => pair[0] + "=" + pair[1])
+    .join("\\n");
+  const secret = createHmac("sha256", "WebAppData").update(botToken).digest();
+  const calc = createHmac("sha256", secret).update(dataCheckString).digest("hex");
+  return calc === hash;
+}
+`,
+        "app/lighthouse.json": `{
+  "performance": 0.93,
+  "tti_ms": 1500,
+  "fcp_ms": 900,
+  "viewport": "mobile-375"
+}
+`,
+        "app/bundle-size.json": `{
+  "gzip_kb": 42,
+  "raw_kb": 120
+}
+`,
+        "app/devices.md": `# Матрица устройств
+
+| Устройство | ОС | WebView | Результат |
+| --- | --- | --- | --- |
+| iPhone 13 | iOS 17 | Safari | ок |
+| iPhone SE | iOS 16 | Safari | ок |
+| Pixel 7 | Android 14 | Chrome | ок |
+| Galaxy A54 | Android 13 | Chrome | ок |
+`,
+      },
+    },
+  },
 };
 
 export default TZ_ARTIFACTS;

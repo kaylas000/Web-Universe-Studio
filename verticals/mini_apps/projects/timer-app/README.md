@@ -1,7 +1,11 @@
 # Таймер «Помодоро»
 
-Мини-приложение без сборщика: разметка, скрипт и стиль.
+Telegram Mini App без сборщика: разметка, скрипт и стиль.
+
+## Платформа
+
+Telegram WebApp SDK (MainButton, BackButton, HapticFeedback, CloudStorage).
 
 ## Запуск
 
-Откройте app/index.html в браузере.
+Откройте app/index.html в браузере; в Telegram — через бота.

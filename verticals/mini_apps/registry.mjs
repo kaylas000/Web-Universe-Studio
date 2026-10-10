@@ -51,7 +51,7 @@ export const vertical = {
   buildConfig(projectName) {
     return {
       project_name: projectName,
-      task: "собрать помодоро-таймер как мини-приложение без сборщика",
+      task: "сделать помодоро-таймер как Telegram Mini App",
       loop: { max_iterations: 1 },
       generator: { type: "mock" },
       context_builder: { type: "studio_default" },

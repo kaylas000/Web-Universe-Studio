@@ -327,6 +327,16 @@ export function evalRule(projectDir, rule) {
       const m = String(text).match(/Execution Time:\s*([\d.]+)\s*ms/);
       return m !== null && Number(m[1]) <= Number(rule.maxMs ?? Infinity);
     }
+    case "jsonNumberMax": {
+      const data = readJson(read(rule.path));
+      const value = data === null ? undefined : getPath(data, rule.key);
+      return typeof value === "number" && value <= Number(rule.max ?? Infinity);
+    }
+    case "jsonNumberMin": {
+      const data = readJson(read(rule.path));
+      const value = data === null ? undefined : getPath(data, rule.key);
+      return typeof value === "number" && value >= Number(rule.min ?? -Infinity);
+    }
     case "uniqueNumbering": {
       // нет дублей нумерации пунктов «N.M» и их не меньше min (К-04 legal: cross-reference)
       const text = read(rule.path);

@@ -3,73 +3,223 @@
   "rules": [
     {
       "code": "V-01",
-      "title": "Разметка на месте",
-      "kind": "fileExists",
-      "path": "app/index.html",
-      "ok": "app/index.html найден",
-      "fail": "нет app/index.html"
+      "title": "Адаптация под viewport Telegram",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "app/style.css",
+          "pattern": "@media",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/style.css",
+          "pattern": "max-width|width:\\s*100%",
+          "min": 1
+        }
+      ],
+      "ok": "есть media-запросы под узкие экраны",
+      "fail": "нет адаптации под 320/375/420px (К-01) · прокси Playwright"
     },
     {
       "code": "V-02",
-      "title": "Скрипт на месте",
-      "kind": "fileExists",
+      "title": "Нативная интеграция SDK",
+      "kind": "regexAtLeast",
       "path": "app/app.js",
-      "ok": "app/app.js найден",
-      "fail": "нет app/app.js (К-01)"
+      "pattern": "MainButton|BackButton|HapticFeedback",
+      "min": 1,
+      "ok": "используются нативные кнопки SDK",
+      "fail": "нет MainButton/BackButton/HapticFeedback (К-02)"
     },
     {
       "code": "V-03",
-      "title": "Заголовок страницы",
+      "title": "Темы Telegram через theme_params",
       "kind": "regexAtLeast",
-      "path": "app/index.html",
-      "pattern": "<title>",
+      "path": "app/style.css",
+      "pattern": "var\\(--tg-theme",
       "min": 1,
-      "ok": "<title> есть",
-      "fail": "нет <title> (К-06)"
+      "ok": "цвета берутся из theme_params",
+      "fail": "нет var(--tg-theme-*) (К-03)"
     },
     {
       "code": "V-04",
-      "title": "Без var",
-      "kind": "regexAbsent",
-      "path": "app/app.js",
-      "pattern": "\\bvar\\s",
-      "ok": "let/const",
-      "fail": "найден var (К-03)"
+      "title": "TTI < 2 c",
+      "kind": "jsonNumberMax",
+      "path": "app/lighthouse.json",
+      "key": "tti_ms",
+      "max": 2000,
+      "ok": "TTI в бюджете",
+      "fail": "TTI превышает 2 c (К-04) · Lighthouse Mobile"
     },
     {
       "code": "V-05",
-      "title": "Отклик через addEventListener",
+      "title": "Safe area для клавиатуры",
       "kind": "regexAtLeast",
-      "path": "app/app.js",
-      "pattern": "addEventListener",
+      "path": "app/style.css",
+      "pattern": "env\\(safe-area-inset",
       "min": 1,
-      "ok": "addEventListener есть",
-      "fail": "нет addEventListener (К-04)"
+      "ok": "учтён safe area",
+      "fail": "нет env(safe-area-inset-bottom) (К-05)"
     },
     {
       "code": "V-06",
-      "title": "Без alert",
-      "kind": "regexAbsent",
+      "title": "Обработка viewportChanged",
+      "kind": "regexAtLeast",
       "path": "app/app.js",
-      "pattern": "\\balert\\(",
-      "ok": "alert не используется",
-      "fail": "найден alert (К-04)"
+      "pattern": "viewportChanged",
+      "min": 1,
+      "ok": "высота обновляется по событию",
+      "fail": "нет подписки на viewportChanged (К-06)"
     },
     {
       "code": "V-07",
-      "title": "Стиль на месте",
-      "kind": "fileExists",
-      "path": "app/style.css",
-      "ok": "app/style.css найден",
-      "fail": "нет app/style.css (К-01)"
+      "title": "Оплата через Telegram Payments",
+      "kind": "regexAtLeast",
+      "path": "app/app.js",
+      "pattern": "openInvoice|sendData",
+      "min": 1,
+      "ok": "оплата/данные идут через SDK",
+      "fail": "нет openInvoice/sendData (К-07)"
     },
     {
       "code": "V-08",
-      "title": "README проекта",
-      "kind": "fileExists",
+      "title": "JS-бандл < 300KB gzip",
+      "kind": "jsonNumberMax",
+      "path": "app/bundle-size.json",
+      "key": "gzip_kb",
+      "max": 300,
+      "ok": "бандл в бюджете",
+      "fail": "бандл больше 300KB (К-08) · bundle-analyzer"
+    },
+    {
+      "code": "V-09",
+      "title": "Навигация BackButton и web_app_data",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "app/app.js",
+          "pattern": "BackButton",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/app.js",
+          "pattern": "web_app_data",
+          "min": 1
+        }
+      ],
+      "ok": "BackButton и web_app_data обработаны",
+      "fail": "нет обработки BackButton/web_app_data (К-09)"
+    },
+    {
+      "code": "V-10",
+      "title": "Ссылки внутри WebView/openLink",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "app/app.js",
+          "pattern": "openLink",
+          "min": 1
+        },
+        {
+          "kind": "regexAbsent",
+          "path": "app/index.html",
+          "pattern": "target=\"_blank\""
+        }
+      ],
+      "ok": "ссылки открываются через SDK",
+      "fail": "target=_blank без SDK (К-10)"
+    },
+    {
+      "code": "V-11",
+      "title": "Тач-таргеты ≥ 44×44px",
+      "kind": "regexAtLeast",
+      "path": "app/style.css",
+      "pattern": "min-height:\\s*(4[4-9]|[5-9][0-9]|[1-9][0-9]{2,})px",
+      "min": 1,
+      "ok": "тач-таргеты не меньше 44px",
+      "fail": "мелкие тач-таргеты (К-11)"
+    },
+    {
+      "code": "V-12",
+      "title": "Базовый offline через Service Worker",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "fileExists",
+          "path": "app/sw.js"
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/app.js",
+          "pattern": "serviceWorker",
+          "min": 1
+        }
+      ],
+      "ok": "Service Worker зарегистрирован",
+      "fail": "нет offline-кэша (К-12) · Lighthouse PWA"
+    },
+    {
+      "code": "V-13",
+      "title": "Сохранение состояния при закрытии",
+      "kind": "regexAtLeast",
+      "path": "app/app.js",
+      "pattern": "CloudStorage|sendData|mainButtonClicked",
+      "min": 1,
+      "ok": "состояние сохраняется",
+      "fail": "нет сохранения состояния (К-13)"
+    },
+    {
+      "code": "V-14",
+      "title": "Запрет alert/confirm/prompt",
+      "kind": "regexAbsent",
+      "path": "app/app.js",
+      "pattern": "\\balert\\(|\\bconfirm\\(|\\bprompt\\(",
+      "ok": "нативных popup нет, заглушек нет",
+      "fail": "использован alert/confirm/prompt (К-14)"
+    },
+    {
+      "code": "V-15",
+      "title": "Валидация initData (HMAC-SHA256)",
+      "kind": "regexAtLeast",
+      "path": "app/server.mjs",
+      "pattern": "createHmac|HMAC|sha256",
+      "min": 1,
+      "ok": "подпись initData проверяется",
+      "fail": "нет HMAC-проверки initData (К-15)"
+    },
+    {
+      "code": "V-16",
+      "title": "VK Bridge для VK-продуктов",
+      "kind": "implies",
       "path": "README.md",
-      "ok": "README.md найден",
-      "fail": "нет README.md"
+      "if": "VK|ВКонтакте",
+      "then": [
+        "vk-bridge|@vkontakte"
+      ],
+      "ok": "для VK подключён vk-bridge (или продукт не VK)",
+      "fail": "VK без vk-bridge (К-16)"
+    },
+    {
+      "code": "V-17",
+      "title": "Тесты на реальных устройствах",
+      "kind": "fileExists",
+      "path": "app/devices.md",
+      "ok": "зафиксированы устройства iOS/Android",
+      "fail": "нет матрицы устройств (К-17) · скриншоты"
+    },
+    {
+      "code": "V-18",
+      "title": "Нет утечек памяти",
+      "kind": "regexAtLeast",
+      "path": "app/app.js",
+      "pattern": "clearInterval|clearTimeout|removeEventListener",
+      "min": 1,
+      "ok": "таймеры/слушатели снимаются",
+      "fail": "нет очистки таймеров/слушателей (К-18) · Memory profiler"
     }
   ]
 }

@@ -1,5 +1,5 @@
 project_name: timer-app
-task: "собрать помодоро-таймер как мини-приложение без сборщика"
+task: "сделать помодоро-таймер как Telegram Mini App"
 loop:
   max_iterations: 1
 generator:
