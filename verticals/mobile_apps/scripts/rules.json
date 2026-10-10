@@ -3,78 +3,307 @@
   "rules": [
     {
       "code": "V-01",
-      "title": "Манифест на месте",
-      "kind": "fileExists",
-      "path": "app/app.json",
-      "ok": "app/app.json найден",
-      "fail": "нет app/app.json"
+      "title": "Гайдлайны платформы (HIG / Material 3)",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "textHasAny",
+          "path": "README.md",
+          "patterns": [
+            "HIG|Human Interface"
+          ]
+        },
+        {
+          "kind": "textHasAny",
+          "path": "README.md",
+          "patterns": [
+            "Material"
+          ]
+        }
+      ],
+      "ok": "учтены HIG и Material Design 3",
+      "fail": "нет привязки к гайдлайнам платформы (К-01) · LLM-критик + статанализ"
     },
     {
       "code": "V-02",
-      "title": "Модуль экрана",
-      "kind": "fileExists",
+      "title": "Safe Area (notch / home indicator)",
+      "kind": "regexAtLeast",
       "path": "app/src/App.mjs",
-      "ok": "app/src/App.mjs найден",
-      "fail": "нет app/src/App.mjs (К-02)"
+      "pattern": "SafeAreaView|SafeArea|safeAreaInset",
+      "min": 1,
+      "ok": "контент в безопасной зоне",
+      "fail": "нет Safe Area (К-02)"
     },
     {
       "code": "V-03",
-      "title": "Имя и версия",
-      "kind": "jsonHas",
-      "path": "app/app.json",
-      "keys": [
-        "name",
-        "version"
-      ],
-      "ok": "name и version на месте",
-      "fail": "нет name или version (К-01)"
+      "title": "Тач-таргеты ≥ 44/48",
+      "kind": "regexAtLeast",
+      "path": "app/src/App.mjs",
+      "pattern": "minHeight=\\{(44|48)\\}|hitSlop",
+      "min": 1,
+      "ok": "тач-таргеты не меньше нормы",
+      "fail": "мелкие тач-таргеты (К-03)"
     },
     {
       "code": "V-04",
-      "title": "Экспорт экрана",
-      "kind": "regexAtLeast",
-      "path": "app/src/App.mjs",
-      "pattern": "\\bexport\\b",
-      "min": 1,
-      "ok": "экран экспортирован",
-      "fail": "App.mjs ничего не экспортирует (К-02)"
+      "title": "4 состояния экрана",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "Loading",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "Empty",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "Error",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "Success",
+          "min": 1
+        }
+      ],
+      "ok": "есть Loading/Empty/Error/Success",
+      "fail": "нет всех 4 состояний экрана (К-04)"
     },
     {
       "code": "V-05",
-      "title": "Без alert",
-      "kind": "regexAbsent",
+      "title": "Тёмная тема",
+      "kind": "regexAtLeast",
       "path": "app/src/App.mjs",
-      "pattern": "\\balert\\(",
-      "ok": "alert не используется",
-      "fail": "найден alert (К-05)"
+      "pattern": "useColorScheme|Appearance|colorScheme",
+      "min": 1,
+      "ok": "тема реагирует на системную",
+      "fail": "нет поддержки тёмной темы (К-05)"
     },
     {
       "code": "V-06",
-      "title": "Доступность",
-      "kind": "regexAtLeast",
-      "path": "app/src/App.mjs",
-      "pattern": "aria-label",
-      "min": 1,
-      "ok": "подписи доступности есть",
-      "fail": "нет подписей доступности (К-04)"
+      "title": "Запуск < 2 c, FPS ≥ 55",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "jsonNumberMax",
+          "path": "app/perf.json",
+          "key": "start_ms",
+          "max": 2000
+        },
+        {
+          "kind": "jsonNumberMin",
+          "path": "app/perf.json",
+          "key": "fps",
+          "min": 55
+        }
+      ],
+      "ok": "производительность в бюджете",
+      "fail": "просадка старта/FPS (К-06) · Flipper/DevTools"
     },
     {
       "code": "V-07",
-      "title": "README проекта",
-      "kind": "fileExists",
-      "path": "README.md",
-      "ok": "README.md найден",
-      "fail": "нет README.md (К-06)"
+      "title": "Offline: кэш и очередь",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "NetInfo",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "AsyncStorage|Storage|cache",
+          "min": 1
+        }
+      ],
+      "ok": "есть слушатель сети и локальное хранилище",
+      "fail": "нет offline-режима (К-07)"
     },
     {
       "code": "V-08",
-      "title": "Состояние экрана",
+      "title": "Нативный стек навигации",
       "kind": "regexAtLeast",
       "path": "app/src/App.mjs",
-      "pattern": "state",
+      "pattern": "createNativeStackNavigator|NavigationContainer|go_router|NavigationStack|react-navigation",
       "min": 1,
-      "ok": "состояние хранится явно",
-      "fail": "нет явного состояния (К-03)"
+      "ok": "используется нативный стек",
+      "fail": "кастомный стек без анимаций (К-08)"
+    },
+    {
+      "code": "V-09",
+      "title": "Клавиатура не перекрывает поля",
+      "kind": "regexAtLeast",
+      "path": "app/src/App.mjs",
+      "pattern": "KeyboardAvoidingView|Scaffold",
+      "min": 1,
+      "ok": "поля уходят из-под клавиатуры",
+      "fail": "нет KeyboardAvoidingView/Scaffold (К-09)"
+    },
+    {
+      "code": "V-10",
+      "title": "Адаптивный layout на планшетах",
+      "kind": "jsonArrayMinItems",
+      "path": "app/screenshots.json",
+      "key": "tablet",
+      "min": 1,
+      "ok": "есть скриншоты планшета",
+      "fail": "нет адаптации под планшеты (К-10) · скриншоты"
+    },
+    {
+      "code": "V-11",
+      "title": "Accessibility-подписи",
+      "kind": "regexAtLeast",
+      "path": "app/src/App.mjs",
+      "pattern": "accessibilityLabel|aria-label|semanticLabel",
+      "min": 1,
+      "ok": "интерактив подписан для скринридера",
+      "fail": "нет accessibilityLabel/semanticLabel (К-11)"
+    },
+    {
+      "code": "V-12",
+      "title": "Разрешения по запросу, не на старте",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "requestPermission",
+          "min": 1
+        },
+        {
+          "kind": "regexAbsent",
+          "path": "app/src/App.mjs",
+          "pattern": "componentDidMount|initState"
+        }
+      ],
+      "ok": "разрешения запрашиваются в момент использования",
+      "fail": "запрос разрешений на старте (К-12) · статанализ"
+    },
+    {
+      "code": "V-13",
+      "title": "Deep links (universal/app links)",
+      "kind": "jsonHas",
+      "path": "app/app.json",
+      "keys": [
+        "scheme"
+      ],
+      "ok": "deep links объявлены",
+      "fail": "нет обработки deep links (К-13)"
+    },
+    {
+      "code": "V-14",
+      "title": "Локализация en + ru",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "filesExist",
+          "paths": [
+            "app/locales/ru.json",
+            "app/locales/en.json"
+          ]
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "i18n|intl|Localizable",
+          "min": 1
+        }
+      ],
+      "ok": "два языка через i18n",
+      "fail": "нет i18n на 2 языка (К-14)"
+    },
+    {
+      "code": "V-15",
+      "title": "Push через FCM / APNs",
+      "kind": "regexAtLeast",
+      "path": "app/src/App.mjs",
+      "pattern": "onMessage|messaging|firebase|FCM",
+      "min": 1,
+      "ok": "есть обработчик push",
+      "fail": "нет onMessage-обработчика (К-15)"
+    },
+    {
+      "code": "V-16",
+      "title": "Единый стейт-менеджер",
+      "kind": "regexAtLeast",
+      "path": "app/src/App.mjs",
+      "pattern": "createStore|zustand|createSlice|useReducer|Provider|Riverpod|Bloc",
+      "min": 1,
+      "ok": "состояние в одном сторе",
+      "fail": "prop drilling/нет стора (К-16)"
+    },
+    {
+      "code": "V-17",
+      "title": "Retry и понятные ошибки",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "retry|attempts",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "catch",
+          "min": 1
+        }
+      ],
+      "ok": "есть retry и обработка ошибок",
+      "fail": "нет retry/UI-фидбека (К-17)"
+    },
+    {
+      "code": "V-18",
+      "title": "5+ разрешений экрана",
+      "kind": "jsonArrayMinItems",
+      "path": "app/screenshots.json",
+      "key": "phone",
+      "min": 5,
+      "ok": "проверено на 5+ разрешениях",
+      "fail": "меньше 5 разрешений (К-18) · Detox/Appium"
+    },
+    {
+      "code": "V-19",
+      "title": "Биометрия через нативные API",
+      "kind": "regexAtLeast",
+      "path": "app/src/App.mjs",
+      "pattern": "biometric|local_auth|LocalAuthentication|Biometrics",
+      "min": 1,
+      "ok": "биометрия через нативный API",
+      "fail": "нет нативной биометрии (К-19)"
+    },
+    {
+      "code": "V-20",
+      "title": "Готовность к сторам",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "fileExists",
+          "path": "app/assets/icon-1024.png"
+        },
+        {
+          "kind": "jsonHas",
+          "path": "app/store.json",
+          "keys": [
+            "icon",
+            "screenshots",
+            "description"
+          ]
+        }
+      ],
+      "ok": "иконка 1024 и метаданные стора на месте",
+      "fail": "нет иконки/скриншотов/описания (К-20)"
     }
   ]
 }

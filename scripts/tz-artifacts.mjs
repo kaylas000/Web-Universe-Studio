@@ -914,6 +914,73 @@ export function verifyInitData(initData, botToken) {
       },
     },
   },
+  /* ———————————————————————————— 9.7 Mobile Apps ———————————————————————————— */
+  mobile_apps: {
+    rules: [
+      { code: "V-01", title: "Гайдлайны платформы (HIG / Material 3)", kind: "allOf", rules: [
+        { kind: "textHasAny", path: "README.md", patterns: ["HIG|Human Interface"] },
+        { kind: "textHasAny", path: "README.md", patterns: ["Material"] },
+      ], ok: "учтены HIG и Material Design 3", fail: "нет привязки к гайдлайнам платформы (К-01) · LLM-критик + статанализ" },
+      { code: "V-02", title: "Safe Area (notch / home indicator)", kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "SafeAreaView|SafeArea|safeAreaInset", min: 1, ok: "контент в безопасной зоне", fail: "нет Safe Area (К-02)" },
+      { code: "V-03", title: "Тач-таргеты ≥ 44/48", kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "minHeight=\\{(44|48)\\}|hitSlop", min: 1, ok: "тач-таргеты не меньше нормы", fail: "мелкие тач-таргеты (К-03)" },
+      { code: "V-04", title: "4 состояния экрана", kind: "allOf", rules: [
+        { kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "Loading", min: 1 },
+        { kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "Empty", min: 1 },
+        { kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "Error", min: 1 },
+        { kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "Success", min: 1 },
+      ], ok: "есть Loading/Empty/Error/Success", fail: "нет всех 4 состояний экрана (К-04)" },
+      { code: "V-05", title: "Тёмная тема", kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "useColorScheme|Appearance|colorScheme", min: 1, ok: "тема реагирует на системную", fail: "нет поддержки тёмной темы (К-05)" },
+      { code: "V-06", title: "Запуск < 2 c, FPS ≥ 55", kind: "allOf", rules: [
+        { kind: "jsonNumberMax", path: "app/perf.json", key: "start_ms", max: 2000 },
+        { kind: "jsonNumberMin", path: "app/perf.json", key: "fps", min: 55 },
+      ], ok: "производительность в бюджете", fail: "просадка старта/FPS (К-06) · Flipper/DevTools" },
+      { code: "V-07", title: "Offline: кэш и очередь", kind: "allOf", rules: [
+        { kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "NetInfo", min: 1 },
+        { kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "AsyncStorage|Storage|cache", min: 1 },
+      ], ok: "есть слушатель сети и локальное хранилище", fail: "нет offline-режима (К-07)" },
+      { code: "V-08", title: "Нативный стек навигации", kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "createNativeStackNavigator|NavigationContainer|go_router|NavigationStack|react-navigation", min: 1, ok: "используется нативный стек", fail: "кастомный стек без анимаций (К-08)" },
+      { code: "V-09", title: "Клавиатура не перекрывает поля", kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "KeyboardAvoidingView|Scaffold", min: 1, ok: "поля уходят из-под клавиатуры", fail: "нет KeyboardAvoidingView/Scaffold (К-09)" },
+      { code: "V-10", title: "Адаптивный layout на планшетах", kind: "jsonArrayMinItems", path: "app/screenshots.json", key: "tablet", min: 1, ok: "есть скриншоты планшета", fail: "нет адаптации под планшеты (К-10) · скриншоты" },
+      { code: "V-11", title: "Accessibility-подписи", kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "accessibilityLabel|aria-label|semanticLabel", min: 1, ok: "интерактив подписан для скринридера", fail: "нет accessibilityLabel/semanticLabel (К-11)" },
+      { code: "V-12", title: "Разрешения по запросу, не на старте", kind: "allOf", rules: [
+        { kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "requestPermission", min: 1 },
+        { kind: "regexAbsent", path: "app/src/App.mjs", pattern: "componentDidMount|initState" },
+      ], ok: "разрешения запрашиваются в момент использования", fail: "запрос разрешений на старте (К-12) · статанализ" },
+      { code: "V-13", title: "Deep links (universal/app links)", kind: "jsonHas", path: "app/app.json", keys: ["scheme"], ok: "deep links объявлены", fail: "нет обработки deep links (К-13)" },
+      { code: "V-14", title: "Локализация en + ru", kind: "allOf", rules: [
+        { kind: "filesExist", paths: ["app/locales/ru.json", "app/locales/en.json"] },
+        { kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "i18n|intl|Localizable", min: 1 },
+      ], ok: "два языка через i18n", fail: "нет i18n на 2 языка (К-14)" },
+      { code: "V-15", title: "Push через FCM / APNs", kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "onMessage|messaging|firebase|FCM", min: 1, ok: "есть обработчик push", fail: "нет onMessage-обработчика (К-15)" },
+      { code: "V-16", title: "Единый стейт-менеджер", kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "createStore|zustand|createSlice|useReducer|Provider|Riverpod|Bloc", min: 1, ok: "состояние в одном сторе", fail: "prop drilling/нет стора (К-16)" },
+      { code: "V-17", title: "Retry и понятные ошибки", kind: "allOf", rules: [
+        { kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "retry|attempts", min: 1 },
+        { kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "catch", min: 1 },
+      ], ok: "есть retry и обработка ошибок", fail: "нет retry/UI-фидбека (К-17)" },
+      { code: "V-18", title: "5+ разрешений экрана", kind: "jsonArrayMinItems", path: "app/screenshots.json", key: "phone", min: 5, ok: "проверено на 5+ разрешениях", fail: "меньше 5 разрешений (К-18) · Detox/Appium" },
+      { code: "V-19", title: "Биометрия через нативные API", kind: "regexAtLeast", path: "app/src/App.mjs", pattern: "biometric|local_auth|LocalAuthentication|Biometrics", min: 1, ok: "биометрия через нативный API", fail: "нет нативной биометрии (К-19)" },
+      { code: "V-20", title: "Готовность к сторам", kind: "allOf", rules: [
+        { kind: "fileExists", path: "app/assets/icon-1024.png" },
+        { kind: "jsonHas", path: "app/store.json", keys: ["icon", "screenshots", "description"] },
+      ], ok: "иконка 1024 и метаданные стора на месте", fail: "нет иконки/скриншотов/описания (К-20)" },
+    ],
+    demo: {
+      slug: "notes-app",
+      task: "собрать MVP заметок на React Native с офлайн-режимом",
+      files: {
+        "README.md": `# Заметки\n\nMVP мобильного приложения на React Native.\n\n## Платформа\n\niOS: Apple Human Interface Guidelines (HIG).\nAndroid: Material Design 3.\n\n## Запуск\n\nМодуль app/src/App.mjs отрисует экран в контейнер с идентификатором app.\n`,
+        "app/app.json": `{\n  "name": "notes",\n  "version": "1.0.0",\n  "entry": "src/App.mjs",\n  "displayName": "Заметки",\n  "scheme": "notes",\n  "designSystem": "hig-material3",\n  "newArchEnabled": true,\n  "tabletSupport": true\n}\n`,
+        "app/src/i18n.mjs": `/* Мини-i18n: ru + en без внешних зависимостей. */\nconst dict = {\n  ru: { title: "Заметки", add: "Добавить", unlock: "Войти по биометрии" },\n  en: { title: "Notes", add: "Add", unlock: "Sign in with biometrics" },\n};\n\nlet lang = "ru";\n\nexport const i18n = {\n  t: (key) => (dict[lang][key] !== undefined ? dict[lang][key] : key),\n  set: (next) => { lang = next; },\n};\n\nexport default i18n;\n`,
+        "app/locales/ru.json": `{\n  "title": "Заметки",\n  "add": "Добавить"\n}\n`,
+        "app/locales/en.json": `{\n  "title": "Notes",\n  "add": "Add"\n}\n`,
+        "app/perf.json": `{\n  "start_ms": 1500,\n  "fps": 58,\n  "device": "Pixel 6a (mid-range)"\n}\n`,
+        "app/screenshots.json": `{\n  "phone": [\n    "iPhone SE 375x667",\n    "iPhone 13 390x844",\n    "iPhone 15 Pro Max 430x932",\n    "Pixel 6a 412x915",\n    "Galaxy S23 360x780",\n    "Android 600dp 600x960"\n  ],\n  "tablet": [\n    "iPad 10.9 820x1180",\n    "Android tablet 800x1280"\n  ]\n}\n`,
+        "app/store.json": `{\n  "icon": "assets/icon-1024.png",\n  "screenshots": ["6.5in", "5.5in"],\n  "description": "Быстрые заметки с офлайн-режимом и биометрией."\n}\n`,
+        "app/assets/icon-1024.png": `PNG placeholder 1024x1024 (в реальном проекте — бинарная иконка).\n`,
+        "app/src/App.mjs": `/* Экран заметок: 4 состояния, safe area, тёмная тема, i18n, offline, биометрия. */\nimport { KeyboardAvoidingView } from "react-native";\nimport { SafeAreaView } from "react-native-safe-area-context";\nimport NetInfo from "@react-native-community/netinfo";\nimport AsyncStorage from "@react-native-async-storage/async-storage";\nimport { createNativeStackNavigator } from "@react-navigation/native-stack";\nimport biometrics from "expo-local-authentication";\nimport messaging from "@react-native-firebase/messaging";\nimport { create } from "zustand";\nimport { i18n } from "./i18n.mjs";\n\n/* Нативный стек навигации. */\nconst Stack = createNativeStackNavigator();\nexport const navigator = Stack;\n\n/* Тёмная тема: useColorScheme отдаёт 'dark'/'light'. */\nexport const themeFor = (colorScheme) => (colorScheme === "dark" ? "dark" : "light");\n\n/* Единый стейт-менеджер (zustand), без prop drilling. */\nconst useNotes = create((set) => ({\n  status: "Loading",\n  items: [],\n  load: async () => {\n    set({ status: "Loading" });\n    try {\n      const notes = await fetchNotes(3);\n      set({ status: notes.length > 0 ? "Success" : "Empty", items: notes });\n    } catch (error) {\n      set({ status: "Error", items: [] });\n    }\n  },\n}));\nexport const store = useNotes;\n\n/* API-вызовы с retry и понятной ошибкой. */\nasync function fetchNotes(attempts) {\n  let lastError = null;\n  for (let i = 0; i < attempts; i += 1) {\n    try {\n      const res = await fetch("https://api.example.com/notes");\n      if (!res.ok) throw new Error("bad status");\n      return await res.json();\n    } catch (error) {\n      lastError = error;\n    }\n  }\n  throw lastError;\n}\n\n/* Offline-режим: кэш и очередь запросов. */\nNetInfo.addEventListener((state) => {\n  if (!state.isConnected) AsyncStorage.setItem("queue", "[]");\n});\n\n/* Push через FCM. */\nmessaging().onMessage(async (message) => {\n  await AsyncStorage.setItem("lastPush", message.messageId || "");\n});\n\n/* Разрешения запрашиваются в момент использования. */\nexport async function ensurePushPermission() {\n  return messaging().requestPermission();\n}\n\n/* Биометрия запрашивается по действию пользователя, не на старте. */\nexport async function unlockOnDemand() {\n  const has = await biometrics.hasHardwareAsync();\n  if (!has) return false;\n  const result = await biometrics.authenticateAsync({ promptMessage: i18n.t("unlock") });\n  return result.success;\n}\n\n/* Deep links: notes:// и universal link. */\nexport const linking = {\n  prefixes: ["notes://", "https://notes.example.com"],\n  config: { screens: {} },\n};\n\nexport function createState() {\n  return {\n    items: [\n      { id: 1, text: "Позвонить в порт" },\n      { id: 2, text: "Подписать акт" },\n    ],\n    draft: "",\n  };\n}\n\nconst item = (note) =>\n  [\n    '<li class="note">',\n    '<span class="note__text" accessibilityLabel="' + note.text + '">' + note.text + "</span>",\n    '<button accessibilityLabel="Удалить" accessibilityRole="button" data-action="remove" data-id="' + note.id + '">×</button>',\n    "</li>",\n  ].join("");\n\nexport function render(state, colorScheme) {\n  const theme = themeFor(colorScheme);\n  const list = state.items.map(item).join("");\n  return [\n    '<SafeAreaView class="screen" data-theme="' + theme + '">',\n    '<KeyboardAvoidingView behavior="padding">',\n    "<h1>" + i18n.t("title") + "</h1>",\n    '<ul class="notes">' + list + "</ul>",\n    '<form class="compose">',\n    '<input class="compose__field" accessibilityLabel="' + i18n.t("add") + '" data-role="draft" minHeight={48} />',\n    '<button accessibilityLabel="' + i18n.t("add") + '" data-action="add" minHeight={48}>' + i18n.t("add") + "</button>",\n    "</form>",\n    "</KeyboardAvoidingView>",\n    "</SafeAreaView>",\n  ].join("");\n}\n`,
+      },
+    },
+  },
 };
 
 export default TZ_ARTIFACTS;

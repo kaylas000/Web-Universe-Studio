@@ -1,5 +1,5 @@
 project_name: notes-app
-task: "собрать экран заметок с состоянием и доступными подписями"
+task: "собрать MVP заметок на React Native с офлайн-режимом"
 loop:
   max_iterations: 1
 generator:

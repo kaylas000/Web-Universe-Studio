@@ -51,7 +51,7 @@ export const vertical = {
   buildConfig(projectName) {
     return {
       project_name: projectName,
-      task: "собрать экран заметок с состоянием и доступными подписями",
+      task: "собрать MVP заметок на React Native с офлайн-режимом",
       loop: { max_iterations: 1 },
       generator: { type: "mock" },
       context_builder: { type: "studio_default" },

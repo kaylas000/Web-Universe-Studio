@@ -1,6 +1,11 @@
 # Заметки
 
-Экран списка заметок с добавлением и удалением.
+MVP мобильного приложения на React Native.
+
+## Платформа
+
+iOS: Apple Human Interface Guidelines (HIG).
+Android: Material Design 3.
 
 ## Запуск
 
