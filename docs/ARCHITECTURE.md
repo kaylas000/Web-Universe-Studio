@@ -68,10 +68,20 @@ node core/gate.mjs --vertical web_studio --json
 Шесть новых вертикалей порождены идемпотентным генератором `scripts/bootstrap-verticals.mjs`.
 
 Полные конституции (§9 ТЗ) и анти-слоп (§10 ТЗ) шести вертикалей лежат в `scripts/tz-verticals.mjs`
-(слой `TZ_OVERRIDES`, дословные тексты статей `К-xx`, запретов `B-xx` и квот `Q-xx`) и накладываются
-на инлайновые SPECS генератора. Офлайн-набор `scripts/validate.mjs` (`V-xx`) реализует детерминированное
-подмножество статей; проверки, требующие LLM-judge, песочницы или устройств (Playwright/Lighthouse/Flipper),
-исполняются на верхнем тире (§14 ТЗ) и отмечены в графе `method` каждой статьи.
+(слой `TZ_OVERRIDES`, дословные тексты статей `К-xx`, запретов `B-xx` и квот `Q-xx`).
+
+Точные правила приёмки §9 и эталонные артефакты каждой студии — в `scripts/tz-artifacts.mjs`
+(слой `TZ_ARTIFACTS`): декларативные правила `V-01…V-20` 1:1 к §9 и демо-файлы проекта. Генератор
+`bootstrap-verticals.mjs` пишет их в `scripts/rules.json` и `projects/<demo>/`. Проверки, требующие
+внешнего тира (Playwright, Lighthouse, SQL/устройства-песочницы, LLM-judge), реализованы
+**декларативными офлайн-прокси** — метод указан прямо в тексте `fail` правила (например,
+«прокси Playwright»); тир, не требующий внешних бинарей, остаётся детерминированным и офлайн.
+Движок правил и контракт отчёта — `core/vertical-kit/index.mjs`.
+
+Генерация артефактов не-веб студий — `core/loop-engine/generators/studio.mjs` (`StudioGenerator`):
+обходит `skills/<skill>/deliverable/`, рендерит `.j2` (детерминированно, файлы без токенов `{{`/`{%`
+копируются как есть — JSON/CSS/JS не портятся) и кладёт результат в проект; так путь «бриф → артефакт
+→ приёмка» замкнут офлайн (LLM-генератор подключается, когда задан ключ в окружении).
 
 ## CEO-агент (`core/orchestrator`)
 
@@ -105,4 +115,14 @@ node core/gate.mjs --vertical web_studio --json
 
 ```bash
 bash scripts/acceptance_test.sh     # DoD §15: тесты движка, selftest, гейт, индекс, аудит, CEO, тесты
+npm test                            # полная цепочка: engine + selftest + gate + platform + verticals
+npm run gate                        # CI-слой К-15/К-21: цикл по всем 7 вертикалям × проектам
+```
+
+DoD §15.1 (цикл К-21 по одному проекту) в метаплатформе запускается с указанием корня студии —
+`scripts/` цеха живут внутри вертикали, а не в корне репозитория:
+
+```bash
+LOOP_STUDIO_ROOT=verticals/web_studio node core/loop-engine/cli.mjs projects/pcpolimer --validator ceh_project
+# exit 0, evidence → projects/pcpolimer/workspace/loop-result.json
 ```
