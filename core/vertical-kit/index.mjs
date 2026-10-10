@@ -131,6 +131,16 @@ export function evalRule(projectDir, rule) {
         return false;
       }
     }
+    case "sentencesMaxWords": {
+      const text = read(rule.path);
+      if (text === null) return false;
+      const sentences = String(text)
+        .replace(/\n+/g, " ")
+        .split(/(?<=[.!?])\s+/)
+        .map((s) => s.split(/\s+/).filter(Boolean).length)
+        .filter((n) => n > 0);
+      return sentences.length > 0 && sentences.every((n) => n <= Number(rule.max ?? 40));
+    }
     default:
       return false;
   }

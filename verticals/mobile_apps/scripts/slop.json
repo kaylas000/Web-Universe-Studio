@@ -10,24 +10,14 @@
   ],
   "rules": [
     {
-      "code": "B-01",
-      "pattern": "\\balert\\(",
-      "message": "обратная связь через alert"
-    },
-    {
-      "code": "B-02",
-      "pattern": "TODO",
-      "message": "незавершённое"
+      "code": "B-05",
+      "pattern": "Alert\\.alert\\(",
+      "message": "alert вместо нативного UI (B-05)"
     },
     {
       "code": "B-03",
-      "pattern": "console\\.log",
-      "message": "отладочный шум"
-    },
-    {
-      "code": "B-04",
-      "pattern": ":\\s*any\\b",
-      "message": "нетипизированное место"
+      "pattern": "javaScriptEnabled:\\s*true",
+      "message": "WebView без sandbox (B-03)"
     }
   ]
 }

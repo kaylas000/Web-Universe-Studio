@@ -10,23 +10,18 @@
   "rules": [
     {
       "code": "B-01",
-      "pattern": "очевидно, что",
-      "message": "вывод без опоры"
-    },
-    {
-      "code": "B-02",
-      "pattern": "как известно",
-      "message": "вывод без опоры"
-    },
-    {
-      "code": "B-03",
-      "pattern": "в целом можно сказать",
-      "message": "филлер"
+      "pattern": "SELECT\\s+\\*",
+      "message": "SELECT * в продакшн-запросе (B-01)"
     },
     {
       "code": "B-04",
-      "pattern": "данные говорят сами за себя",
-      "message": "вывод без опоры"
+      "pattern": "except\\s*:\\s*pass",
+      "message": "проглоченная ошибка (B-04)"
+    },
+    {
+      "code": "B-08",
+      "pattern": "password\\s*=\\s*[\"']",
+      "message": "хардкод креденшела (B-08)"
     }
   ]
 }

@@ -9,6 +9,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { TZ_OVERRIDES } from "./tz-verticals.mjs";
+
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const V = join(ROOT, "verticals");
 
@@ -25,13 +27,14 @@ T.constitution = (s) =>
   L(
     `# CONSTITUTION.md — закон студии «${s.title}»`,
     "",
-    `Проверяемые правила вертикали \`${s.slug}\`: каждое связано с детерминированной проверкой`,
-    "в `scripts/validate.mjs` (V-xx) или `scripts/lint-slop.mjs` (B-xx). Правило без проверки — пожелание.",
+    `Полные статьи вертикали \`${s.slug}\` (§9 ТЗ). Каждая статья связана с проверкой:`,
+    "детерминированной (`scripts/validate.mjs`, код `V-xx`) или платформенной (LLM-judge/песочница/Playwright).",
     "",
     "## Статьи",
     "",
-    s.constitution.map((r) => `- **${r.code}. ${r.title}.** ${r.text}`),
+    s.constitution.map((r) => `- **${r.code}. ${r.title}.** ${r.text} *Проверка:* ${r.method ?? "валидатор студии"}.`),
     "",
+    ...(s.gatesText ? [`**Гейты:** ${s.gatesText}.`, ""] : []),
     "## Приёмка",
     "",
     "1. Проект не сдаётся, пока `node scripts/validate.mjs projects/<имя>` не вернул `exit 0`.",
@@ -324,7 +327,7 @@ T.verticalYaml = (s) =>
     "spec:",
     `  skills: [${s.skills.join(", ")}]`,
     "  validators: [constitution, anti_slop, schema]",
-    "  gates: [G1-direction, G2-structure, G3-artifact, G4-final]",
+    `  gates: [${(s.gates ?? ["G1-direction", "G2-structure", "G3-artifact", "G4-final"]).join(", ")}]`,
     "  tools: [validate_artifact, lint_slop]",
     '  registry: "registry.mjs"',
     "  models:",
@@ -1215,7 +1218,7 @@ export default { createState, render, addItem, removeItem };
 /*__SPECS__*/
 
 const main = () => {
-  const dirs = SPECS.map((s) => T.writeVertical(s));
+  const dirs = SPECS.map((s) => T.writeVertical({ ...s, ...(TZ_OVERRIDES[s.slug] ?? {}) }));
   for (const dir of dirs) process.stdout.write(`вертикаль создана: ${dir}\n`);
   process.stdout.write(`готово: ${dirs.length} вертикалей\n`);
 };

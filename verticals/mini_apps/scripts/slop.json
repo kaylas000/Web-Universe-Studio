@@ -11,24 +11,14 @@
   ],
   "rules": [
     {
-      "code": "B-01",
-      "pattern": "transition:\\s*all",
-      "message": "тяжёлая анимация"
-    },
-    {
-      "code": "B-02",
-      "pattern": "onclick=",
-      "message": "инлайновый обработчик"
-    },
-    {
       "code": "B-03",
-      "pattern": "!important",
-      "message": "насилие над каскадом"
+      "pattern": "window\\.location\\.href",
+      "message": "навигация закроет Mini App (B-03)"
     },
     {
       "code": "B-04",
-      "pattern": "console\\.log",
-      "message": "отладочный шум"
+      "pattern": "::-webkit-scrollbar",
+      "message": "кастомный скроллбар ломает momentum iOS (B-04)"
     }
   ]
 }
