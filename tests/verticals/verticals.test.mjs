@@ -30,7 +30,7 @@ test("у каждой вертикали — манифест §8 (§apiVersion/
 test("у каждой вертикали есть скелет §7.1 и хотя бы один демо-проект", () => {
   for (const dir of listVerticals()) {
     const meta = readVerticalMeta(dir);
-    for (const rel of ["CONSTITUTION.md", "AGENTS.md", "scripts/validate.mjs", "scripts/lint-slop.mjs", "references/INDEX.md"]) {
+    for (const rel of ["CONSTITUTION.md", "AGENTS.md", "BRIEF-TEMPLATE.md", "README.md", "registry.mjs", "scripts/validate.mjs", "scripts/lint-slop.mjs", "references/INDEX.md"]) {
       assert.ok(existsSync(join(dir, rel)), `${meta.name}: нет ${rel}`);
     }
     const gates = existsSync(join(dir, "gates")) ? readdirSync(join(dir, "gates")) : [];
@@ -41,6 +41,23 @@ test("у каждой вертикали есть скелет §7.1 и хотя
       assert.ok(existsSync(join(project, "loop.config.yaml")) || existsSync(join(project, "DIRECTION.md")), `${project}: нет ни loop.config.yaml, ни DIRECTION.md`);
       assert.ok(existsSync(join(project, meta.deliverable)), `${project}: нет артефакта ${meta.deliverable}/`);
     }
+  }
+});
+
+test("registry.mjs каждой вертикали — валидный IVertical (§5.1, §7.1)", async () => {
+  const { isVertical } = await import("../../core/loop-engine/protocols.mjs");
+  for (const dir of listVerticals()) {
+    const meta = readVerticalMeta(dir);
+    const { vertical } = await import(`../../verticals/${meta.name}/registry.mjs`);
+    assert.ok(isVertical(vertical), `${meta.name}: registry.mjs не совместим с IVertical`);
+    assert.deepEqual(vertical.checks, meta.checks, `${meta.name}: checks реестра ≠ checks манифеста`);
+    assert.ok(vertical.getSkills().length > 0, `${meta.name}: реестр без приёмов`);
+    assert.ok(vertical.getDefaultSkill(), `${meta.name}: нет приёма по умолчанию`);
+    const gates = vertical.getVerificationGates();
+    assert.ok(Object.values(gates).every((g) => typeof g.verify === "function"), `${meta.name}: ворота без verify`);
+    const cfg = vertical.buildConfig(meta.name);
+    assert.equal(cfg.project_name, meta.name, `${meta.name}: buildConfig.project_name`);
+    assert.equal(cfg.validator.type, "vertical_project", `${meta.name}: buildConfig.validator`);
   }
 });
 
