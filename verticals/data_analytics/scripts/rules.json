@@ -1,0 +1,82 @@
+{
+  "vertical": "data_analytics",
+  "rules": [
+    {
+      "code": "V-01",
+      "title": "Отчёт на месте",
+      "kind": "fileExists",
+      "path": "analysis/report.md",
+      "ok": "analysis/report.md найден",
+      "fail": "нет analysis/report.md"
+    },
+    {
+      "code": "V-02",
+      "title": "Запросы на месте",
+      "kind": "fileExists",
+      "path": "analysis/queries.sql",
+      "ok": "analysis/queries.sql найден",
+      "fail": "нет analysis/queries.sql (К-01)"
+    },
+    {
+      "code": "V-03",
+      "title": "Метрики на месте",
+      "kind": "fileExists",
+      "path": "analysis/metrics.json",
+      "ok": "analysis/metrics.json найден",
+      "fail": "нет analysis/metrics.json (К-06)"
+    },
+    {
+      "code": "V-04",
+      "title": "Запросы считают",
+      "kind": "regexAtLeast",
+      "path": "analysis/queries.sql",
+      "pattern": "SELECT",
+      "min": 3,
+      "ok": "три и более SELECT",
+      "fail": "меньше трёх SELECT (К-01)"
+    },
+    {
+      "code": "V-05",
+      "title": "Структура метрик",
+      "kind": "jsonHas",
+      "path": "analysis/metrics.json",
+      "keys": [
+        "period",
+        "metrics"
+      ],
+      "ok": "period и metrics на месте",
+      "fail": "нет period или metrics (К-03)"
+    },
+    {
+      "code": "V-06",
+      "title": "Выводы",
+      "kind": "regexAtLeast",
+      "path": "analysis/report.md",
+      "pattern": "^##\\s+Вывод",
+      "min": 1,
+      "ok": "раздел «Вывод» есть",
+      "fail": "нет раздела «Вывод» (К-05)"
+    },
+    {
+      "code": "V-07",
+      "title": "Формулы метрик",
+      "kind": "regexAtLeast",
+      "path": "analysis/metrics.json",
+      "pattern": "\"formula\"",
+      "min": 3,
+      "ok": "у каждой метрики формула",
+      "fail": "меньше трёх формул (К-02)"
+    },
+    {
+      "code": "V-08",
+      "title": "Источник данных",
+      "kind": "textHasAll",
+      "path": "analysis/report.md",
+      "patterns": [
+        "Источник данных"
+      ],
+      "ok": "источник указан",
+      "fail": "не указан источник данных (К-04)"
+    }
+  ]
+}

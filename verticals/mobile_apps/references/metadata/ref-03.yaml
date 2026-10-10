@@ -1,0 +1,4 @@
+id: ref-03
+style: touch-target
+source: references/sources.yaml#a11y-pass
+takeaway: Цель нажатия не меньше 44×44 px и отделена от соседей видимым зазором.

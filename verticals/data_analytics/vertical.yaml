@@ -1,0 +1,36 @@
+# ЦЕХ · метаплатформа — декларативное описание студии (§8 ТЗ).
+# metadata.* и spec.* читает ядро; metadata.deliverable/checks — маркеры приёмки гейта.
+apiVersion: autogen/v1
+kind: Vertical
+metadata:
+  name: data_analytics
+  displayName: "Студия данных"
+  description: "Считает метрики и оформляет разбор: SQL-запросы, метрики с формулами, выводы и указание источника данных — всё проверяется машинно."
+  version: "1.0.0"
+  domain: data_analytics
+  tags: [metric-report, sql-audit]
+  deliverable: analysis
+  checks: [validate, lint-slop]
+spec:
+  skills: [metric-report, sql-audit]
+  validators: [constitution, anti_slop, schema]
+  gates: [G1-direction, G2-structure, G3-artifact, G4-final]
+  tools: [validate_artifact, lint_slop]
+  registry: "registry.mjs"
+  models:
+    planner: "ollama/llama3.1:8b"
+    coder: "ollama/qwen2.5-coder:7b"
+    verifier_llm: "ollama/gemma2:9b"
+    fixer: "ollama/llama3.1:8b"
+  budget:
+    max_cost_usd_per_run: 1.5
+    max_iterations: 10
+    max_tokens_per_run: 120000
+  knowledge:
+    provider: local
+    rag_collections:
+      - name: data_analytics_references
+        source: "verticals/data_analytics/references"
+  anti_slop:
+    banned_file: "anti-slop/BANNED.md"
+    quotas_file: "anti-slop/QUOTAS.md"

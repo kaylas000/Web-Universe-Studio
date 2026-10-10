@@ -1,0 +1,18 @@
+# ЦЕХ · метаплатформа — матрица устройств и вьюпортов (§4.4, §15 ТЗ).
+# Используется валидаторами вертикалей (контраст, размер цели нажатия) и мобильной студией.
+viewports:
+  - { name: mobile-s,  width: 320,  height: 568,  dpr: 2 }
+  - { name: mobile-m,  width: 390,  height: 844,  dpr: 3 }
+  - { name: tablet,    width: 768,  height: 1024, dpr: 2 }
+  - { name: desktop,   width: 1280, height: 800,  dpr: 1 }
+  - { name: wide,      width: 1920, height: 1080, dpr: 1 }
+
+targets:
+  min_touch_target_px: 44
+  min_contrast_ratio: 4.5
+  max_content_width_px: 1440
+
+platforms:
+  web: [chromium, firefox, webkit]
+  mobile_apps: [android, ios]
+  mini_apps: [webview]

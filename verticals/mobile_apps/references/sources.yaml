@@ -1,0 +1,14 @@
+# sources.yaml — источники приёмов студии
+sources:
+  - id: ref-01
+    title: "thumb-zone"
+    source: "references/sources.yaml#screen-composer"
+    takeaway: "Главные действия — в нижней трети экрана, в зоне большого пальца."
+  - id: ref-02
+    title: "platform-nav"
+    source: "references/sources.yaml#screen-composer"
+    takeaway: "Навигация следует платформе: таб-бар снизу на iOS, системная панель на Android."
+  - id: ref-03
+    title: "touch-target"
+    source: "references/sources.yaml#a11y-pass"
+    takeaway: "Цель нажатия не меньше 44×44 px и отделена от соседей видимым зазором."

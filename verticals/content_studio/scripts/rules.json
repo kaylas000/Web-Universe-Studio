@@ -1,0 +1,82 @@
+{
+  "vertical": "content_studio",
+  "rules": [
+    {
+      "code": "V-01",
+      "title": "Пост на месте",
+      "kind": "fileExists",
+      "path": "content/post.md",
+      "ok": "content/post.md найден",
+      "fail": "нет content/post.md"
+    },
+    {
+      "code": "V-02",
+      "title": "Один H1",
+      "kind": "regexAtLeast",
+      "path": "content/post.md",
+      "pattern": "^#\\s+\\S",
+      "min": 1,
+      "ok": "заголовок есть",
+      "fail": "нет заголовка H1 (К-01)"
+    },
+    {
+      "code": "V-03",
+      "title": "Подзаголовки",
+      "kind": "regexAtLeast",
+      "path": "content/post.md",
+      "pattern": "^##\\s+\\S",
+      "min": 2,
+      "ok": "два и более H2",
+      "fail": "меньше двух H2 (К-03)"
+    },
+    {
+      "code": "V-04",
+      "title": "Метаданные",
+      "kind": "jsonHas",
+      "path": "content/meta.json",
+      "keys": [
+        "title",
+        "description",
+        "tags"
+      ],
+      "ok": "title/description/tags на месте",
+      "fail": "нет обязательного поля метаданных (К-04)"
+    },
+    {
+      "code": "V-05",
+      "title": "Источники",
+      "kind": "fileExists",
+      "path": "content/SOURCES.md",
+      "ok": "content/SOURCES.md найден",
+      "fail": "нет content/SOURCES.md (К-05)"
+    },
+    {
+      "code": "V-06",
+      "title": "Объём",
+      "kind": "minWords",
+      "path": "content/post.md",
+      "min": 260,
+      "ok": "объём достаточный",
+      "fail": "пост короче 260 слов"
+    },
+    {
+      "code": "V-07",
+      "title": "Призыв к действию",
+      "kind": "textHasAll",
+      "path": "content/post.md",
+      "patterns": [
+        "Попробуйте"
+      ],
+      "ok": "призыв есть",
+      "fail": "нет призыва к действию (К-06)"
+    },
+    {
+      "code": "V-08",
+      "title": "README студии проекта",
+      "kind": "fileExists",
+      "path": "content/README.md",
+      "ok": "content/README.md найден",
+      "fail": "нет content/README.md"
+    }
+  ]
+}

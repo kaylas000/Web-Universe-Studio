@@ -1,0 +1,11 @@
+.cta {
+  transition: all 0.3s ease-in-out;
+  background: #6366f1;
+  background-clip: text;
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+}
+
+.hero {
+  filter: blur(80px);
+}

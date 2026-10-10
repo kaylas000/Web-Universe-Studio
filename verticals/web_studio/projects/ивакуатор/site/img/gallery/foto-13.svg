@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="t d">
+  <title id="t">Фото эвакуатора — место для снимка</title>
+  <desc id="d">Заглушка: рамка под фотографию техники. Замените на реальный снимок img/gallery/foto-13.jpg.</desc>
+  <rect width="400" height="300" fill="oklch(0.905 0.013 86)"/>
+  <rect x="10" y="10" width="380" height="280" fill="none" stroke="oklch(0.80 0.015 86)" stroke-width="2"/>
+  <rect x="24" y="24" width="352" height="216" fill="oklch(0.935 0.012 88)" stroke="oklch(0.80 0.015 86)" stroke-width="1.5" stroke-dasharray="9 9"/>
+  <path d="M354 24h40v20z" fill="oklch(0.535 0.193 30)"/>
+  <g fill="oklch(0.235 0 90)">
+    <rect x="52" y="150" width="288" height="14" rx="3"/>
+    <rect x="336" y="104" width="48" height="50"/>
+    <rect x="88" y="118" width="120" height="26"/>
+    <rect x="110" y="98" width="62" height="22"/>
+  </g>
+  <circle cx="100" cy="168" r="18" fill="none" stroke="oklch(0.235 0 90)" stroke-width="10"/>
+  <circle cx="300" cy="168" r="18" fill="none" stroke="oklch(0.235 0 90)" stroke-width="10"/>
+  <circle cx="100" cy="168" r="6" fill="oklch(0.935 0.012 88)"/>
+  <circle cx="300" cy="168" r="6" fill="oklch(0.935 0.012 88)"/>
+  <text x="24" y="272" font-family="Arial, sans-serif" font-size="13" letter-spacing="1.2" fill="oklch(0.505 0 90)">ЗАГЛУШКА · IMG/GALLERY/foto-13.JPG</text>
+</svg>

@@ -1,0 +1,758 @@
+/* @font-face — локальные woff2 из assets/fonts/PAIRS.md (пара №4).
+   Скачаны в проект, ни одного стороннего запроса: бюджет Q-10 и SRI sha384 (К-20). */
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/ibm-plex-sans-400-cyrillic-ext.woff2") format("woff2");unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/ibm-plex-sans-400-cyrillic.woff2") format("woff2");unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/ibm-plex-sans-400-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/ibm-plex-sans-400-latin.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/ibm-plex-sans-500-cyrillic-ext.woff2") format("woff2");unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/ibm-plex-sans-500-cyrillic.woff2") format("woff2");unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/ibm-plex-sans-500-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/ibm-plex-sans-500-latin.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/ibm-plex-sans-600-cyrillic-ext.woff2") format("woff2");unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/ibm-plex-sans-600-cyrillic.woff2") format("woff2");unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/ibm-plex-sans-600-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/ibm-plex-sans-600-latin.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:"Tektur";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/tektur-500-cyrillic-ext.woff2") format("woff2");unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;}
+@font-face{font-family:"Tektur";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/tektur-500-cyrillic.woff2") format("woff2");unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:"Tektur";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/tektur-500-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face{font-family:"Tektur";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/tektur-500-latin.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:"Tektur";font-style:normal;font-weight:700;font-display:swap;src:url("fonts/tektur-700-cyrillic-ext.woff2") format("woff2");unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;}
+@font-face{font-family:"Tektur";font-style:normal;font-weight:700;font-display:swap;src:url("fonts/tektur-700-cyrillic.woff2") format("woff2");unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:"Tektur";font-style:normal;font-weight:700;font-display:swap;src:url("fonts/tektur-700-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face{font-family:"Tektur";font-style:normal;font-weight:700;font-display:swap;src:url("fonts/tektur-700-latin.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+@font-face{font-family:"Tektur";font-style:normal;font-weight:900;font-display:swap;src:url("fonts/tektur-900-cyrillic-ext.woff2") format("woff2");unicode-range:U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;}
+@font-face{font-family:"Tektur";font-style:normal;font-weight:900;font-display:swap;src:url("fonts/tektur-900-cyrillic.woff2") format("woff2");unicode-range:U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;}
+@font-face{font-family:"Tektur";font-style:normal;font-weight:900;font-display:swap;src:url("fonts/tektur-900-latin-ext.woff2") format("woff2");unicode-range:U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;}
+@font-face{font-family:"Tektur";font-style:normal;font-weight:900;font-display:swap;src:url("fonts/tektur-900-latin.woff2") format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;}
+
+/* PRJ-03 · Цех лазерной резки · styles.css
+   Архетип ARCH-01 Swiss Minimal. Цвета только в OKLCH (К-20).
+   Easing только из motion/easing-curves.json (К-05): ceh-brake, ceh-snap,
+   ceh-drag, ceh-coast, ceh-drive. Браузерные дефолты запрещены (B-02). */
+
+@layer reset, tokens, layout, content, components, motion;
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body, h1, h2, h3, p, ul, ol, dl, dd, figure, blockquote { margin: 0; }
+  ul, ol { padding: 0; list-style: none; }
+  img, svg { display: block; max-width: 100%; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  a { color: inherit; text-decoration: none; }
+}
+
+@layer tokens {
+  :root {
+    /* палитра: бумага и сталь из references/poster-type/REF-05.meta.yaml */
+    --paper: oklch(0.941 0.013 87);
+    --paper-hi: oklch(0.97 0.007 89);
+    --steel: oklch(0.173 0 90);
+    --steel-hi: oklch(0.213 0 90);
+    --ink: oklch(0.173 0 90);
+    --ink-soft: oklch(0.45 0.01 90);
+    --paper-soft: oklch(0.7 0.01 90);
+    --paper-mid: oklch(0.62 0.01 90);
+
+    /* чпу-индикатор: роль референсного #0B66C3, hue сдвинут на 55° (B-05, К-14) */
+    --cnc: oklch(0.47 0.11 200);
+    --cnc-lift: oklch(0.78 0.11 195);
+
+    /* линия реза из references/play/REF-04.meta.yaml */
+    --cut: oklch(0.81 0.166 85);
+    --cut-ink: oklch(0.5 0.16 65);
+
+    --line: oklch(0.86 0.01 90);
+    --line-strong: oklch(0.74 0.01 90);
+    --line-dark: oklch(0.38 0.01 90);
+
+    /* кривые только из motion/easing-curves.json */
+    --curve-brake: cubic-bezier(0.16, 1, 0.3, 1);
+    --curve-snap: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --curve-drag: cubic-bezier(0.65, 0, 0.15, 1);
+    --curve-coast: cubic-bezier(0.33, 0.01, 0.16, 1);
+    --curve-drive: cubic-bezier(0, 0, 1, 1);
+
+    /* шкала отступов tokens/spacing.tokens.json */
+    --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px;
+    --s6: 32px; --s7: 48px; --s8: 64px; --s9: 96px; --s10: 144px;
+
+    --rail: clamp(196px, 15vw, 250px);
+    --gut: clamp(20px, 4vw, 64px);
+
+    --font-display: "Tektur", sans-serif;
+    --font-body: "IBM Plex Sans", sans-serif;
+  }
+}
+
+@layer layout {
+  html, body { background: var(--paper); color: var(--ink); }
+  body.plain { padding-left: 0; }
+  body {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.55;
+    font-variant-numeric: tabular-nums;
+    overflow-x: hidden;
+    padding-left: var(--rail);
+    padding-top: env(safe-area-inset-top);
+  }
+
+  /* зерно T-01 · assets/textures/grain.md */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size: 512px 512px;
+    animation: grainShift 0.4s steps(4) infinite;
+  }
+
+  .sheet {
+    container-type: inline-size;
+    position: relative;
+    background-image:
+      repeating-linear-gradient(to right, var(--line) 0 1px, transparent 1px 56px),
+      repeating-linear-gradient(to bottom, var(--line) 0 1px, transparent 1px 56px);
+    background-position: 0 0;
+    min-height: 100vh;
+  }
+
+  /* левая рейка — ось композиции из SEED */
+  .rail {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: var(--rail);
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--s5);
+    padding: var(--s5) var(--s4) calc(var(--s5) + env(safe-area-inset-bottom));
+    background: var(--steel);
+    color: var(--paper);
+    border-right: 1px solid var(--line-dark);
+  }
+}
+
+@layer content {
+  .act {
+    position: relative;
+    padding: var(--s9) var(--gut);
+    border-bottom: 1px solid var(--line-strong);
+    scroll-margin-top: var(--s5);
+  }
+  .act:nth-of-type(even) { background: var(--paper-hi); }
+
+  .act__head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s4);
+    margin-bottom: var(--s6);
+    border-bottom: 1px solid var(--line-strong);
+    padding-bottom: var(--s3);
+  }
+  .act__no {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(40px, 9cqw, 128px);
+    line-height: 0.8;
+    color: var(--cnc);
+    letter-spacing: -0.03em;
+  }
+  .act__title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(20px, 2.6cqw, 34px);
+    line-height: 1.05;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .act__note {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--ink-soft);
+    text-align: right;
+    max-width: 34ch;
+  }
+
+  .lede {
+    font-size: clamp(17px, 1.5cqw, 21px);
+    line-height: 1.5;
+    max-width: 46ch;
+    color: var(--ink-soft);
+  }
+  .kicker {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cnc);
+  }
+
+  /* 01 · разворот */
+  .hero { padding-top: var(--s8); }
+  .hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--s6);
+    align-items: start;
+  }
+  .hero__head { grid-column: 1 / -1; }
+  .hero__side { grid-column: 1; }
+  .hero__stamp { grid-column: 2; align-self: start; }
+  .nest { grid-column: 1 / -1; max-width: 1080px; }
+  .hero__title {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 9vw;
+    line-height: 0.86;
+    letter-spacing: -0.035em;
+    text-transform: uppercase;
+    margin: var(--s4) 0 var(--s5);
+    text-wrap: balance;
+  }
+  .hero__title .word { display: block; }
+  .hero__title em {
+    font-style: normal;
+    color: var(--cut-ink);
+  }
+  .hero__stamp {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid var(--ink);
+    border-left: 1px solid var(--ink);
+  }
+  .stamp {
+    border-right: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: var(--s3) var(--s3) var(--s4);
+    background: var(--paper-hi);
+  }
+  .stamp b {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(19px, 2.2cqw, 28px);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .stamp span {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .nest {
+    border: 1px solid var(--ink);
+    background: var(--paper-hi);
+    padding: var(--s3);
+  }
+  .nest figcaption {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s3);
+    margin-top: var(--s2);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .nest .frame { fill: none; stroke: var(--ink); stroke-width: 2; }
+  .nest .ghost { fill: none; stroke: var(--cnc); stroke-width: 1.4; }
+  .nest .cut { fill: none; stroke: var(--cut-ink); stroke-width: 2.4; }
+  .nest .tick { fill: var(--cnc); }
+  .nest .mark {
+    fill: var(--steel);
+    font-family: var(--font-body);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+  }
+
+  /* 02 · паспорт детали — sticky-scene */
+  .tol { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s6); }
+  .tol__plate {
+    position: sticky;
+    top: var(--s5);
+    align-self: start;
+    background: var(--steel);
+    color: var(--paper);
+    border: 1px solid var(--ink);
+    padding: var(--s5);
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: var(--s5);
+  }
+  .tol__label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cnc-lift);
+  }
+  .tol__value {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(46px, 7cqw, 96px);
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    color: var(--cut);
+  }
+  .tol__unit {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 15px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--paper-mid);
+  }
+  .tol__caption { font-size: 15px; color: var(--paper-soft); max-width: 30ch; }
+  .tol__scale { display: flex; gap: 4px; }
+  .tol__scale i {
+    flex: 1;
+    height: 8px;
+    background: var(--line-dark);
+    transition: background-color 0.35s var(--curve-brake);
+  }
+  .tol__scale i[data-on="1"] { background: var(--cut); }
+
+  .tol__steps { display: flex; flex-direction: column; gap: var(--s7); }
+  .tol__step {
+    border-left: 2px solid var(--line-strong);
+    padding-left: var(--s5);
+    transition: border-color 0.4s var(--curve-brake);
+  }
+  .tol__step h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(18px, 2cqw, 26px);
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    margin-bottom: var(--s2);
+    color: var(--ink-soft);
+    transition: color 0.4s var(--curve-brake);
+  }
+  .tol__step p {
+    color: var(--ink-soft);
+    max-width: 52ch;
+    transition: color 0.4s var(--curve-brake);
+  }
+  /* Свеча активного шага делается тоном, а не прозрачностью: AA для любого текста (Q-12). */
+  .tol__step[data-active="1"] { border-color: var(--cnc); }
+  .tol__step[data-active="1"] h3,
+  .tol__step[data-active="1"] p { color: var(--ink); }
+  .tol__step .idx {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--cnc);
+    display: block;
+    margin-bottom: var(--s2);
+  }
+
+  /* 03 · материалы — ломаная сетка 4/8 */
+  .mat { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--s6); }
+  .mat__filter { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--ink); }
+  .mat__btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--s3);
+    width: 100%;
+    min-height: 52px;
+    padding: var(--s3) var(--s3);
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--line-strong);
+    text-align: left;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.3s var(--curve-brake), color 0.3s var(--curve-brake);
+  }
+  .mat__btn small { color: var(--ink-soft); font-size: 12px; letter-spacing: 0.06em; }
+  .mat__btn[aria-selected="true"] { background: var(--steel); color: var(--paper); }
+  .mat__btn[aria-selected="true"] small { color: var(--cnc-lift); }
+  .mat__btn:hover { background: var(--cnc); color: var(--paper); }
+  .mat__btn:focus-visible { outline: 3px solid var(--cnc); outline-offset: -3px; }
+
+  .price { width: 100%; border-collapse: collapse; font-size: 15px; }
+  .price caption {
+    text-align: left;
+    padding-bottom: var(--s3);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(17px, 1.8cqw, 22px);
+    text-transform: uppercase;
+  }
+  .price th, .price td {
+    border-bottom: 1px solid var(--line-strong);
+    padding: var(--s3) var(--s2);
+    text-align: right;
+    white-space: nowrap;
+  }
+  .price th:first-child, .price td:first-child { text-align: left; padding-left: 0; }
+  .price thead th {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--ink);
+  }
+  .price tbody tr:hover { background: var(--paper); }
+  .price td.hot { color: var(--cut-ink); font-weight: 600; }
+  .price .from { display: block; font-size: 11px; color: var(--ink-soft); letter-spacing: 0.06em; }
+  .mat__legend {
+    margin-top: var(--s4);
+    font-size: 13px;
+    color: var(--ink-soft);
+    max-width: 70ch;
+  }
+
+  /* 04 · расчёт — ломаная сетка, панель уходит за правое поле */
+  .calc { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s6); align-items: start; }
+  .calc__form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4); }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field--wide { grid-column: 1 / -1; }
+  .field > label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .field select,
+  .field input[type="text"],
+  .field input[type="tel"],
+  .field textarea {
+    min-height: 46px;
+    font-size: 16px;
+    padding: var(--s2) var(--s3);
+    background: var(--paper-hi);
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    width: 100%;
+  }
+  .field textarea { min-height: 96px; resize: vertical; }
+  .field ::placeholder { color: var(--ink-soft); opacity: 1; }
+  .field select:focus-visible,
+  .field input:focus-visible,
+  .field textarea:focus-visible { outline: 3px solid var(--cnc); outline-offset: 1px; }
+  .field .hint { font-size: 12px; color: var(--ink-soft); }
+  .field input[type="range"] { width: 100%; accent-color: var(--cnc); min-height: 44px; }
+
+  .calc__out {
+    background: var(--steel);
+    color: var(--paper);
+    border: 1px solid var(--ink);
+    padding: var(--s5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--s4);
+    min-height: 260px;
+  }
+  .calc__sum {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(38px, 6cqw, 74px);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    color: var(--cut);
+  }
+  .calc__unit { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cnc-lift); }
+  .calc__rows { display: flex; flex-direction: column; gap: var(--s2); font-size: 14px; }
+  .calc__row { display: flex; justify-content: space-between; gap: var(--s3); border-bottom: 1px dotted var(--line-dark); padding-bottom: 6px; }
+  .calc__row span:last-child { color: var(--cnc-lift); }
+  .calc__state { font-size: 14px; min-height: 42px; }
+  .calc__state[data-state="error"] { color: var(--cut); }
+  .calc__state[data-state="empty"],
+  .calc__state[data-state="partial"] { color: var(--paper-soft); }
+  .skeleton { display: none; gap: var(--s2); flex-direction: column; }
+  .skeleton i { display: block; height: 14px; background: var(--line-dark); }
+  .skeleton i:nth-child(2) { width: 70%; }
+  .skeleton i:nth-child(3) { width: 45%; }
+  [data-loading="1"] .skeleton { display: flex; }
+  [data-loading="1"] .calc__sum { visibility: hidden; }
+
+  /* 05 · маршрут */
+  .flow { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s5) var(--s6); }
+  .flow__step { border-top: 2px solid var(--ink); padding-top: var(--s3); }
+  .flow__code {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    color: var(--cnc);
+    min-height: 20px;
+    display: block;
+    margin-bottom: var(--s2);
+  }
+  .flow__step h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(16px, 1.6cqw, 21px);
+    text-transform: uppercase;
+    margin-bottom: var(--s2);
+  }
+  .flow__step p { font-size: 14px; color: var(--ink-soft); max-width: 46ch; }
+  .flow__step:nth-child(2) { margin-top: var(--s6); }
+  .flow__step:nth-child(4) { margin-top: var(--s6); }
+
+  /* 06 · доказательства */
+  .proof__nums {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    border-top: 1px solid var(--ink);
+    border-left: 1px solid var(--ink);
+    margin-bottom: var(--s7);
+  }
+  .proof__num { border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding: var(--s4); }
+  .proof__num b {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(30px, 4cqw, 52px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--cnc);
+  }
+  .proof__num span { display: block; margin-top: var(--s2); font-size: 13px; color: var(--ink-soft); }
+
+  .proof__body { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--s6); }
+  .reviews { display: flex; flex-direction: column; gap: var(--s5); }
+  .review { border-left: 2px solid var(--cut); padding-left: var(--s4); }
+  .review p { font-size: 15px; }
+  .review footer { margin-top: var(--s2); font-size: 13px; color: var(--ink-soft); }
+  .review footer b { color: var(--ink); font-weight: 600; }
+
+  .terms { border-top: 1px solid var(--ink); }
+  .terms div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s3);
+    padding: var(--s3) 0;
+    border-bottom: 1px solid var(--line-strong);
+    font-size: 15px;
+  }
+  .terms dt { color: var(--ink-soft); }
+  .terms dd { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.01em; }
+
+  /* 07 · контакты */
+  .place { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s6); }
+  .place__list { display: flex; flex-direction: column; gap: var(--s4); }
+  .place__item { border-bottom: 1px solid var(--line-strong); padding-bottom: var(--s3); }
+  .place__item dt { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--cnc); }
+  .place__item dd { font-size: 17px; margin-top: 4px; }
+  .place__item dd a { border-bottom: 2px solid var(--cut); }
+  .place__item dd a:hover { background: var(--cut); border-color: var(--cut); }
+  .place__item dd a:focus-visible { outline: 3px solid var(--cnc); outline-offset: 2px; }
+
+  .form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4); }
+  .form__msg { grid-column: 1 / -1; font-size: 14px; min-height: 22px; }
+  .form__msg[data-state="error"] { color: var(--cut-ink); font-weight: 600; }
+  .form__msg[data-state="ok"] { color: var(--cnc); font-weight: 600; }
+  .form__msg[data-state="loading"] { color: var(--ink-soft); }
+
+  .districts { margin-top: var(--s6); border-top: 1px solid var(--ink); padding-top: var(--s3); }
+  .districts h3 { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: var(--s2); }
+  .districts ul { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); font-size: 15px; }
+  .districts li::before { content: "· "; color: var(--cut-ink); }
+}
+
+@layer components {
+  .cta { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s5); }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s2);
+    min-height: 48px;
+    padding: var(--s3) var(--s5);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--ink);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: transform 0.25s var(--curve-brake), background-color 0.25s var(--curve-brake), color 0.25s var(--curve-brake);
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(0); transition-timing-function: var(--curve-snap); }
+  .btn:focus-visible { outline: 3px solid var(--cnc); outline-offset: 2px; }
+  .btn--fill { background: var(--cut); color: var(--steel); }
+  .btn--fill:hover { background: var(--steel); color: var(--cut); }
+  .btn--line { background: transparent; color: var(--ink); }
+  .btn--line:hover { background: var(--steel); color: var(--paper); }
+  .btn--block { width: 100%; justify-content: center; }
+
+  .rail__mark {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 22px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .rail__mark span { display: block; font-size: 11px; font-weight: 500; letter-spacing: 0.2em; color: var(--cnc-lift); margin-top: 6px; }
+  .rail__idx { display: flex; flex-direction: column; gap: 2px; }
+  .rail__idx a {
+    display: flex;
+    align-items: center;
+    gap: var(--s3);
+    min-height: 34px;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--paper-mid);
+    transition: color 0.3s var(--curve-brake), transform 0.3s var(--curve-brake);
+  }
+  .rail__idx a b { font-family: var(--font-display); font-weight: 700; font-size: 12px; }
+  .rail__idx a::after { content: ""; flex: 1; height: 1px; background: var(--line-dark); }
+  .rail__idx a:hover,
+  .rail__idx a[aria-current="true"] { color: var(--cut); transform: translateX(3px); }
+  .rail__idx a:hover::after,
+  .rail__idx a[aria-current="true"]::after { background: var(--cut); }
+  .rail__idx a:focus-visible { outline: 2px solid var(--cnc-lift); outline-offset: 2px; }
+
+  .rail__stamp { border-top: 1px solid var(--line-dark); padding-top: var(--s3); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--paper-mid); display: flex; flex-direction: column; gap: 6px; }
+  .rail__stamp b { color: var(--cnc-lift); font-weight: 600; }
+  .rail__tel {
+    display: flex;
+    align-items: center;
+    min-height: 46px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    color: var(--paper);
+    border-top: 1px solid var(--line-dark);
+    transition: color 0.3s var(--curve-brake);
+  }
+  .rail__tel:hover { color: var(--cut); }
+  .rail__tel:focus-visible { outline: 2px solid var(--cnc-lift); outline-offset: 2px; }
+
+  .foot {
+    background: var(--steel);
+    color: var(--paper-soft);
+    padding: var(--s7) var(--gut) calc(var(--s7) + env(safe-area-inset-bottom));
+    font-size: 14px;
+  }
+  .foot__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: var(--s5); }
+  .foot h3 { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cnc-lift); margin-bottom: var(--s3); }
+  .foot li { padding: 4px 0; }
+  .foot a { transition: color 0.25s var(--curve-brake); }
+  .foot a:hover { color: var(--cut); }
+  .foot a:focus-visible { outline: 2px solid var(--cnc-lift); outline-offset: 2px; }
+  .foot__meta { margin-top: var(--s6); padding-top: var(--s4); border-top: 1px solid var(--line-dark); display: flex; flex-wrap: wrap; gap: var(--s3) var(--s5); justify-content: space-between; font-size: 13px; }
+  .foot__note { max-width: 74ch; }
+
+  .skip {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--cut);
+    color: var(--steel);
+    padding: var(--s3) var(--s4);
+    z-index: 90;
+  }
+  .skip:focus { left: 0; }
+}
+
+@layer motion {
+  @keyframes grainShift {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-8px, 6px); }
+    50% { transform: translate(6px, -8px); }
+    75% { transform: translate(-6px, -4px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  /* линия реза: кинематика артефакта, кривая ceh-drive (К-05) */
+  @keyframes cutDraw { to { stroke-dashoffset: 0; } }
+  @keyframes cutHead { to { offset-distance: 100%; } }
+
+  .nest .cut { stroke-dasharray: 1; stroke-dashoffset: 1; animation: cutDraw 1.9s var(--curve-drive) forwards; animation-delay: var(--d, 0s); }
+  .nest .ghost { stroke-dasharray: 6 5; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .grain { animation: none; }
+    .nest .cut { animation: none; stroke-dashoffset: 0; }
+    .btn:hover, .rail__idx a:hover, .rail__idx a[aria-current="true"] { transform: none; }
+    .tol__step, .tol__scale i, .mat__btn, .rail__idx a, .foot a { transition-duration: 0.01ms; }
+  }
+}
+
+/* Адаптив: K-12. Тап-зоны ≥44px, инпуты ≥16px, safe-area, нет горизонтального скролла. */
+@media (max-width: 1080px) {
+  body { padding-left: 0; }
+  .rail {
+    position: sticky;
+    inset: auto;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: var(--s3);
+    padding: var(--s2) var(--gut);
+    border-right: 0;
+    border-bottom: 1px solid var(--line-dark);
+  }
+  .rail__mark { flex: 0 0 auto; }
+  /* Рейка сжимается в один ряд: индекс прокручивается внутри своей ячейки,
+     страница горизонтального скролла не получает (К-12). */
+  .rail__idx {
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: var(--s3);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .rail__idx::-webkit-scrollbar { display: none; }
+  .rail__idx a { min-height: 44px; flex: 0 0 auto; white-space: nowrap; }
+  .rail__idx a::after { display: none; }
+  .rail__tel { flex: 0 0 auto; }
+  .rail__stamp { display: none; }
+  .rail__mark span { display: none; }
+  .hero__grid, .tol, .mat, .calc, .proof__body, .place { grid-template-columns: minmax(0, 1fr); }
+  .hero__head, .hero__side, .hero__stamp, .nest { grid-column: auto; }
+  .nest { max-width: none; }
+  .hero__stamp { margin-top: var(--s4); }
+  .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .flow__step:nth-child(2), .flow__step:nth-child(4) { margin-top: 0; }
+  .tol__plate { position: static; }
+}
+
+@media (min-width: 1500px) {
+  .flow { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  .act { padding: var(--s7) var(--gut); }
+  .hero__title { font-size: 16vw; }
+  .flow { grid-template-columns: minmax(0, 1fr); }
+  .calc__form, .form { grid-template-columns: minmax(0, 1fr); }
+  .act__head { flex-wrap: wrap; }
+  .act__note { margin-left: 0; text-align: left; max-width: none; }
+  .price { font-size: 14px; }
+  .price th, .price td { padding: 10px 4px; white-space: normal; }
+  .rail__tel { font-size: 13px; }
+  /* На телефоне рейка становится узкой планкой: логотип и звонок,
+     индекс разделов уступает место смете и заявке. */
+  .rail { justify-content: space-between; }
+  .rail__idx { display: none; }
+}
+
+@media (max-width: 360px) {
+  .hero__title { font-size: 15vw; }
+  .btn { width: 100%; justify-content: center; }
+}

@@ -1,0 +1,10 @@
+project_name: timer-app
+task: "собрать помодоро-таймер как мини-приложение без сборщика"
+loop:
+  max_iterations: 1
+generator:
+  type: mock
+context_builder:
+  type: studio_default
+validator:
+  type: vertical_project

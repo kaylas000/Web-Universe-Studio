@@ -1,0 +1,9 @@
+name: copy-edit
+title: "copy-edit"
+description: "Приём студии «Контент-студия»: copy-edit."
+inputs: [brief, deliverable_dir]
+outputs: [content]
+steps:
+  - "Разобрать бриф"
+  - "Собрать артефакт по закону студии"
+  - "Отдать на приёмку"

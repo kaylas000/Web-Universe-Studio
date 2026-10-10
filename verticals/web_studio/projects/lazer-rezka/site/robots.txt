@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content&yclid&gclid
+
+Host: https://ceh-lazer-rezka.ru
+Sitemap: https://ceh-lazer-rezka.ru/sitemap.xml

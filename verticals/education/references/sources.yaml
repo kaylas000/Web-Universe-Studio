@@ -1,0 +1,14 @@
+# sources.yaml — источники приёмов студии
+sources:
+  - id: ref-01
+    title: "backward-design"
+    source: "references/sources.yaml#lesson-plan"
+    takeaway: "Урок проектируется от результата: сначала проверка, потом материал под неё."
+  - id: ref-02
+    title: "single-objective"
+    source: "references/sources.yaml#lesson-plan"
+    takeaway: "Один урок — один измеримый результат, сформулированный глаголом действия."
+  - id: ref-03
+    title: "distractor-design"
+    source: "references/sources.yaml#quiz-builder"
+    takeaway: "Дистракторы отражают типичные ошибки ученика, а не случайные числа."

@@ -1,0 +1,9 @@
+name: quiz-builder
+title: "quiz-builder"
+description: "Приём студии «Образовательная студия»: quiz-builder."
+inputs: [brief, deliverable_dir]
+outputs: [course]
+steps:
+  - "Разобрать бриф"
+  - "Собрать артефакт по закону студии"
+  - "Отдать на приёмку"

@@ -1,0 +1,14 @@
+# sources.yaml — источники приёмов студии
+sources:
+  - id: ref-01
+    title: "one-thesis"
+    source: "references/sources.yaml#longform-post"
+    takeaway: "Один длинный текст держит один тезис; каждый абзац продвигает его, а не повторяет сказанное."
+  - id: ref-02
+    title: "concrete-open"
+    source: "references/sources.yaml#longform-post"
+    takeaway: "Первая фраза начинается с факта или сцены, а не с обобщения вроде «в современном мире»."
+  - id: ref-03
+    title: "read-aloud"
+    source: "references/sources.yaml#copy-edit"
+    takeaway: "Правку читают вслух: спотыкание на слоге — сигнал переписать предложение короче."

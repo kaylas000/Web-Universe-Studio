@@ -1,0 +1,9 @@
+name: sql-audit
+title: "sql-audit"
+description: "Приём студии «Студия данных»: sql-audit."
+inputs: [brief, deliverable_dir]
+outputs: [analysis]
+steps:
+  - "Разобрать бриф"
+  - "Собрать артефакт по закону студии"
+  - "Отдать на приёмку"

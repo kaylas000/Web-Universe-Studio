@@ -1,0 +1,4 @@
+id: ref-01
+style: single-question
+source: references/sources.yaml#metric-report
+takeaway: Отчёт отвечает на один вопрос; каждая метрика связывается с решением, а не с любопытством.

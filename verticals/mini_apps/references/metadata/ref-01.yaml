@@ -1,0 +1,4 @@
+id: ref-01
+style: one-screen
+source: references/sources.yaml#single-page-app
+takeaway: Экран решает одну задачу; вторичные действия уходят в меню, а не теснятся рядом.

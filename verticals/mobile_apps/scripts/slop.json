@@ -1,0 +1,33 @@
+{
+  "vertical": "mobile_apps",
+  "scan": [
+    "app"
+  ],
+  "extensions": [
+    ".mjs",
+    ".json",
+    ".md"
+  ],
+  "rules": [
+    {
+      "code": "B-01",
+      "pattern": "\\balert\\(",
+      "message": "обратная связь через alert"
+    },
+    {
+      "code": "B-02",
+      "pattern": "TODO",
+      "message": "незавершённое"
+    },
+    {
+      "code": "B-03",
+      "pattern": "console\\.log",
+      "message": "отладочный шум"
+    },
+    {
+      "code": "B-04",
+      "pattern": ":\\s*any\\b",
+      "message": "нетипизированное место"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "vertical": "education",
+  "rules": [
+    {
+      "code": "V-01",
+      "title": "Программа на месте",
+      "kind": "fileExists",
+      "path": "course/README.md",
+      "ok": "course/README.md найден",
+      "fail": "нет course/README.md"
+    },
+    {
+      "code": "V-02",
+      "title": "Урок на месте",
+      "kind": "fileExists",
+      "path": "course/lesson-01.md",
+      "ok": "course/lesson-01.md найден",
+      "fail": "нет course/lesson-01.md"
+    },
+    {
+      "code": "V-03",
+      "title": "Тест на месте",
+      "kind": "jsonHas",
+      "path": "course/quiz.json",
+      "keys": [
+        "questions"
+      ],
+      "ok": "вопросы есть",
+      "fail": "нет course/quiz.json с questions (К-04)"
+    },
+    {
+      "code": "V-04",
+      "title": "Три вопроса",
+      "kind": "regexAtLeast",
+      "path": "course/quiz.json",
+      "pattern": "\"question\"",
+      "min": 3,
+      "ok": "три и более вопросов",
+      "fail": "меньше трёх вопросов (К-04)"
+    },
+    {
+      "code": "V-05",
+      "title": "Цели обучения",
+      "kind": "textHasAll",
+      "path": "course/README.md",
+      "patterns": [
+        "Цели обучения"
+      ],
+      "ok": "цели перечислены",
+      "fail": "нет блока «Цели обучения» (К-01)"
+    },
+    {
+      "code": "V-06",
+      "title": "Три блока урока",
+      "kind": "textHasAll",
+      "path": "course/lesson-01.md",
+      "patterns": [
+        "Теория",
+        "Практика",
+        "Проверка"
+      ],
+      "ok": "Теория/Практика/Проверка на месте",
+      "fail": "пропущен блок урока (К-02)"
+    },
+    {
+      "code": "V-07",
+      "title": "Объём урока",
+      "kind": "minWords",
+      "path": "course/lesson-01.md",
+      "min": 220,
+      "ok": "объём достаточный",
+      "fail": "урок короче 220 слов (К-06)"
+    },
+    {
+      "code": "V-08",
+      "title": "Источники",
+      "kind": "fileExists",
+      "path": "course/SOURCES.md",
+      "ok": "course/SOURCES.md найден",
+      "fail": "нет course/SOURCES.md (К-05)"
+    }
+  ]
+}

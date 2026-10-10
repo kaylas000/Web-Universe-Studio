@@ -1,0 +1,4 @@
+id: ref-01
+style: one-thesis
+source: references/sources.yaml#longform-post
+takeaway: Один длинный текст держит один тезис; каждый абзац продвигает его, а не повторяет сказанное.

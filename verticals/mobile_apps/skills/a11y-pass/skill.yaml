@@ -1,0 +1,9 @@
+name: a11y-pass
+title: "a11y-pass"
+description: "Приём студии «Студия мобильных приложений»: a11y-pass."
+inputs: [brief, deliverable_dir]
+outputs: [app]
+steps:
+  - "Разобрать бриф"
+  - "Собрать артефакт по закону студии"
+  - "Отдать на приёмку"

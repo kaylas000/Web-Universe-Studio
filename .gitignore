@@ -1,0 +1,18 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Прогоны цикла: state = файлы, но evidence итераций не коммитим
+**/workspace/
+!projects/_LOOP_TEMPLATE/workspace/
+
+# Индексы RAG (собираются scripts/index_references.mjs)
+**/references/.index.json
+
+# Прочее
+.DS_Store
+dist/
+*.local
+.env
+.env.*
+!.env.example

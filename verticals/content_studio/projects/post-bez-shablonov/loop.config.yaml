@@ -1,0 +1,10 @@
+project_name: post-bez-shablonov
+task: "написать лонгрид о сборке страниц под задачу вместо шаблонов"
+loop:
+  max_iterations: 1
+generator:
+  type: mock
+context_builder:
+  type: studio_default
+validator:
+  type: vertical_project

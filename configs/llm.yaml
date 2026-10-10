@@ -1,0 +1,47 @@
+# ЦЕХ · метаплатформа — конфигурация LLM-провайдеров (§4.3, §14.4 ТЗ).
+# Ключи ТОЛЬКО из переменных окружения (api_key_env); в отчётах — флаг apiKeyPresent.
+# Провайдер по умолчанию для офлайн/CI — mock (детерминированный, без сети).
+default_provider: mock
+
+providers:
+  mock:
+    kind: mock
+    deterministic: true
+    description: "Офлайн-генератор для --dry-run, --selftest и CI. Ноль сети."
+
+  openai:
+    kind: openai
+    base_url_env: OPENAI_BASE_URL
+    default_base_url: "https://api.openai.com/v1"
+    api_key_env: OPENAI_API_KEY
+    supports_response_format: files
+    models:
+      - gpt-4o-mini
+      - gpt-4o
+
+  ollama:
+    kind: openai
+    base_url: "http://127.0.0.1:11434/v1"
+    api_key_env: OLLAMA_API_KEY
+    api_key_optional: true
+    supports_response_format: files
+    models:
+      - llama3.1:8b
+      - qwen2.5-coder:7b
+      - gemma2:9b
+
+  anthropic:
+    kind: anthropic
+    api_key_env: ANTHROPIC_API_KEY
+    models:
+      - claude-3-5-sonnet-latest
+
+roles:
+  planner: { provider: mock, model: llama3.1:8b }
+  coder: { provider: mock, model: qwen2.5-coder:7b }
+  verifier_llm: { provider: mock, model: gemma2:9b }
+  fixer: { provider: mock, model: llama3.1:8b }
+
+limits:
+  max_tokens_per_run: 200000
+  temperature_schedule: [0.6, 0.4, 0.2]

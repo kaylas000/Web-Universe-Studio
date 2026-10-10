@@ -1,0 +1,28 @@
+{
+  "name": "studio-univers",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Мета-платформа ИИ-студий: Node/ESM zero-dep ядро (цикл К-21) + 7 вертикалей (§ТЗ v3.0).",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "loop": "node core/loop-engine/cli.mjs",
+    "loop:selftest": "node core/loop-engine/cli.mjs --selftest",
+    "gate": "node core/gate.mjs",
+    "gate:web": "node core/loop-engine/gate.mjs",
+    "test:engine": "node --test core/loop-engine/tests/*.test.mjs",
+    "test:platform": "node scripts/run-tests.mjs tests",
+    "test:verticals": "node scripts/run-tests.mjs verticals",
+    "test": "npm run test:engine && npm run loop:selftest && npm run gate && npm run test:platform && npm run test:verticals",
+    "index:references": "node scripts/index_references.mjs",
+    "scrape": "node scripts/scrape_references.mjs",
+    "references": "node cli/references_cli.mjs",
+    "cli": "node cli/main.mjs",
+    "api": "node core/api/server.mjs",
+    "orchestrate": "node core/orchestrator/cli.mjs",
+    "acceptance": "bash scripts/acceptance_test.sh",
+    "deploy": "bash scripts/deploy.sh"
+  }
+}

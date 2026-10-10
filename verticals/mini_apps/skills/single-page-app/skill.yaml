@@ -1,0 +1,10 @@
+name: single-page-app
+title: "Одностраничное приложение"
+description: "Собирает мини-приложение: разметка, скрипт с addEventListener, стиль."
+inputs: [brief, deliverable_dir]
+outputs: [app]
+steps:
+  - "Собрать разметку"
+  - "Навесить обработчики через addEventListener"
+  - "Оформить стиль без transition: all"
+  - "Проверить анти-слоп"

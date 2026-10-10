@@ -1,0 +1,9 @@
+name: legal-review
+title: "legal-review"
+description: "Приём студии «Юридическая студия»: legal-review."
+inputs: [brief, deliverable_dir]
+outputs: [docs]
+steps:
+  - "Разобрать бриф"
+  - "Собрать артефакт по закону студии"
+  - "Отдать на приёмку"

@@ -1,0 +1,36 @@
+# ЦЕХ · метаплатформа — провайдеры песочницы (§4.4, §14.3 ТЗ).
+# Ядро: core/loop-engine/subprocess.mjs — shell:false, аргументы массивом, timeout+SIGKILL,
+# усечение вывода. Инъекция команд исключена; запись только в workspace/ (safeResolveInside).
+default_provider: local
+
+providers:
+  local:
+    kind: local
+    description: "Прямой запуск процесса ядра (по умолчанию). Сеть — по хост-политике."
+    limits: { cpu: 2, memory_mb: 1024, timeout_s: 300 }
+
+  docker:
+    kind: docker
+    description: "Изоляция контейнером; сеть наружу запрещена allowlist-ом."
+    network: none
+    allowlist: []
+    limits: { cpu: 2, memory_mb: 2048, timeout_s: 300 }
+
+  e2b:
+    kind: e2b
+    description: "Внешняя песочница (опционально); ключ только из env."
+    api_key_env: E2B_API_KEY
+    limits: { cpu: 2, memory_mb: 2048, timeout_s: 300 }
+
+templates:
+  node-20:
+    provider: docker
+    image: "node:20-slim"
+    workdir: "/workspace"
+  node-20-e2b:
+    provider: e2b
+    template: "node-20"
+
+quotas:
+  max_concurrent: 10
+  default_timeout_s: 300

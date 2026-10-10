@@ -1,0 +1,34 @@
+{
+  "vertical": "mini_apps",
+  "scan": [
+    "app"
+  ],
+  "extensions": [
+    ".html",
+    ".js",
+    ".css",
+    ".md"
+  ],
+  "rules": [
+    {
+      "code": "B-01",
+      "pattern": "transition:\\s*all",
+      "message": "тяжёлая анимация"
+    },
+    {
+      "code": "B-02",
+      "pattern": "onclick=",
+      "message": "инлайновый обработчик"
+    },
+    {
+      "code": "B-03",
+      "pattern": "!important",
+      "message": "насилие над каскадом"
+    },
+    {
+      "code": "B-04",
+      "pattern": "console\\.log",
+      "message": "отладочный шум"
+    }
+  ]
+}

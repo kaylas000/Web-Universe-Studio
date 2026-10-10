@@ -1,0 +1,37 @@
+# ЦЕХ · метаплатформа — декларативное описание студии (§8 ТЗ), эталон web_studio.
+# metadata.* и spec.* читает ядро; metadata.deliverable/checks — маркеры приёмки гейта.
+# Правила живут в CONSTITUTION.md, приёмы — в skills/, приёмка — в scripts/.
+apiVersion: autogen/v1
+kind: Vertical
+metadata:
+  name: web_studio
+  displayName: Веб-студия ЦЕХ (эталон)
+  description: Промышленная вёрстка сайтов: конституция К-01…К-21, 16 приёмов, motion-рецепты и анти-слоп.
+  version: "1.0.0"
+  domain: web
+  tags: [web, landing, industrial, motion]
+  deliverable: site
+  checks: [validate, lint-slop, lint-copy, lint-marketing]
+spec:
+  skills: [scroll-story, case-storytelling, cinema-intro, comparison-matrix, content-fit, contrast-states, crop, frames-to-motion, industrial-copy, industrial-passport, interactive-data, micro-interactions, poster-type, proof-engine, ux-states, ux-writing, value-calculator, webgpu-codevideo, broken-grid]
+  validators: [constitution, anti_slop, schema, a11y_contrast, touch_target, llm_judge]
+  gates: [G1, G2, G3, G4]
+  tools: [validate_artifact, lint_slop, lint_copy, lint_marketing]
+  registry: registry.mjs
+  models:
+    planner: "ollama/llama3.1:8b"
+    coder: "ollama/qwen2.5-coder:7b"
+    verifier_llm: "ollama/gemma2:9b"
+    fixer: "ollama/llama3.1:8b"
+  budget:
+    max_cost_usd_per_run: 2.0
+    max_iterations: 6
+    max_tokens_per_run: 200000
+  knowledge:
+    provider: local
+    rag_collections:
+      - name: web_studio_references
+        source: "verticals/web_studio/references"
+  anti_slop:
+    banned_file: "anti-slop/BANNED.md"
+    quotas_file: "anti-slop/QUOTAS.md"

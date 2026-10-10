@@ -1,0 +1,7 @@
+node_modules/
+.next/
+build/
+*.log
+dist/
+# К-21: evidence прогонов цикла — рабочая зона движка, не часть проекта
+projects/*/workspace/

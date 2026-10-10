@@ -1,0 +1,32 @@
+{
+  "vertical": "data_analytics",
+  "scan": [
+    "analysis"
+  ],
+  "extensions": [
+    ".md",
+    ".sql"
+  ],
+  "rules": [
+    {
+      "code": "B-01",
+      "pattern": "очевидно, что",
+      "message": "вывод без опоры"
+    },
+    {
+      "code": "B-02",
+      "pattern": "как известно",
+      "message": "вывод без опоры"
+    },
+    {
+      "code": "B-03",
+      "pattern": "в целом можно сказать",
+      "message": "филлер"
+    },
+    {
+      "code": "B-04",
+      "pattern": "данные говорят сами за себя",
+      "message": "вывод без опоры"
+    }
+  ]
+}

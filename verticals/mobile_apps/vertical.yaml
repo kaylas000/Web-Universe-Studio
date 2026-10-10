@@ -1,0 +1,36 @@
+# ЦЕХ · метаплатформа — декларативное описание студии (§8 ТЗ).
+# metadata.* и spec.* читает ядро; metadata.deliverable/checks — маркеры приёмки гейта.
+apiVersion: autogen/v1
+kind: Vertical
+metadata:
+  name: mobile_apps
+  displayName: "Студия мобильных приложений"
+  description: "Собирает экран мобильного приложения: манифест, модуль экрана с состоянием и разметкой, доступные подписи и README."
+  version: "1.0.0"
+  domain: mobile_apps
+  tags: [screen-composer, a11y-pass]
+  deliverable: app
+  checks: [validate, lint-slop]
+spec:
+  skills: [screen-composer, a11y-pass]
+  validators: [constitution, anti_slop, schema]
+  gates: [G1-direction, G2-structure, G3-artifact, G4-final]
+  tools: [validate_artifact, lint_slop]
+  registry: "registry.mjs"
+  models:
+    planner: "ollama/llama3.1:8b"
+    coder: "ollama/qwen2.5-coder:7b"
+    verifier_llm: "ollama/gemma2:9b"
+    fixer: "ollama/llama3.1:8b"
+  budget:
+    max_cost_usd_per_run: 1.5
+    max_iterations: 10
+    max_tokens_per_run: 120000
+  knowledge:
+    provider: local
+    rag_collections:
+      - name: mobile_apps_references
+        source: "verticals/mobile_apps/references"
+  anti_slop:
+    banned_file: "anti-slop/BANNED.md"
+    quotas_file: "anti-slop/QUOTAS.md"

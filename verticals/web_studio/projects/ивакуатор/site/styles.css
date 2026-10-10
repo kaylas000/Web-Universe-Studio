@@ -1,0 +1,1522 @@
+/* ==========================================================================
+   Эвакуатор Москва и Химки · главная
+   Палитра только в OKLCH (К-20). Кривые только из motion/easing-curves.json (К-05).
+   Шрифтовая пара №1 из assets/fonts/PAIRS.md: Russo One + Golos Text.
+   ========================================================================== */
+
+@font-face {
+  font-family: "Russo One";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/russo-one-400-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Russo One";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("fonts/russo-one-400-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Golos Text";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("fonts/golos-text-var-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Golos Text";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("fonts/golos-text-var-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@layer reset, tokens, layout, content, components, motion;
+
+@layer reset {
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body, h1, h2, h3, p, ul, ol, dl, dd, dt, figure, blockquote, fieldset, legend {
+    margin: 0;
+    padding: 0;
+  }
+  ul, ol { padding: 0; list-style: none; }
+  img, svg { display: block; max-width: 100%; }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  fieldset { border: 0; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 3px solid var(--alarm); outline-offset: 3px; }
+}
+
+@layer tokens {
+  :root {
+    /* бумага и чернила: references/poster/REF-03.meta.yaml */
+    --paper: oklch(0.961 0.011 90);
+    --paper-2: oklch(0.935 0.012 88);
+    --paper-3: oklch(0.905 0.013 86);
+    --ink: oklch(0.235 0 90);
+    --ink-2: oklch(0.17 0 90);
+    --muted: oklch(0.505 0 90);
+    --muted-dark: oklch(0.66 0 90);
+    --line: oklch(0.883 0.015 85);
+    --line-2: oklch(0.80 0.015 86);
+    --line-dark: oklch(0.40 0 90);
+
+    /* гигантские цифры разделов (SEED, ось «типографика»): декоративные,
+       но держим 3:1 к бумаге и к чернилам — WCAG 1.4.3 для крупного текста */
+    --num: oklch(0.60 0 90);
+    --num-ink: oklch(0.55 0 90);
+
+    /* аварийный красный: references/poster/REF-03.meta.yaml, доведён по контрасту */
+    --alarm: oklch(0.535 0.193 30);
+    /* сигнальный янтарь: references/play/REF-04.meta.yaml */
+    --amber: oklch(0.811 0.166 85);
+
+    --display: "Russo One", Impact, "Arial Black", system-ui, sans-serif;
+    --body: "Golos Text", "Helvetica Neue", Arial, sans-serif;
+
+    --curve-brake: cubic-bezier(0.16, 1, 0.3, 1);
+    --curve-drag: cubic-bezier(0.65, 0, 0.15, 1);
+    --curve-snap: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --curve-coast: cubic-bezier(0.33, 0.01, 0.16, 1);
+    --curve-drive: cubic-bezier(0, 0, 1, 1);
+
+    --rail-w: 300px;
+    --gap: clamp(16px, 2.4vw, 32px);
+  }
+}
+
+@layer layout {
+  html, body { min-height: 100%; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: clamp(16px, 1.06vw, 18px);
+    line-height: 1.55;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    /* clip вместо hidden: не создаёт scroll-контейнер на body,
+       иначе position: sticky у шапки ломается в Safari */
+    overflow-x: hidden;
+    overflow-x: clip;
+  }
+
+  .skip {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 12px 18px;
+    z-index: 40;
+  }
+  .skip:focus { left: 8px; top: 8px; }
+
+  .masthead {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 3vw, 40px);
+    padding: 12px clamp(14px, 3vw, 32px);
+    border-bottom: 2px solid var(--ink);
+    background: var(--paper);
+    position: relative;
+    z-index: 6;
+    min-height: 64px;
+  }
+  .brand { display: flex; flex-direction: column; justify-content: center; min-height: 44px; line-height: 1.1; }
+  .brand__word {
+    font-family: var(--display);
+    font-size: clamp(17px, 1.7vw, 22px);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .brand__city {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .nav {
+    display: flex;
+    gap: clamp(8px, 1.6vw, 22px);
+    margin-left: auto;
+    flex-wrap: wrap;
+  }
+  .nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 2px;
+    font-size: 15px;
+    border-bottom: 2px solid transparent;
+  }
+  .nav a:hover { border-bottom-color: var(--alarm); }
+  .mburger {
+    display: none;
+    position: relative;
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+  }
+  .mburger__bars,
+  .mburger__bars::before,
+  .mburger__bars::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    width: 20px;
+    height: 2px;
+    margin-left: -10px;
+    background: var(--ink);
+    transition: transform 240ms var(--curve-snap), opacity 200ms var(--curve-drive);
+  }
+  .mburger__bars { top: 50%; margin-top: -1px; }
+  .mburger__bars::before { top: -7px; }
+  .mburger__bars::after { top: 7px; }
+  .masthead__tel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-height: 44px;
+    justify-content: center;
+    text-align: right;
+  }
+  .masthead__tel b {
+    font-family: var(--display);
+    font-size: clamp(15px, 1.5vw, 19px);
+    letter-spacing: 0.02em;
+  }
+  .masthead__tel span {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .shell {
+    display: grid;
+    grid-template-columns: var(--rail-w) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .plate {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-right: 3px solid var(--alarm);
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-dark) var(--ink);
+  }
+  .plate__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    border-bottom: 1px solid var(--line-dark);
+    padding-bottom: 10px;
+  }
+  .plate__label {
+    font-family: var(--display);
+    font-size: 15px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .plate__no {
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    color: var(--muted-dark);
+  }
+  .plate__status {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--amber);
+  }
+  .dot {
+    width: 9px;
+    height: 9px;
+    background: var(--amber);
+    border-radius: 50%;
+    flex: none;
+    animation: blink 1.8s steps(2) infinite;
+  }
+  .plate__fields { display: flex; flex-direction: column; gap: 7px; }
+  .plate__fields div {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: baseline;
+    border-bottom: 1px dotted var(--line-dark);
+    padding-bottom: 6px;
+  }
+  .plate__fields dt {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted-dark);
+  }
+  .plate__fields dd {
+    font-size: 13.5px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .plate__stamp {
+    align-self: flex-start;
+    transform: rotate(-7deg);
+    border: 2px solid var(--alarm);
+    color: var(--amber);
+    font-family: var(--display);
+    font-size: 15px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    background: oklch(0.17 0 90 / 0.6);
+  }
+  .plate__tel {
+    font-family: var(--display);
+    font-size: clamp(24px, 2vw, 30px);
+    line-height: 1.05;
+    letter-spacing: 0.01em;
+    color: var(--paper);
+    text-transform: none;
+    display: block;
+    min-height: 44px;
+  }
+  .plate__tel:hover { color: var(--amber); }
+  .plate__idx {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--line-dark);
+  }
+  .plate__idx a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 30px;
+    font-size: 13.5px;
+    color: var(--muted-dark);
+    border-left: 3px solid transparent;
+    padding-left: 8px;
+  }
+  .plate__idx a b {
+    font-family: var(--display);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--muted-dark);
+  }
+  .plate__idx a:hover { color: var(--paper); }
+  .plate__idx a[aria-current="true"] {
+    color: var(--paper);
+    border-left-color: var(--alarm);
+  }
+  .plate__idx a[aria-current="true"] b { color: var(--amber); }
+
+  .flow { min-width: 0; }
+
+  .act {
+    position: relative;
+    container-type: inline-size;
+    overflow-x: clip;
+    padding: clamp(52px, 7vw, 96px) clamp(18px, 5vw, 72px);
+    border-top: 2px solid var(--ink);
+    scroll-margin-top: 8px;
+  }
+  .act:first-child { border-top: 0; }
+  .act > *:not(.act__num) { position: relative; z-index: 1; }
+
+  .act__num {
+    position: absolute;
+    top: 0.06em;
+    right: 0.06em;
+    z-index: 0;
+    font-family: var(--display);
+    font-size: 11vw;
+    line-height: 0.78;
+    color: var(--num);
+    letter-spacing: -0.02em;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .act__head {
+    max-width: 62ch;
+    margin-bottom: clamp(24px, 3.4vw, 44px);
+    container-type: inline-size;
+  }
+  .act__head h2 {
+    font-family: var(--display);
+    font-size: clamp(30px, 4.6vw, 62px);
+    line-height: 1.02;
+    text-transform: uppercase;
+    letter-spacing: 0.005em;
+    margin-bottom: 14px;
+  }
+  .act__lede { color: var(--muted); font-size: clamp(16px, 1.2vw, 19px); max-width: 52ch; }
+}
+
+@layer content {
+  .kicker {
+    font-family: var(--display);
+    font-size: clamp(11px, 1vw, 13px);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--alarm);
+    margin-bottom: clamp(14px, 2vw, 24px);
+  }
+
+  .act--hero {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+    padding-top: clamp(40px, 5vw, 72px);
+    min-height: 78vh;
+  }
+  /* H1 живёт в колонке 7fr, а не во вьюпорте: на 1440 это 539px, а самое
+     длинное слово в Russo One («КРУГЛОСУТОЧНО») — 8,7em. Кегль берём от
+     контейнера колонки, иначе mask-reveal молча срезает правый край. */
+  .hero__copy { container-type: inline-size; }
+  .hero__title {
+    font-family: var(--display);
+    font-size: clamp(28px, 10.8cqw, 150px);
+    line-height: 0.94;
+    text-transform: uppercase;
+    letter-spacing: -0.015em;
+    margin-bottom: clamp(16px, 2vw, 26px);
+    text-wrap: balance;
+    overflow-wrap: break-word;
+  }
+  .hero__lede { max-width: 46ch; font-size: clamp(17px, 1.35vw, 21px); }
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: clamp(22px, 3vw, 34px);
+  }
+  .hero__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(16px, 3vw, 40px);
+    margin-top: clamp(24px, 3.4vw, 40px);
+    border-top: 2px solid var(--ink);
+    padding-top: 16px;
+  }
+  .hero__facts li { display: flex; flex-direction: column; gap: 2px; }
+  .hero__facts b {
+    font-family: var(--display);
+    font-size: clamp(22px, 2.6vw, 34px);
+    line-height: 1;
+  }
+  .hero__facts span {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    max-width: 18ch;
+  }
+
+  .hero__scene { align-self: center; }
+  .hero__scene svg {
+    width: 100%;
+    height: auto;
+    background: var(--paper-3);
+    border: 2px solid var(--ink);
+  }
+  .hero__scene figcaption {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--muted);
+    max-width: 40ch;
+  }
+
+  .index { border-top: 2px solid var(--ink); margin-bottom: clamp(22px, 3vw, 34px); }
+  .index__row {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) minmax(0, 36%);
+    gap: clamp(10px, 2vw, 26px);
+    align-items: baseline;
+    padding: clamp(12px, 1.5vw, 18px) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .index__row:hover { background: var(--paper-2); }
+  .index__n {
+    font-family: var(--display);
+    font-size: 15px;
+    color: var(--alarm);
+    letter-spacing: 0.06em;
+  }
+  .index__name {
+    font-family: var(--display);
+    font-size: clamp(19px, 2.6cqw, 34px);
+    line-height: 1.06;
+    text-transform: uppercase;
+  }
+  .index__meta {
+    font-size: clamp(13px, 1.1vw, 15px);
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+
+  .article { display: grid; gap: 18px; max-width: 68ch; }
+  .article p { font-size: clamp(17px, 1.1vw, 18.5px); line-height: 1.6; }
+  .article ul, .article ol { padding-left: 22px; display: grid; gap: 8px; }
+  .article ul { list-style: disc; }
+  .article li::marker { color: var(--alarm); }
+  .article b { font-weight: 700; }
+  .article .article__note {
+    border-left: 3px solid var(--amber);
+    padding-left: 16px;
+    color: var(--muted);
+    font-size: clamp(15px, 1vw, 17px);
+    line-height: 1.55;
+  }
+
+  .act--lane { padding-bottom: 0; }
+  /* отступ входа ≈130px на любом десктопе: 44px шапки + центровка сцены
+     ((100vh − 96px подушки − ~390px контента) / 2), взятая на себя отрицательным
+     полем. Закреплённая композиция от этого не меняется — только точка входа. */
+  .lane { height: 320vh; margin-top: calc(329px - 50vh); }
+  .lane__stage {
+    position: sticky;
+    top: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(28px, 5vh, 60px);
+    padding-bottom: clamp(52px, 7vw, 96px);
+  }
+  .lane__rail {
+    position: relative;
+    height: 104px;
+    border-bottom: 3px solid var(--ink);
+    margin-bottom: 26px;
+  }
+  .lane__t {
+    position: absolute;
+    left: calc(var(--p, 0) * (100% - 132px));
+    bottom: 0;
+    width: 132px;
+    display: block;
+  }
+  .lane__t svg { width: 132px; height: auto; }
+  .lane__tick {
+    position: absolute;
+    left: var(--at);
+    bottom: -3px;
+    width: 3px;
+    height: 28px;
+    background: var(--ink);
+    transform: translateX(-50%);
+  }
+  .lane__tick::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -7px;
+    width: 11px;
+    height: 11px;
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    transform: translateX(-50%);
+  }
+  .lane__steps {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: clamp(10px, 1.6vw, 22px);
+  }
+  .lane__steps li {
+    border-top: 3px solid var(--line);
+    padding-top: 14px;
+    transition: border-color 320ms var(--curve-brake);
+  }
+  .lane__steps li.is-hit { border-top-color: var(--alarm); }
+  .lane__no {
+    display: block;
+    font-family: var(--display);
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .lane__steps b {
+    display: block;
+    font-family: var(--display);
+    font-size: clamp(19px, 2vw, 26px);
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .lane__steps p { font-size: clamp(14px, 1.1vw, 16px); color: var(--muted); }
+  .lane__stamp {
+    display: inline-block;
+    margin-bottom: 10px;
+    border: 2px solid var(--alarm);
+    color: var(--alarm);
+    font-family: var(--display);
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 9px;
+    opacity: 0;
+    transform: rotate(-6deg) scale(0.4);
+    transition: opacity 300ms var(--curve-snap), transform 300ms var(--curve-snap);
+  }
+  li.is-hit .lane__stamp { opacity: 1; transform: rotate(-6deg) scale(1); }
+
+  .price { border-top: 2px solid var(--ink); }
+  .price__row {
+    display: flex;
+    /* значение в nowrap не держим: «Химки, Клязьма-Старбеево» шире колонки
+       5fr, flex-item не ужимался и уезжал за кромку секции под overflow-x: clip.
+       При нехватке ширины значение уходит на свою строку. */
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 6px clamp(12px, 3vw, 40px);
+    padding: clamp(14px, 1.8vw, 20px) 0;
+    border-bottom: 1px solid var(--line);
+    font-size: clamp(17px, 1.7vw, 24px);
+  }
+  .price__row b {
+    font-family: var(--display);
+    font-size: clamp(19px, 2.2vw, 30px);
+    margin-left: auto;
+  }
+  .price__row a { display: inline-flex; align-items: center; min-height: 44px; }
+  .price__row--hi {
+    background: var(--paper-2);
+    border-left: 5px solid var(--alarm);
+    padding-left: clamp(10px, 1.6vw, 18px);
+    padding-right: clamp(10px, 1.6vw, 18px);
+    border-bottom-color: var(--ink);
+  }
+  .price__row--hi b { color: var(--alarm); }
+  .price__note {
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 56ch;
+  }
+
+  .calc {
+    margin-top: clamp(30px, 4vw, 52px);
+    background: var(--paper-2);
+    border: 2px solid var(--ink);
+    padding: clamp(18px, 3vw, 34px);
+    display: grid;
+    gap: clamp(16px, 2vw, 26px);
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas:
+      "title title"
+      "zone  res"
+      "tech  res"
+      "case  res"
+      "act   res"
+      "fleet fleet";
+    align-items: start;
+  }
+  .calc__title {
+    grid-area: title;
+    font-family: var(--display);
+    font-size: clamp(19px, 2vw, 26px);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 12px;
+  }
+  .calc__q { min-width: 0; }
+  .calc__q:nth-of-type(1) { grid-area: zone; }
+  .calc__q:nth-of-type(2) { grid-area: tech; }
+  .calc__q:nth-of-type(3) { grid-area: case; }
+  .calc__q legend {
+    font-size: 11.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 9px;
+  }
+  .seg { display: flex; flex-wrap: wrap; gap: 8px; }
+  .calc__act {
+    grid-area: act;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+  .calc__reset {
+    background: none;
+    border: 0;
+    border-bottom: 2px solid var(--line-2);
+    color: var(--muted);
+    font-size: 14px;
+    min-height: 44px;
+    padding: 0 4px;
+    cursor: pointer;
+  }
+  .calc__reset:hover { color: var(--ink); border-bottom-color: var(--ink); }
+
+  .res {
+    grid-area: res;
+    background: var(--ink);
+    color: var(--paper);
+    border-left: 5px solid var(--alarm);
+    padding: clamp(16px, 2.4vw, 26px);
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-self: stretch;
+  }
+  .res__msg { color: var(--muted-dark); font-size: 15.5px; }
+  .res[data-state="error"] { border-left-color: var(--amber); }
+  .res[data-state="error"] .res__msg { color: var(--amber); }
+  .res[data-state="ideal"] .res__msg { color: var(--paper); }
+  .res__body { display: flex; flex-direction: column; gap: 12px; }
+  .res__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: baseline;
+    border-bottom: 1px dotted var(--line-dark);
+    padding-bottom: 7px;
+    font-size: 14.5px;
+  }
+  .res__row span:first-child {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted-dark);
+  }
+  .res__row b { text-align: right; }
+  .res__price {
+    font-family: var(--display);
+    font-size: clamp(26px, 3vw, 38px);
+    line-height: 1;
+    color: var(--amber);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .res__sub { font-size: 13.5px; color: var(--muted-dark); }
+
+  /* техника на выезде: реальные фото img/fleet/*.jpg (1600 px по длинной
+     стороне, progressive q85), карточки зеркалят варианты «Техника»
+     калькулятора; активная подсвечивается по data-active (выбор в подборе). */
+  .fleet {
+    grid-area: fleet;
+    border-top: 2px solid var(--line-2);
+    padding-top: clamp(14px, 2vw, 20px);
+  }
+  .fleet__title {
+    font-family: var(--display);
+    font-size: clamp(13px, 1.4vw, 16px);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .fleet__row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: clamp(10px, 1.6vw, 18px);
+  }
+  .fleet__card {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: opacity 400ms var(--curve-drive);
+  }
+  .fleet__photo {
+    display: block;
+    border: 2px solid var(--line-2);
+    transition: border-color 400ms var(--curve-drive);
+  }
+  .fleet__photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 5 / 3;
+    object-fit: cover;
+    background: var(--paper-2);
+  }
+  .fleet[data-active="light"] .fleet__card:not([data-val="light"]),
+  .fleet[data-active="comm"] .fleet__card:not([data-val="comm"]),
+  .fleet[data-active="special"] .fleet__card:not([data-val="special"]) { opacity: 0.45; }
+  .fleet[data-active="light"] .fleet__card[data-val="light"] .fleet__photo,
+  .fleet[data-active="comm"] .fleet__card[data-val="comm"] .fleet__photo,
+  .fleet[data-active="special"] .fleet__card[data-val="special"] .fleet__photo { border-color: var(--alarm); }
+
+  /* галерея: 20 слотов фото техники (img/gallery/foto-*.svg, заменяются
+     реальной съёмкой тех же имён *.jpg) */
+  .gal__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: clamp(10px, 1.6vw, 18px);
+  }
+  .gal__f { margin: 0; }
+  .gal__photo {
+    display: block;
+    border: 2px solid var(--line-2);
+  }
+  .gal__photo img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background: var(--paper-2);
+  }
+
+  .ledger { border-top: 2px solid var(--ink); }
+  .ledger div {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(10px, 2vw, 30px);
+    padding: clamp(11px, 1.4vw, 16px) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .ledger dt {
+    font-size: 11.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 4px;
+  }
+  .ledger dd { font-size: clamp(16px, 1.5vw, 21px); }
+  .act--last .ledger div { border-bottom-color: var(--line-dark); }
+
+  .reviews { border-top: 2px solid var(--ink); }
+  .reviews__row {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    gap: clamp(10px, 2vw, 30px);
+    padding: clamp(16px, 2vw, 24px) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .reviews__meta { display: flex; flex-direction: column; gap: 3px; }
+  .reviews__meta b {
+    font-family: var(--display);
+    font-size: clamp(17px, 1.7vw, 22px);
+    text-transform: uppercase;
+  }
+  .reviews__meta span {
+    font-size: 12.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .reviews blockquote {
+    font-size: clamp(17px, 1.7vw, 23px);
+    line-height: 1.4;
+    border-left: 5px solid var(--alarm);
+    padding-left: clamp(12px, 2vw, 22px);
+  }
+
+  .zone {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: clamp(20px, 3vw, 44px);
+    align-items: center;
+    margin-bottom: clamp(22px, 3vw, 34px);
+  }
+  .zone__map {
+    width: 100%;
+    height: auto;
+    background: var(--paper-3);
+    border: 2px solid var(--ink);
+  }
+  .zone__list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: baseline;
+    padding: clamp(10px, 1.3vw, 15px) 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .zone__list li:first-child { border-top: 2px solid var(--ink); }
+  .zone__list b {
+    font-family: var(--display);
+    font-size: clamp(16px, 1.6vw, 21px);
+    text-transform: uppercase;
+  }
+  .zone__list span { font-size: 14px; color: var(--muted); text-align: right; }
+
+  .faq { max-width: 76ch; border-top: 2px solid var(--ink); }
+  .faq__q { border-bottom: 1px solid var(--line); padding: clamp(10px, 1.4vw, 16px) 0; }
+  .faq__q summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    min-height: 44px;
+    font-family: var(--display);
+    font-size: clamp(17px, 1.8vw, 24px);
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+  .faq__q summary::-webkit-details-marker { display: none; }
+  .faq__q summary::after {
+    content: "+";
+    margin-left: auto;
+    color: var(--alarm);
+    font-size: 26px;
+    line-height: 1;
+  }
+  .faq__q[open] summary::after { content: "–"; }
+  .faq__q p {
+    margin-top: 10px;
+    padding-left: clamp(14px, 2vw, 28px);
+    color: var(--muted);
+    max-width: 62ch;
+  }
+
+  .act--last,
+  .foot {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .act--last { border-top: 3px solid var(--alarm); }
+  .act--last .act__num { color: var(--num-ink); }
+  .act--last .act__lede { color: var(--muted-dark); }
+
+  .call {
+    display: grid;
+    /* номер — строкой во всю ширину: в колонке 5fr он рвался на три строки */
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: start;
+  }
+  .call__tel {
+    font-family: var(--display);
+    /* кегль упирается в контейнер, а не в вьюпорт: 11.4cqw — это 100 / 8.28em
+       (длина номера в Russo One) с запасом 6%, номер не рвётся ни на одном брейкпоинте */
+    font-size: min(clamp(38px, 6vw, 84px), 11.4cqw);
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+    display: block;
+    min-height: 44px;
+    color: var(--amber);
+  }
+  .call__tel:hover { color: var(--paper); }
+  .contact {
+    margin-top: clamp(26px, 4vw, 44px);
+    border-top: 1px solid var(--line-dark);
+    padding-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 18px;
+  }
+  .contact li { display: flex; flex-direction: column; gap: 4px; }
+  .contact b {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted-dark);
+  }
+  .contact span { font-size: 15.5px; }
+  .contact a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    border-bottom: 1px solid var(--line-dark);
+  }
+  .contact a:hover { border-bottom-color: var(--amber); color: var(--amber); }
+
+  .foot {
+    border-top: 1px solid var(--line-dark);
+    padding: clamp(24px, 3vw, 40px) clamp(18px, 5vw, 72px) calc(clamp(24px, 3vw, 40px) + env(safe-area-inset-bottom));
+    display: grid;
+    gap: 12px;
+  }
+  .foot__nav { display: flex; flex-wrap: wrap; gap: clamp(12px, 2vw, 26px); }
+  .foot__nav a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 15px;
+    border-bottom: 1px solid transparent;
+  }
+  .foot__nav a:hover { border-bottom-color: var(--amber); }
+  .foot__tel { font-size: clamp(16px, 1.5vw, 20px); }
+  .foot__tel a {
+    font-family: var(--display);
+    border-bottom: 2px solid var(--alarm);
+    display: inline-block;
+    min-height: 44px;
+    line-height: 44px;
+  }
+  .foot__tel a:hover { color: var(--amber); }
+  .foot__legal { font-size: 13px; color: var(--muted-dark); max-width: 84ch; }
+  .foot__towns {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(12px, 2vw, 26px);
+    font-size: 13px;
+    color: var(--muted-dark);
+  }
+  .foot__towns a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+    border-bottom: 1px solid transparent;
+    transition: border-color 200ms var(--curve-drive), color 200ms var(--curve-drive);
+  }
+  .foot__towns a:hover { border-bottom-color: var(--amber); color: var(--amber); }
+
+  .callbar { display: none; }
+}
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
+    min-height: 52px;
+    padding: 10px 22px;
+    background: var(--paper);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    font-family: var(--display);
+    font-size: 15px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 260ms var(--curve-snap), background-color 260ms var(--curve-brake),
+      color 260ms var(--curve-brake), border-color 260ms var(--curve-brake);
+  }
+  .btn__sub {
+    font-family: var(--body);
+    font-size: 12.5px;
+    letter-spacing: 0.1em;
+    text-transform: none;
+    font-weight: 500;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(0); transition-timing-function: var(--curve-snap); }
+  .btn--fill { background: var(--alarm); border-color: var(--alarm); color: var(--paper); }
+  .btn--fill:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .btn--line { background: transparent; }
+  .btn--line:hover { background: var(--ink); color: var(--paper); }
+  .btn--solid { background: var(--amber); border-color: var(--ink); color: var(--ink); }
+  .btn--solid:hover { background: var(--ink); color: var(--amber); }
+  .btn--block { width: 100%; }
+
+  /* Кнопка «наверх»: фиксированная в правом нижнем углу, появляется, когда
+     hero-блок целиком ушёл за верхнюю кромку. Класс `is-on` вешает app.js
+     по data-to-top; без JS кнопка не показывается вовсе (visibility: hidden).
+     Появление — микроанимация компонента, не motion-рецепт (кривые те же,
+     что у .btn — К-05; в reduce переходы снимаются — К-19). */
+  .to-top {
+    position: fixed;
+    right: clamp(14px, 2.2vw, 30px);
+    bottom: clamp(16px, 2.2vw, 30px);
+    z-index: 26;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    width: 58px;
+    min-height: 56px;
+    padding: 7px 4px;
+    background: var(--paper-3);
+    color: var(--ink);
+    border: 2px solid var(--ink);
+    font-family: var(--display);
+    font-size: 9px;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 220ms var(--curve-brake), transform 220ms var(--curve-brake),
+      visibility 0s var(--curve-brake) 220ms, background-color 220ms var(--curve-brake),
+      color 220ms var(--curve-brake);
+  }
+  .to-top.is-on {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 240ms var(--curve-brake), transform 240ms var(--curve-brake),
+      visibility 0s, background-color 220ms var(--curve-brake),
+      color 220ms var(--curve-brake);
+  }
+  .to-top:hover { background: var(--ink); color: var(--paper); }
+  .to-top:active { transform: translateY(1px); transition-timing-function: var(--curve-snap); }
+  .to-top__i { font-size: 17px; }
+
+  .seg__b {
+    min-height: 46px;
+    padding: 8px 16px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    font-family: var(--body);
+    font-weight: 500;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 220ms var(--curve-brake), color 220ms var(--curve-brake);
+  }
+  .seg__b:hover { background: var(--paper-3); }
+  .seg__b[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--amber);
+    border-color: var(--ink);
+  }
+
+  .form {
+    background: oklch(0.17 0 90);
+    border: 1px solid var(--line-dark);
+    border-left: 5px solid var(--amber);
+    padding: clamp(18px, 2.6vw, 30px);
+    display: grid;
+    gap: 16px;
+  }
+  .form__f { display: grid; gap: 7px; }
+  .form__f span {
+    font-size: 11.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted-dark);
+  }
+  .form__f input {
+    min-height: 54px;
+    font-size: 16px;
+    background: var(--ink-2);
+    color: var(--paper);
+    border: 1px solid var(--line-dark);
+    padding: 0 14px;
+    transition: border-color 220ms var(--curve-brake);
+  }
+  .form__f input::placeholder { color: var(--muted-dark); opacity: 1; }
+  .form__f input:hover { border-color: var(--muted-dark); }
+  .form__f input:focus { border-color: var(--amber); outline: none; }
+  .form__f input[aria-invalid="true"] { border-color: var(--alarm); }
+  .form__note { font-size: 13px; color: var(--muted-dark); }
+  .form__state {
+    font-size: 14.5px;
+    min-height: 22px;
+    color: var(--amber);
+  }
+  .form__state[data-kind="error"] { color: var(--amber); border-left: 3px solid var(--alarm); padding-left: 10px; }
+  .form__state[data-kind="success"] { color: var(--paper); border-left: 3px solid var(--amber); padding-left: 10px; }
+}
+
+@layer motion {
+  .grain {
+    position: fixed;
+    inset: -60px;
+    z-index: 30;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>");
+    animation: grainShift 0.4s steps(4) infinite;
+  }
+
+  @keyframes grainShift {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(-7px, 5px); }
+    50% { transform: translate(5px, -7px); }
+    75% { transform: translate(-5px, -4px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  @keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0.25; }
+  }
+
+  .mask {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
+  }
+  .mask > span { display: block; }
+  .js .mask > span {
+    transform: translateY(112%);
+    transition: transform 700ms var(--curve-brake);
+  }
+  .js .mask.is-in > span { transform: translateY(0); }
+
+  .s-ink { fill: var(--ink); }
+  .s-paper { fill: var(--paper); }
+  .s-cut { fill: var(--paper); }
+  .s-car { fill: var(--alarm); }
+  .s-alarm { fill: var(--alarm); }
+  .s-block { fill: none; stroke: var(--ink); stroke-width: 3; }
+  .s-ground { stroke: var(--ink); stroke-width: 4; }
+  .s-dash path { stroke: var(--alarm); stroke-width: 5; fill: none; stroke-dasharray: 22 16; }
+  .s-cable {
+    stroke: var(--ink);
+    stroke-width: 3;
+    fill: none;
+    stroke-dasharray: 230.4;
+    stroke-dashoffset: 216.4;
+    animation: sPullCable 8000ms var(--curve-drag) infinite;
+  }
+  .s-load {
+    transform: translate(263.8px, 235.6px);
+    animation: sPull 8000ms var(--curve-drag) infinite;
+  }
+  .s-wheel, .s-drum { transform-box: fill-box; transform-origin: 50% 50%; }
+  .s-wheel { animation: sRoll 8000ms var(--curve-drag) infinite; }
+  .s-drum { animation: sWind 8000ms var(--curve-drag) infinite; }
+
+  /* Лебёдка стягивает машину на платформу: анимация иллюстрации, не motion-рецепт
+     страницы — Q-01 остаётся тремя. Кривая ceh-drag (К-05), гасится К-19.
+     Такт 8000 мс: 0–10 % машина у земли, 10–40 % подтяжка, 40–70 % держим,
+     70–100 % лебёдка отпускает. 100 % = 0 % — цикл без шва. */
+  @keyframes sPull {
+    0% { transform: translate(51.8px, 278.6px); }
+    10% { transform: translate(51.8px, 278.6px); }
+    40% { transform: translate(263.8px, 235.6px); }
+    70% { transform: translate(263.8px, 235.6px); }
+    100% { transform: translate(51.8px, 278.6px); }
+  }
+  @keyframes sPullCable {
+    0% { stroke-dashoffset: 0; }
+    10% { stroke-dashoffset: 0; }
+    40% { stroke-dashoffset: 216.4; }
+    70% { stroke-dashoffset: 216.4; }
+    100% { stroke-dashoffset: 0; }
+  }
+  @keyframes sRoll {
+    0% { transform: rotate(0deg); }
+    10% { transform: rotate(0deg); }
+    40% { transform: rotate(1033deg); }
+    70% { transform: rotate(1033deg); }
+    100% { transform: rotate(0deg); }
+  }
+  @keyframes sWind {
+    0% { transform: rotate(0deg); }
+    10% { transform: rotate(0deg); }
+    40% { transform: rotate(1240deg); }
+    70% { transform: rotate(1240deg); }
+    100% { transform: rotate(0deg); }
+  }
+  .s-label {
+    font-family: var(--display);
+    font-size: 15px;
+    letter-spacing: 0.16em;
+    fill: var(--ink);
+  }
+
+  /* Три кадра заказчика (site/hero.svg → hero-truck/hero-fork/hero-car.svg):
+     пустой погрузчик → вилы внизу → машина подъезжает справа → загрузка на вилы.
+     Анимация иллюстрации, не motion-рецепт страницы — Q-01 остаётся тремя.
+     Такт 8000 мс: 0–16 % опускаем вилы, 16–24 % отъезжаем шире, 24–42 % машина
+     въезжает, 46–60 % подъём на вилы, 60–76 % держим загруженным, 76–94 % спуск
+     и выезд, 94–100 % возврат к крупному плану. 100 % = 0 % — цикл без шва.
+     Кривые только К-05 (ceh-*), гасится К-19. Кадры выровнены по шасси:
+     hero-fork/car сдвинуты translate(1117 −881), общий viewBox 1286 235 4168 714. */
+  .h-zoom {
+    transform: translate(-349.35px, 18.3px) scale(0.3);
+    transform-box: view-box;
+    transform-origin: 0 0;
+    animation: hZoom 8000ms var(--curve-coast) infinite;
+  }
+  .h-truck { animation: hTruck 8000ms var(--curve-drag) infinite; }
+  .h-fork { opacity: 0; animation: hFork 8000ms var(--curve-drag) infinite; }
+  .h-car {
+    transform: translate(-2233px, -288px);
+    animation: hCar 8000ms var(--curve-coast) infinite;
+  }
+
+  @keyframes hZoom {
+    0% { transform: translate(-349.35px, 18.3px) scale(0.3); }
+    16% { transform: translate(-349.35px, 18.3px) scale(0.3); }
+    24% { transform: translate(-196.05px, 146.42px) scale(0.165); }
+    46% { transform: translate(-196.05px, 146.42px) scale(0.165); animation-timing-function: var(--curve-brake); }
+    60% { transform: translate(-349.35px, 18.3px) scale(0.3); }
+    70% { transform: translate(-349.35px, 18.3px) scale(0.3); }
+    76% { transform: translate(-196.05px, 146.42px) scale(0.165); }
+    94% { transform: translate(-196.05px, 146.42px) scale(0.165); animation-timing-function: var(--curve-brake); }
+    100% { transform: translate(-349.35px, 18.3px) scale(0.3); }
+  }
+  @keyframes hTruck {
+    0% { opacity: 1; }
+    6% { opacity: 1; }
+    13% { opacity: 0; }
+    46% { opacity: 0; }
+    60% { opacity: 1; }
+    76% { opacity: 1; }
+    83% { opacity: 0; }
+    94% { opacity: 0; }
+    96% { opacity: 1; }
+    100% { opacity: 1; }
+  }
+  @keyframes hFork {
+    0% { opacity: 0; }
+    6% { opacity: 0; }
+    13% { opacity: 1; }
+    46% { opacity: 1; }
+    60% { opacity: 0; }
+    76% { opacity: 0; }
+    83% { opacity: 1; }
+    94% { opacity: 1; }
+    96% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+  @keyframes hCar {
+    0% { transform: translate(1300px, 0); }
+    24% { transform: translate(1300px, 0); }
+    42% { transform: translate(0, 0); animation-timing-function: var(--curve-drag); }
+    46% { transform: translate(0, 0); animation-timing-function: var(--curve-brake); }
+    60% { transform: translate(-2233px, -288px); }
+    76% { transform: translate(-2233px, -288px); animation-timing-function: var(--curve-drag); }
+    83% { transform: translate(0, 0); animation-timing-function: var(--curve-drag); }
+    87% { transform: translate(0, 0); }
+    94% { transform: translate(1300px, 0); }
+    100% { transform: translate(1300px, 0); }
+  }
+
+  .z-hint { fill: none; stroke: var(--line-2); stroke-width: 1.5; stroke-dasharray: 3 7; }
+  .z-3 { fill: none; stroke: var(--alarm); stroke-width: 2.5; stroke-dasharray: 12 9; }
+  .z-line { fill: none; stroke: var(--alarm); stroke-width: 3; }
+  .z-base { fill: var(--alarm); stroke: var(--paper); stroke-width: 2; }
+  .z-tip { fill: var(--alarm); stroke: var(--paper); stroke-width: 2; }
+  .z-t {
+    font-family: var(--display);
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    fill: var(--ink);
+  }
+  .z-t--km { font-size: 16px; }
+  .z-ring { fill: none; stroke: var(--ink); stroke-width: 2; }
+  .z-ring-tick { fill: none; stroke: var(--ink); stroke-width: 2; }
+
+  /* Карта зоны выезда: плакатная схема Химок и окрестностей (OSM).
+     Масштаб 5,6 ед/км: 30 км = r 168, 20 км = r 112, 10 км = r 56.
+     Центр (230,180) — кольцо ул. Заводской у моста через Ленинградское
+     шоссе (55.9055573, 37.4282983); геометрия: x = 230 + Δlon°·349,4,
+     y = 180 − Δlat°·622,7. Заливок у колец нет — карта видна (правка). */
+  .zm-grat { fill: none; stroke: var(--line); stroke-width: 1; }
+  .zm-water { fill: var(--paper-2); stroke: var(--line-2); stroke-width: 1.5; }
+  .zm-canal { fill: none; stroke: var(--line-2); stroke-width: 4; stroke-linecap: round; }
+  .zm-river { fill: none; stroke: var(--line-2); stroke-width: 2; stroke-linecap: round; }
+  .zm-rail { fill: none; stroke: var(--line-dark); stroke-width: 1.6; stroke-dasharray: 7 5; }
+  .zm-cross { fill: none; stroke: var(--line-dark); stroke-width: 1.6; }
+  .zm-mkad { fill: none; stroke: var(--line-dark); stroke-width: 2; stroke-dasharray: 9 6; }
+  .zm-hwy { fill: none; stroke: var(--ink); stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+  .zm-dot { fill: var(--ink); }
+  .zm-dot--cap { fill: var(--alarm); }
+  .zm-t {
+    font-family: var(--display);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    fill: var(--ink);
+  }
+  .zm-t--dim { fill: var(--line-dark); font-size: 11px; }
+  .zm-plane { fill: var(--amber); stroke: var(--ink); stroke-width: 1.2; }
+  .zm-scale-bar { fill: none; stroke: var(--ink); stroke-width: 2; }
+
+  /* Зона выезда: радиус-луч обходит кольца, на внешнем кольце (r=168 — зона
+     до 30 км в масштабе карты) метка «30 КМ», на конце луча сигнальная точка.
+     Анимация иллюстрации, не motion-рецепт — Q-01 остаётся тремя (V-05).
+     Такт 8000 мс, кривая ceh-drive из motion/easing-curves.json (К-05) —
+     равный ход по кругу: 360° на 100 % равен 0 %, скорость на шве та же,
+     цикл без рывка. В покое (и в reduce, К-19) луч стоит на 45° — смотрит
+     на метку. transform-origin в координатах viewBox = центр (230, 180) —
+     кольцо ул. Заводской. */
+  .z-sweep {
+    transform-box: view-box;
+    transform-origin: 230px 180px;
+    animation: zSweep 8000ms var(--curve-drive) infinite;
+  }
+  @keyframes zSweep {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}
+
+/* ---------- адаптив (вне слоёв: переопределения всегда побеждают) ---------- */
+
+@media (max-width: 1180px) {
+  :root { --rail-w: 260px; }
+  .act--hero { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .hero__scene { order: 2; }
+
+  /* лента без скролл-сборки: высокий вьюпорт не гарантирован, стыковка рискованна */
+  .lane { height: auto; margin-top: clamp(18px, 4vw, 30px); }
+  .lane__stage { position: static; min-height: 0; padding-bottom: clamp(52px, 7vw, 96px); }
+  .lane__steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  .calc {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "title" "zone" "tech" "case" "act" "fleet" "res";
+  }
+  .zone, .call, .reviews__row, .ledger div { grid-template-columns: minmax(0, 1fr); }
+  .reviews__meta { flex-direction: row; flex-wrap: wrap; gap: 12px; align-items: baseline; }
+}
+
+@media (max-width: 860px) {
+  html { scroll-padding-top: 76px; }
+  .shell { grid-template-columns: minmax(0, 1fr); }
+  .plate {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 3px solid var(--alarm);
+    gap: 12px;
+    /* мобильный блок — не scroll-контейнер: иначе жест на «Наряд-вызов»
+       запирается (overflow-y auto + overscroll-behavior contain из базы) */
+    overflow: visible;
+    overscroll-behavior: auto;
+  }
+  .plate__idx { display: none; }
+  .masthead { flex-wrap: nowrap; gap: 8px 10px; position: sticky; top: 0; }
+  .mburger { display: flex; align-items: center; justify-content: center; }
+  .masthead__tel { margin-left: auto; }
+  /* симметричные надписи: верхние строки — один размер, нижние — один размер */
+  .brand__word, .masthead__tel b { font-size: 16px; }
+  .brand__city, .masthead__tel span { font-size: 11px; letter-spacing: 0.14em; }
+
+  .masthead.is-open .mburger__bars { background: transparent; }
+  .masthead.is-open .mburger__bars::before { transform: translateY(7px) rotate(45deg); }
+  .masthead.is-open .mburger__bars::after { transform: translateY(-7px) rotate(-45deg); }
+
+  /* навигация уходит в выпадающую панель под шапкой (гамбургер) */
+  .nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 0;
+    flex-direction: column;
+    gap: 0;
+    background: var(--paper);
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    box-shadow: 0 16px 32px oklch(0 0 0 / 0.16);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 260ms var(--curve-brake), transform 260ms var(--curve-brake), visibility 260ms var(--curve-drive);
+  }
+  .masthead.is-open .nav {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+  .nav a {
+    min-height: 48px;
+    padding: 0 clamp(14px, 4vw, 28px);
+    font-size: 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .nav a:last-child { border-bottom: 0; }
+  .nav a:hover { background: var(--paper-2); }
+
+  body { padding-bottom: calc(74px + env(safe-area-inset-bottom)); }
+  /* над мобильным колбэром, чтобы не наезжать на «Вызвать» */
+  .to-top { right: 12px; bottom: calc(84px + env(safe-area-inset-bottom)); width: 54px; min-height: 54px; }
+  .callbar {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 25;
+    gap: 10px;
+    align-items: center;
+    background: var(--ink);
+    border-top: 3px solid var(--alarm);
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+  }
+  .callbar__tel {
+    display: flex;
+    flex-direction: column;
+    color: var(--paper);
+    min-height: 44px;
+    justify-content: center;
+  }
+  .callbar__tel b { font-family: var(--display); font-size: 17px; letter-spacing: 0.02em; }
+  .callbar__tel span { font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted-dark); }
+  .callbar .btn { margin-left: auto; min-height: 48px; padding: 8px 18px; }
+}
+
+@media (max-width: 720px) {
+  .act__num { font-size: 22vw; color: var(--num); top: -0.04em; }
+  .act--last .act__num { color: var(--num-ink); }
+  .index__row { grid-template-columns: 40px minmax(0, 1fr); }
+  .index__meta { grid-column: 2; }
+  .lane__steps { grid-template-columns: minmax(0, 1fr); }
+  .lane__rail { height: 84px; }
+  .lane__t, .lane__t svg { width: 104px; }
+  .lane__t { left: calc(var(--p, 0) * (100% - 104px)); }
+  .price__row { flex-direction: column; flex-wrap: nowrap; gap: 4px; }
+  .price__row b { margin-left: 0; }
+  .hero__cta .btn { width: 100%; }
+}
+
+@media (max-width: 380px) {
+  .act { padding-left: 14px; padding-right: 14px; }
+  .btn { padding: 10px 14px; font-size: 14px; }
+  .callbar__tel b { font-size: 15px; }
+  /* три блока шапки одной строкой даже на 320 px + симметрия надписей */
+  .masthead { padding-left: 8px; padding-right: 8px; gap: 8px; }
+  .brand__word, .masthead__tel b { font-size: 15px; }
+  .brand__city, .masthead__tel span { font-size: 10.5px; letter-spacing: 0.1em; }
+}
+
+@media (min-width: 1181px) {
+  /* форма ушла из колонки 7fr на всю ширину — поля держим в две колонки */
+  .form { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .form__state { grid-column: 1 / -1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .grain { animation: none; }
+  .dot { animation: none; }
+  .js .mask > span { transform: none; transition: none; }
+  .lane__stamp { opacity: 1; transform: rotate(-6deg) scale(1); transition: none; }
+  .lane__t, .lane__rail__fill, .lane__tick { transition: none; }
+  .lane__steps li { border-top-color: var(--alarm); }
+  .btn { transition: none; }
+  .nav, .mburger__bars, .mburger__bars::before, .mburger__bars::after { transition: none; }
+  .btn:hover { transform: none; }
+  .to-top { transition: none; }
+  .seg__b { transition: none; }
+  .form__f input { transition: none; }
+  .s-load, .s-cable, .s-wheel, .s-drum { animation: none; }
+  /* статичный кадр — «загружено» (кадр 3 заказчика): base-состояния уже на нём */
+  .h-zoom, .h-truck, .h-fork, .h-car { animation: none; }
+  /* статичный кадр зоны — луч стоит на метке «30 КМ» (45°) */
+  .z-sweep { animation: none; }
+}

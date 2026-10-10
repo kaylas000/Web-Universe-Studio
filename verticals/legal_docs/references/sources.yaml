@@ -1,0 +1,14 @@
+# sources.yaml — источники приёмов студии
+sources:
+  - id: ref-01
+    title: "structure-nesting"
+    source: "references/sources.yaml#contract-draft"
+    takeaway: "Договор членится на разделы «Предмет → Обязанности → Ответственность → Срок»; нумерация 1.1/1.2 однозначна."
+  - id: ref-02
+    title: "defined-terms"
+    source: "references/sources.yaml#contract-draft"
+    takeaway: "Термины определяются один раз в разделе «Термины» и далее используются без синонимов."
+  - id: ref-03
+    title: "review-checklist"
+    source: "references/sources.yaml#legal-review"
+    takeaway: "Ревью идёт по чек-листу: стороны, предмет, цена, срок, ответственность, применимое право."

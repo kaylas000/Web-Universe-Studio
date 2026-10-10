@@ -1,0 +1,14 @@
+# sources.yaml — источники приёмов студии
+sources:
+  - id: ref-01
+    title: "one-screen"
+    source: "references/sources.yaml#single-page-app"
+    takeaway: "Экран решает одну задачу; вторичные действия уходят в меню, а не теснятся рядом."
+  - id: ref-02
+    title: "instant-feedback"
+    source: "references/sources.yaml#single-page-app"
+    takeaway: "Каждое нажатие отвечает в пределах 100 мс — сменой состояния, а не спиннером."
+  - id: ref-03
+    title: "focus-visible"
+    source: "references/sources.yaml#a11y-pass"
+    takeaway: "Фокус виден на каждом интерактивном элементе; порядок обхода совпадает с визуальным."

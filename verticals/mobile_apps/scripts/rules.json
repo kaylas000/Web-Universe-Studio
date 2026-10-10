@@ -1,0 +1,80 @@
+{
+  "vertical": "mobile_apps",
+  "rules": [
+    {
+      "code": "V-01",
+      "title": "Манифест на месте",
+      "kind": "fileExists",
+      "path": "app/app.json",
+      "ok": "app/app.json найден",
+      "fail": "нет app/app.json"
+    },
+    {
+      "code": "V-02",
+      "title": "Модуль экрана",
+      "kind": "fileExists",
+      "path": "app/src/App.mjs",
+      "ok": "app/src/App.mjs найден",
+      "fail": "нет app/src/App.mjs (К-02)"
+    },
+    {
+      "code": "V-03",
+      "title": "Имя и версия",
+      "kind": "jsonHas",
+      "path": "app/app.json",
+      "keys": [
+        "name",
+        "version"
+      ],
+      "ok": "name и version на месте",
+      "fail": "нет name или version (К-01)"
+    },
+    {
+      "code": "V-04",
+      "title": "Экспорт экрана",
+      "kind": "regexAtLeast",
+      "path": "app/src/App.mjs",
+      "pattern": "\\bexport\\b",
+      "min": 1,
+      "ok": "экран экспортирован",
+      "fail": "App.mjs ничего не экспортирует (К-02)"
+    },
+    {
+      "code": "V-05",
+      "title": "Без alert",
+      "kind": "regexAbsent",
+      "path": "app/src/App.mjs",
+      "pattern": "\\balert\\(",
+      "ok": "alert не используется",
+      "fail": "найден alert (К-05)"
+    },
+    {
+      "code": "V-06",
+      "title": "Доступность",
+      "kind": "regexAtLeast",
+      "path": "app/src/App.mjs",
+      "pattern": "aria-label",
+      "min": 1,
+      "ok": "подписи доступности есть",
+      "fail": "нет подписей доступности (К-04)"
+    },
+    {
+      "code": "V-07",
+      "title": "README проекта",
+      "kind": "fileExists",
+      "path": "README.md",
+      "ok": "README.md найден",
+      "fail": "нет README.md (К-06)"
+    },
+    {
+      "code": "V-08",
+      "title": "Состояние экрана",
+      "kind": "regexAtLeast",
+      "path": "app/src/App.mjs",
+      "pattern": "state",
+      "min": 1,
+      "ok": "состояние хранится явно",
+      "fail": "нет явного состояния (К-03)"
+    }
+  ]
+}

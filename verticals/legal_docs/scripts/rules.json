@@ -1,0 +1,84 @@
+{
+  "vertical": "legal_docs",
+  "rules": [
+    {
+      "code": "V-01",
+      "title": "Договор на месте",
+      "kind": "fileExists",
+      "path": "docs/dogovor.md",
+      "ok": "docs/dogovor.md найден",
+      "fail": "нет docs/dogovor.md"
+    },
+    {
+      "code": "V-02",
+      "title": "Обязательные разделы",
+      "kind": "textHasAll",
+      "path": "docs/dogovor.md",
+      "patterns": [
+        "^##\\s+Предмет",
+        "^##\\s+Стороны",
+        "^##\\s+Права и обязанности",
+        "^##\\s+Ответственность",
+        "^##\\s+Реквизиты"
+      ],
+      "ok": "все пять разделов",
+      "fail": "пропущен обязательный раздел (К-01, К-03)"
+    },
+    {
+      "code": "V-03",
+      "title": "Нумерованные пункты",
+      "kind": "regexAtLeast",
+      "path": "docs/dogovor.md",
+      "pattern": "^\\d+\\.\\d+",
+      "min": 6,
+      "ok": "нумерация иерархическая",
+      "fail": "меньше шести пунктов вида 1.1 (К-02)"
+    },
+    {
+      "code": "V-04",
+      "title": "Дата и место",
+      "kind": "regexAtLeast",
+      "path": "docs/dogovor.md",
+      "pattern": "\\d{2}\\.\\d{2}\\.\\d{4}",
+      "min": 1,
+      "ok": "дата в формате ДД.ММ.ГГГГ",
+      "fail": "нет даты договора"
+    },
+    {
+      "code": "V-05",
+      "title": "Применимое право",
+      "kind": "regexAtLeast",
+      "path": "docs/dogovor.md",
+      "pattern": "применимое право",
+      "min": 1,
+      "ok": "право указано",
+      "fail": "не указано применимое право (К-04)"
+    },
+    {
+      "code": "V-06",
+      "title": "Реквизиты с ИНН",
+      "kind": "regexAtLeast",
+      "path": "docs/dogovor.md",
+      "pattern": "ИНН",
+      "min": 2,
+      "ok": "ИНН обеих сторон",
+      "fail": "не хватает ИНН сторон"
+    },
+    {
+      "code": "V-07",
+      "title": "Источник норм",
+      "kind": "fileExists",
+      "path": "docs/SOURCES.md",
+      "ok": "docs/SOURCES.md найден",
+      "fail": "нет docs/SOURCES.md (К-05)"
+    },
+    {
+      "code": "V-08",
+      "title": "Резюме для клиента",
+      "kind": "fileExists",
+      "path": "docs/README.md",
+      "ok": "docs/README.md найден",
+      "fail": "нет docs/README.md (К-06)"
+    }
+  ]
+}

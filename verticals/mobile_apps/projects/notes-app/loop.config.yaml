@@ -1,0 +1,10 @@
+project_name: notes-app
+task: "собрать экран заметок с состоянием и доступными подписями"
+loop:
+  max_iterations: 1
+generator:
+  type: mock
+context_builder:
+  type: studio_default
+validator:
+  type: vertical_project

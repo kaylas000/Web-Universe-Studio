@@ -1,0 +1,75 @@
+{
+  "vertical": "mini_apps",
+  "rules": [
+    {
+      "code": "V-01",
+      "title": "Разметка на месте",
+      "kind": "fileExists",
+      "path": "app/index.html",
+      "ok": "app/index.html найден",
+      "fail": "нет app/index.html"
+    },
+    {
+      "code": "V-02",
+      "title": "Скрипт на месте",
+      "kind": "fileExists",
+      "path": "app/app.js",
+      "ok": "app/app.js найден",
+      "fail": "нет app/app.js (К-01)"
+    },
+    {
+      "code": "V-03",
+      "title": "Заголовок страницы",
+      "kind": "regexAtLeast",
+      "path": "app/index.html",
+      "pattern": "<title>",
+      "min": 1,
+      "ok": "<title> есть",
+      "fail": "нет <title> (К-06)"
+    },
+    {
+      "code": "V-04",
+      "title": "Без var",
+      "kind": "regexAbsent",
+      "path": "app/app.js",
+      "pattern": "\\bvar\\s",
+      "ok": "let/const",
+      "fail": "найден var (К-03)"
+    },
+    {
+      "code": "V-05",
+      "title": "Отклик через addEventListener",
+      "kind": "regexAtLeast",
+      "path": "app/app.js",
+      "pattern": "addEventListener",
+      "min": 1,
+      "ok": "addEventListener есть",
+      "fail": "нет addEventListener (К-04)"
+    },
+    {
+      "code": "V-06",
+      "title": "Без alert",
+      "kind": "regexAbsent",
+      "path": "app/app.js",
+      "pattern": "\\balert\\(",
+      "ok": "alert не используется",
+      "fail": "найден alert (К-04)"
+    },
+    {
+      "code": "V-07",
+      "title": "Стиль на месте",
+      "kind": "fileExists",
+      "path": "app/style.css",
+      "ok": "app/style.css найден",
+      "fail": "нет app/style.css (К-01)"
+    },
+    {
+      "code": "V-08",
+      "title": "README проекта",
+      "kind": "fileExists",
+      "path": "README.md",
+      "ok": "README.md найден",
+      "fail": "нет README.md"
+    }
+  ]
+}

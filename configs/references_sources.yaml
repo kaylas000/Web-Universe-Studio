@@ -1,0 +1,27 @@
+# ЦЕХ · метаплатформа — источники архива референсов (§12.1, §12.2 ТЗ).
+# Используется scripts/scrape_references.mjs: обход источников, изъятие приёмов с обязательным takeaway (К-04).
+default_policy: manual
+
+sources:
+  - id: web-gallery
+    vertical: web_studio
+    kind: gallery
+    url: "https://example.org/galleries"
+    enabled: false
+  - id: legal-samples
+    vertical: legal_docs
+    kind: documents
+    url: "https://example.org/contracts"
+    enabled: false
+  - id: content-blog
+    vertical: content_studio
+    kind: articles
+    url: "https://example.org/blog"
+    enabled: false
+
+rules:
+  require_takeaway: true      # запись без takeaway не принимается (К-04)
+  max_per_run: 50
+  min_takeaway_len: 20
+  store_index: "references/INDEX.md"
+  store_metadata: "references/metadata/"
