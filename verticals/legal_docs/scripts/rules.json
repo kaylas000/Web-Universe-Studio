@@ -3,82 +3,219 @@
   "rules": [
     {
       "code": "V-01",
-      "title": "Договор на месте",
-      "kind": "fileExists",
-      "path": "docs/dogovor.md",
-      "ok": "docs/dogovor.md найден",
-      "fail": "нет docs/dogovor.md"
+      "title": "Тип документа и стороны с реквизитами",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "fileExists",
+          "path": "docs/dogovor.md"
+        },
+        {
+          "kind": "textHasAll",
+          "path": "docs/dogovor.md",
+          "patterns": [
+            "^##\\s+Стороны",
+            "^#\\s+Договор"
+          ]
+        }
+      ],
+      "ok": "договор с разделом «Стороны»",
+      "fail": "нет договора или раздела «Стороны» (К-01)"
     },
     {
       "code": "V-02",
-      "title": "Обязательные разделы",
+      "title": "Существенные условия предмета",
       "kind": "textHasAll",
       "path": "docs/dogovor.md",
       "patterns": [
         "^##\\s+Предмет",
-        "^##\\s+Стороны",
-        "^##\\s+Права и обязанности",
-        "^##\\s+Ответственность",
-        "^##\\s+Реквизиты"
+        "1\\.1\\."
       ],
-      "ok": "все пять разделов",
-      "fail": "пропущен обязательный раздел (К-01, К-03)"
+      "ok": "предмет описан",
+      "fail": "нет предмета договора (К-02)"
     },
     {
       "code": "V-03",
-      "title": "Нумерованные пункты",
-      "kind": "regexAtLeast",
-      "path": "docs/dogovor.md",
-      "pattern": "^\\d+\\.\\d+",
-      "min": 6,
-      "ok": "нумерация иерархическая",
-      "fail": "меньше шести пунктов вида 1.1 (К-02)"
+      "title": "Ссылки на нормы ГК РФ",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "docs/dogovor.md",
+          "pattern": "ГК РФ|Гражданск",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "docs/SOURCES.md",
+          "pattern": "ГК РФ",
+          "min": 1
+        }
+      ],
+      "ok": "нормы ГК РФ указаны и в источнике",
+      "fail": "нет опоры на ГК РФ (К-03) · прокси LLM-judge + RAG"
     },
     {
       "code": "V-04",
-      "title": "Дата и место",
-      "kind": "regexAtLeast",
+      "title": "Нет противоречий нумерации",
+      "kind": "uniqueNumbering",
       "path": "docs/dogovor.md",
-      "pattern": "\\d{2}\\.\\d{2}\\.\\d{4}",
-      "min": 1,
-      "ok": "дата в формате ДД.ММ.ГГГГ",
-      "fail": "нет даты договора"
+      "min": 8,
+      "ok": "нумерация пунктов уникальна",
+      "fail": "дубли нумерации пунктов (К-04)"
     },
     {
       "code": "V-05",
-      "title": "Применимое право",
-      "kind": "regexAtLeast",
-      "path": "docs/dogovor.md",
-      "pattern": "применимое право",
-      "min": 1,
-      "ok": "право указано",
-      "fail": "не указано применимое право (К-04)"
+      "title": "Реквизиты по контрольным суммам",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "innChecksum",
+          "path": "docs/dogovor.md",
+          "min": 2
+        },
+        {
+          "kind": "ogrnChecksum",
+          "path": "docs/dogovor.md",
+          "min": 2
+        }
+      ],
+      "ok": "ИНН и ОГРН обеих сторон валидны",
+      "fail": "невалидные ИНН/ОГРН (К-05)"
     },
     {
       "code": "V-06",
-      "title": "Реквизиты с ИНН",
-      "kind": "regexAtLeast",
+      "title": "Ясность формулировок",
+      "kind": "sentencesMaxWords",
       "path": "docs/dogovor.md",
-      "pattern": "ИНН",
-      "min": 2,
-      "ok": "ИНН обеих сторон",
-      "fail": "не хватает ИНН сторон"
+      "max": 40,
+      "ok": "предложения ≤ 40 слов",
+      "fail": "слишком длинные формулировки (К-06)"
     },
     {
       "code": "V-07",
-      "title": "Источник норм",
-      "kind": "fileExists",
-      "path": "docs/SOURCES.md",
-      "ok": "docs/SOURCES.md найден",
-      "fail": "нет docs/SOURCES.md (К-05)"
+      "title": "Обработка ПДн (152-ФЗ)",
+      "kind": "implies",
+      "path": "docs/dogovor.md",
+      "if": "персональн",
+      "then": [
+        "152-ФЗ",
+        "цел",
+        "срок",
+        "соглас"
+      ],
+      "ok": "если ПДн обрабатываются — есть цели/срок/согласие",
+      "fail": "ПДн без 152-ФЗ-обвязки (К-07)"
     },
     {
       "code": "V-08",
-      "title": "Резюме для клиента",
+      "title": "Ответственность и порядок споров",
+      "kind": "textHasAll",
+      "path": "docs/dogovor.md",
+      "patterns": [
+        "^##\\s+Ответственность",
+        "Претензионн",
+        "суд"
+      ],
+      "ok": "ответственность и споры описаны",
+      "fail": "нет ответственности/порядка споров (К-08)"
+    },
+    {
+      "code": "V-09",
+      "title": "Изменение и расторжение",
+      "kind": "textHasAll",
+      "path": "docs/dogovor.md",
+      "patterns": [
+        "Изменени",
+        "расторж"
+      ],
+      "ok": "порядок изменения/расторжения задан",
+      "fail": "не описан порядок изменения/расторжения (К-09)"
+    },
+    {
+      "code": "V-10",
+      "title": "Версионирование документа",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "docs/dogovor.md",
+          "pattern": "\\d{2}\\.\\d{2}\\.\\d{4}",
+          "min": 1
+        },
+        {
+          "kind": "textHasAll",
+          "path": "docs/dogovor.md",
+          "patterns": [
+            "г\\. Москва",
+            "Редакц"
+          ]
+        }
+      ],
+      "ok": "есть дата, место и номер редакции",
+      "fail": "нет версии документа (К-10)"
+    },
+    {
+      "code": "V-11",
+      "title": "Нет неюридических оборотов",
+      "kind": "regexAbsent",
+      "path": "docs/dogovor.md",
+      "pattern": "в соответствии с действующим|надлежащим образом|настоящий Договор",
+      "ok": "без оборотов-заглушек",
+      "fail": "найден канцелярит (К-11) · см. lint-slop"
+    },
+    {
+      "code": "V-12",
+      "title": "Сноски на НПА с редакцией/датой",
+      "kind": "textHasAll",
+      "path": "docs/SOURCES.md",
+      "patterns": [
+        "ГК РФ",
+        "ред"
+      ],
+      "ok": "сноски с редакцией",
+      "fail": "сноски без редакции/даты (К-12)"
+    },
+    {
+      "code": "V-13",
+      "title": "Дисклеймер о не-консультации",
+      "kind": "textHasAll",
+      "path": "docs/dogovor.md",
+      "patterns": [
+        "не является юридической консультацией"
+      ],
+      "ok": "дисклеймер есть",
+      "fail": "нет дисклеймера (К-13)"
+    },
+    {
+      "code": "V-14",
+      "title": "Формальные атрибуты",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "textHasAll",
+          "path": "docs/dogovor.md",
+          "patterns": [
+            "Приложени",
+            "Подписи сторон"
+          ]
+        },
+        {
+          "kind": "uniqueNumbering",
+          "path": "docs/dogovor.md",
+          "min": 8
+        }
+      ],
+      "ok": "нумерация, приложения, места подписей",
+      "fail": "не хватает формальных атрибутов (К-14)"
+    },
+    {
+      "code": "V-15",
+      "title": "Флаг HITL для критического документа",
       "kind": "fileExists",
-      "path": "docs/README.md",
-      "ok": "docs/README.md найден",
-      "fail": "нет docs/README.md (К-06)"
+      "path": "docs/HITL.md",
+      "ok": "документ помечен HITL",
+      "fail": "нет флага ручной проверки (К-15)"
     }
   ]
 }

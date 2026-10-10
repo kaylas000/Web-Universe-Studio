@@ -257,18 +257,21 @@ export function evalRule(projectDir, rule) {
       return total > 0 && seen.size / total >= Number(rule.min ?? 0.9);
     }
     case "readabilityMin": {
-      // адаптированный Flesch Reading Ease (рус.): 206.835 − 1.3·ASL − 60.1·ASW, масштаб на слоги
+      // адаптированный Flesch Reading Ease (рус.): 206.835 − 1.3·ASL − 60.1·ASW.
+      // Читаемость считается по ПРОЗЕ: заголовки, ссылки, картинки, HTML и сноски
+      // (разметка) отбрасываются — иначе длина URL/тегов занижает балл.
       const text = read(rule.path);
       if (text === null) return false;
-      const sentences = String(text)
-        .replace(/^#.*$/gm, "")
+      const prose = String(text)
+        .split("\n")
+        .filter((line) => !/^\s*#/.test(line))
+        .filter((line) => !/https?:\/\/|!\[|\]\(|<[a-z/]|\[\^/.test(line))
+        .join(" ");
+      const sentences = prose
         .split(/[.!?…]+/)
         .map((s) => s.trim())
         .filter((s) => s.split(/\s+/).filter(Boolean).length > 1);
-      const words = String(text)
-        .replace(/^#.*$/gm, "")
-        .split(/[^\p{L}\p{N}]+/u)
-        .filter((w) => w.length > 0);
+      const words = prose.split(/[^\p{L}\p{N}]+/u).filter((w) => /[а-яё]/i.test(w));
       if (sentences.length === 0 || words.length === 0) return false;
       const asl = words.length / sentences.length;
       const syllables = words.reduce((sum, w) => sum + countRuSyllables(w), 0);
@@ -296,6 +299,19 @@ export function evalRule(projectDir, rule) {
       if (text === null) return false;
       if (!new RegExp(rule.if, "m").test(text)) return true;
       return (rule.then ?? []).every((p) => new RegExp(p, "m").test(text));
+    }
+    case "uniqueNumbering": {
+      // нет дублей нумерации пунктов «N.M» и их не меньше min (К-04 legal: cross-reference)
+      const text = read(rule.path);
+      if (text === null) return false;
+      const pattern = rule.linePattern ?? String.raw`^\s*(\d+\.\d+)`;
+      const nums = String(text)
+        .split("\n")
+        .map((line) => line.match(new RegExp(pattern)))
+        .filter(Boolean)
+        .map((m) => m[1]);
+      if (nums.length < Number(rule.min ?? 1)) return false;
+      return new Set(nums).size === nums.length;
     }
     default:
       return false;

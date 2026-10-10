@@ -51,7 +51,7 @@ export const vertical = {
   buildConfig(projectName) {
     return {
       project_name: projectName,
-      task: "написать лонгрид о сборке страниц под задачу вместо шаблонов",
+      task: "написать SEO-статью о проверке данных на входе для блога продукта",
       loop: { max_iterations: 1 },
       generator: { type: "mock" },
       context_builder: { type: "studio_default" },
