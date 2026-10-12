@@ -1,0 +1,12 @@
+{# Верификатор · приём «payments» #}
+Проверить: {{ artifact }}
+
+Чек-лист оплаты:
+- [ ] оплата идёт через tg.openInvoice, данные — через tg.sendData (V-07);
+- [ ] нет внешних платёжных ссылок и target=_blank (V-10);
+- [ ] server.mjs валидирует initData через HMAC-SHA256 (createHmac/sha256) (V-15);
+- [ ] нет alert/confirm/prompt — статус платежа через tg.showPopup (V-14);
+- [ ] бандл ≤ 300KB gzip (V-08/Q-01).
+
+Прогнать: node scripts/validate.mjs && node scripts/lint-slop.mjs && node scripts/lint-quotas.mjs.
+Коды возврата валидатору — только конкретные V-xx/Q-xx, точечные правки (К-10).

@@ -1,0 +1,4 @@
+id: ref-05
+style: link-graph
+source: references/sources.yaml#link-audit
+takeaway: Ссылки строят граф: ≥2 внутренних переходов на связанные материалы и внешние авторитетные источники с осмысленными якорями.

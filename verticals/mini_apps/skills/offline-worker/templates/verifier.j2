@@ -1,0 +1,12 @@
+{# Верификатор · приём «offline-worker» #}
+Проверить: {{ artifact }}
+
+Чек-лист offline:
+- [ ] app/sw.js есть и app.js регистрирует serviceWorker (V-12);
+- [ ] install кэширует оболочку, fetch — cache-first с fallback на сеть;
+- [ ] состояние сохраняется через CloudStorage/sendData/mainButtonClicked (V-13);
+- [ ] таймеры/слушатели снимаются (V-18);
+- [ ] localStorage ≤ 2MB (Q-05).
+
+Прогнать: node scripts/validate.mjs && node scripts/lint-quotas.mjs.
+Проверка реального кэша — Lighthouse PWA на тире (К-12).

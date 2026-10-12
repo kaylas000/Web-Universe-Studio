@@ -1,0 +1,26 @@
+name: offline-worker
+title: "Offline через Service Worker"
+description: "Добавляет базовый offline-режим через Service Worker: кэш оболочки app/ (index.html, style.css, app.js, telegram-web-app.js) с стратегией cache-first (К-12), регистрацию worker'а и сохранение состояния через CloudStorage/sendData, чтобы закрытие не теряло прогресс (К-13)."
+source: REF-06
+takeaway: "Базовый offline — кэш оболочки в Service Worker (install → addAll, fetch → cache-first) и его регистрация; состояние переживает закрытие через CloudStorage/sendData (REF-06)."
+inputs:
+  - brief
+  - deliverable_dir
+  - app/sw.js
+  - app/app.js
+outputs:
+  - app/sw.js (кэш оболочки, cache-first)
+  - app/app.js (регистрация serviceWorker, сохранение состояния)
+steps:
+  - "Составить список оболочки: index.html, style.css, app.js"
+  - "Написать sw.js: install → addAll, fetch → cache-first с fallback на сеть"
+  - "Зарегистрировать worker в app.js: navigator.serviceWorker.register('./sw.js')"
+  - "Сохранение состояния: CloudStorage.setItem/getItem, передача через sendData"
+  - "Проверить validate.mjs (V-12, V-13) и Lighthouse PWA-кэш на тире"
+checks:
+  - "V-12 app/sw.js существует и зарегистрирован (serviceWorker)"
+  - "V-13 состояние сохраняется через CloudStorage/sendData/mainButtonClicked"
+  - "Q-05 localStorage не превышает 2MB"
+applies_to:
+  - mini_apps
+  - telegram-mini-app

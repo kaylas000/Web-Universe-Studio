@@ -7,13 +7,18 @@ import test from "node:test";
 
 const VERTICAL = join(dirname(fileURLToPath(import.meta.url)), "..");
 const DEMO = "projects/kurs-proverka-dannyh";
+const DEMO_FULL = "projects/osnovy-analitiki";
 
-const run = (script) => execFileSync(process.execPath, [script, DEMO], { cwd: VERTICAL, encoding: "utf8" });
+const run = (script, project) => execFileSync(process.execPath, [script, project], { cwd: VERTICAL, encoding: "utf8" });
 
 test("validate: демо-проект проходит приёмку", () => {
-  assert.match(run("scripts/validate.mjs"), /ИТОГ: \d+\/\d+ · exit 0/);
+  assert.match(run("scripts/validate.mjs", DEMO), /ИТОГ: \d+\/\d+ · exit 0/);
 });
 
 test("lint-slop: демо-проект чист", () => {
-  assert.match(run("scripts/lint-slop.mjs"), /чисто:/);
+  assert.match(run("scripts/lint-slop.mjs", DEMO), /чисто:/);
+});
+
+test("lint-quotas: полный демо-проект проходит квоты Q-01…Q-05", () => {
+  assert.match(run("scripts/lint-quotas.mjs", DEMO_FULL), /ИТОГ: 5\/5 · exit 0/);
 });

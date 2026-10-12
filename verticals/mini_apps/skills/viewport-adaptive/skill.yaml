@@ -1,0 +1,27 @@
+name: viewport-adaptive
+title: "Адаптация под viewport Telegram"
+description: "Адаптирует мини-приложение под вьюпорты Telegram 320/375/420px без горизонтального скролла (К-01): media-запросы и ограниченная ширина, низ экрана учитывается через env(safe-area-inset-bottom) (К-05), высота пересчитывается по событию viewportChanged (К-06) без жёсткого 100vh (B-02)."
+source: REF-05
+takeaway: "Адаптация 320/375/420 — media-запросы и ограниченная ширина без горизонтального скролла; низ — через env(safe-area-inset-bottom), высота — через viewportChanged, а не жёсткий 100vh (REF-05)."
+inputs:
+  - brief
+  - deliverable_dir
+  - app/style.css
+  - app/app.js
+outputs:
+  - app/style.css (media-запросы, safe area, --vh)
+  - app/app.js (подписка на viewportChanged)
+steps:
+  - "Собрать контрольные точки: 320px, 375px, 420px"
+  - "Разложить сетку по media-запросам, ограничить ширину (max-width/width: 100%)"
+  - "Добавить env(safe-area-inset-bottom) в отступы низа"
+  - "Подписаться на viewportChanged: e.height → --vh, пересчитать высоту"
+  - "Проверить validate.mjs (V-01, V-05, V-06) и lint-slop (B-02)"
+checks:
+  - "V-01 media-запросы + ограниченная ширина (320/375/420)"
+  - "V-05 env(safe-area-inset-bottom) для клавиатуры"
+  - "V-06 подписка на viewportChanged"
+  - "B-02 нет жёсткого height: 100vh без safe-area"
+applies_to:
+  - mini_apps
+  - telegram-mini-app

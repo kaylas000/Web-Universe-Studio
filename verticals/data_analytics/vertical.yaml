@@ -8,11 +8,11 @@ metadata:
   description: "Считает метрики и оформляет разбор: SQL-запросы, метрики с формулами, выводы и указание источника данных — всё проверяется машинно."
   version: "1.0.0"
   domain: data_analytics
-  tags: [metric-report, sql-audit]
+  tags: [metric-report, sql-audit, dashboard-spec, etl-pipeline, quality-profile, schema-validate]
   deliverable: analysis
   checks: [validate, lint-slop]
 spec:
-  skills: [metric-report, sql-audit]
+  skills: [metric-report, sql-audit, dashboard-spec, etl-pipeline, quality-profile, schema-validate]
   validators: [constitution, anti_slop, schema]
   gates: [G1-direction, G2-structure, G3-artifact, G4-final]
   tools: [validate_artifact, lint_slop]

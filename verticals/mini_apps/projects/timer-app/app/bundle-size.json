@@ -1,4 +1,5 @@
 {
   "gzip_kb": 42,
-  "raw_kb": 120
+  "raw_kb": 120,
+  "localstorage_kb": 2
 }

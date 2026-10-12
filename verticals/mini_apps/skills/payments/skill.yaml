@@ -1,0 +1,28 @@
+name: payments
+title: "Оплата через Telegram Payments"
+description: "Встраивает оплату через Telegram Payments: платёжная накладная открывается через openInvoice, данные оплаты передаются через sendData (К-07); перед обработкой платежа бэкенд валидирует подпись initData через HMAC-SHA256 (К-15). Внешние платёжные ссылки запрещены — только открытая оплата SDK."
+source: REF-04
+takeaway: "Оплата — только Telegram Payments: openInvoice/sendData вместо внешних ссылок; перед обработкой платежа бэкенд проверяет initData через HMAC-SHA256 (REF-04)."
+inputs:
+  - brief
+  - deliverable_dir
+  - app/app.js
+  - app/server.mjs
+outputs:
+  - app/app.js (openInvoice/sendData)
+  - app/server.mjs (HMAC-проверка initData)
+  - app/bundle-size.json (вес после добавления платежей)
+steps:
+  - "Определить платёжный сценарий: товар/услуга, сумма, валюта, накладная"
+  - "Подключить openInvoice в app.js; данные оплаты передавать через sendData"
+  - "Проверить: внешних платёжных ссылок нет, только открытая оплата SDK"
+  - "В server.mjs добавить проверку initData: HMAC-SHA256 с секретом WebAppData"
+  - "Прогнать validate.mjs (V-07, V-15) и lint-quotas"
+checks:
+  - "V-07 openInvoice/sendData — оплата через Telegram Payments"
+  - "V-15 создание HMAC-SHA256 подписи initData на бэкенде"
+  - "V-10 внешние ссылки только через tg.openLink"
+  - "Q-01 бандл не вырос за 300KB gzip"
+applies_to:
+  - mini_apps
+  - telegram-mini-app

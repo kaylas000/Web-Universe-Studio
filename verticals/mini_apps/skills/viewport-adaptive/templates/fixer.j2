@@ -1,0 +1,10 @@
+{# Правщик · приём «viewport-adaptive» · точечно закрывает коды нарушений #}
+Нарушения: {{ errors }}
+
+Правила правки (К-10: точечные правки, не перезапуск):
+- V-01 → style.css: добавить @media под 320/375/420 и max-width/width: 100%;
+- V-05 → env(safe-area-inset-bottom) в нижние отступы;
+- V-06 → app.js: подписка viewportChanged → --vh;
+- B-02 → заменить height: 100vh на min-height: var(--vh) с fallback;
+- B-01 → убрать :hover без :active/:focus-visible.
+После правки прогнать validate.mjs и lint-slop.mjs.

@@ -1,0 +1,14 @@
+{# Исполнитель · приём «offline-worker» · собирает sw.js и правки app.js #}
+План: {{ plan }}
+
+Собрать в {{ deliverable }}/:
+- sw.js:
+  - const CACHE = "<имя>-v1";
+  - install: event.waitUntil(caches.open(CACHE).then((c) => c.addAll(["./index.html", "./style.css", "./app.js"])));
+  - fetch: event.respondWith(caches.match(event.request).then((hit) => hit || fetch(event.request)));
+- app.js:
+  - if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
+  - сохранение состояния: tg.CloudStorage.setItem/getItem, передача — tg.sendData (К-13);
+  - очистка таймеров/слушателей при завершении (V-18).
+
+Запрещено: кэшировать телеметрию/персональные данные; localStorage сверх 2MB (Q-05).

@@ -1,0 +1,16 @@
+name: quality-profile
+title: "Профиль качества данных"
+description: "Собирает профиль качества набора: по каждому полю — доля null, дубликаты, типы, row_count; профиль — база доверия к метрикам (К-11)."
+source: "REF-07"
+takeaway: "Профиль качества (nulls, duplicates, types, row_count) — база доверия к метрикам."
+inputs: [brief, deliverable_dir]
+outputs: [analysis]
+steps:
+  - "Разобрать бриф и входные данные"
+  - "Собрать артефакт по закону студии"
+  - "Прогнать приёмку (V-xx)"
+  - "Зафиксировать нарушения и закрыть их"
+checks:
+  - "validate.mjs → exit 0"
+  - "lint-quotas.mjs → exit 0"
+applies_to: [data]

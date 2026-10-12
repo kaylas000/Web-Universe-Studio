@@ -1,0 +1,59 @@
+{
+  "vertical": "legal_docs",
+  "quotas": [
+    {
+      "code": "Q-01",
+      "title": "Предложения ≤ 40 слов",
+      "kind": "sentencesMaxWords",
+      "path": "docs/dogovor.md",
+      "max": 40,
+      "ok": "предложения ≤ 40 слов",
+      "fail": "слишком длинное предложение (Q-01)"
+    },
+    {
+      "code": "Q-02",
+      "title": "Существенные условия — 100 %",
+      "kind": "allOf",
+      "rules": [
+        { "kind": "regexAtLeast", "path": "docs/dogovor.md", "pattern": "^##\\s+Предмет", "min": 1 },
+        { "kind": "regexAtLeast", "path": "docs/dogovor.md", "pattern": "^##\\s+Срок", "min": 1 },
+        { "kind": "regexAtLeast", "path": "docs/dogovor.md", "pattern": "^##\\s+Ответственность", "min": 1 }
+      ],
+      "ok": "разделы «Предмет», «Срок», «Ответственность» на месте",
+      "fail": "не хватает существенных условий (Q-02)"
+    },
+    {
+      "code": "Q-03",
+      "title": "Дисклеймер — 1 на документ",
+      "kind": "regexCount",
+      "path": "docs/dogovor.md",
+      "pattern": "не является юридической консультацией",
+      "min": 1,
+      "max": 1,
+      "ok": "дисклеймер присутствует ровно один раз",
+      "fail": "дисклеймер отсутствует или продублирован (Q-03)"
+    },
+    {
+      "code": "Q-04",
+      "title": "Приложения ≥ 0 и перечислены в тексте",
+      "kind": "regexCount",
+      "path": "docs/dogovor.md",
+      "pattern": "Приложение №",
+      "min": 0,
+      "ok": "все упомянутые приложения перечислены в разделе «Приложения»",
+      "fail": "приложение упомянуто, но не перечислено (Q-04)"
+    },
+    {
+      "code": "Q-05",
+      "title": "Сноски на НПА ≥ 1 с редакцией",
+      "kind": "allOf",
+      "rules": [
+        { "kind": "fileExists", "path": "docs/SOURCES.md" },
+        { "kind": "regexAtLeast", "path": "docs/SOURCES.md", "pattern": "ГК РФ", "min": 1 },
+        { "kind": "regexAtLeast", "path": "docs/SOURCES.md", "pattern": "ред\\.\\s*от", "min": 1 }
+      ],
+      "ok": "сноска на НПА с редакцией/датой есть",
+      "fail": "нет сноски на НПА с редакцией (Q-05)"
+    }
+  ]
+}

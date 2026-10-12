@@ -3,8 +3,8 @@
   "reason": "успех на итерации 2",
   "iterations": 2,
   "successIteration": 2,
-  "elapsedMs": 151,
-  "finishedAt": "2026-10-10T17:33:37.263Z",
+  "elapsedMs": 152,
+  "finishedAt": "2026-10-12T11:19:15.824Z",
   "feedback": {
     "ok": true,
     "codes": [
@@ -24,7 +24,7 @@
         "fail": 0,
         "tests": 3,
         "skipped": 0,
-        "durationMs": 56.196953
+        "durationMs": 52.908907
       },
       "testsTarget": "tests/artifact.test.mjs"
     }
@@ -48,7 +48,7 @@
     {
       "iteration": 0,
       "temperature": 0.3,
-      "elapsedMs": 33,
+      "elapsedMs": 35,
       "contextChars": 8214,
       "ok": false,
       "codes": [

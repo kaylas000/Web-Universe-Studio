@@ -12,3 +12,15 @@ sources:
     title: "touch-target"
     source: "references/sources.yaml#a11y-pass"
     takeaway: "Цель нажатия не меньше 44×44 px и отделена от соседей видимым зазором."
+  - id: ref-04
+    title: "offline-cache"
+    source: "references/sources.yaml#offline-queue"
+    takeaway: "Offline-режим — это кэш последних данных плюс очередь мутирующих запросов: сеть пропала — экран живёт кэшем, запросы встают в очередь и уходят при восстановлении (К-07, К-17)."
+  - id: ref-05
+    title: "store-assets"
+    source: "references/sources.yaml#store-release"
+    takeaway: "Стор принимает приложение по трём артефактам: иконка 1024×1024 без прозрачности, скриншоты 6.5\" и 5.5\", и описание ценности для пользователя (К-20)."
+  - id: ref-06
+    title: "i18n-keys"
+    source: "references/sources.yaml#i18n-pass"
+    takeaway: "Локализация живёт ключами: en.json и ru.json — единственный источник текста, в коде только ключи, без хардкода строк (К-14, B-04)."

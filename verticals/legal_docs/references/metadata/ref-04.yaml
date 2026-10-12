@@ -1,0 +1,4 @@
+id: ref-04
+style: cheksum-req
+source: references/sources.yaml#requisites
+takeaway: Реквизиты принимаются только после проверки контрольных сумм: ИНН — модуль 11, ОГРН — модуль 11/13 (К-05).

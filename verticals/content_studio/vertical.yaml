@@ -8,11 +8,11 @@ metadata:
   description: "Пишет посты и статьи с проверяемой структурой: заголовок, лид, подзаголовки, метаданные, источники и призыв к действию — без штампов."
   version: "1.0.0"
   domain: content_studio
-  tags: [longform-post, copy-edit]
+  tags: [longform-post, copy-edit, seo-meta, link-audit, typography, cta-analytics]
   deliverable: content
   checks: [validate, lint-slop]
 spec:
-  skills: [longform-post, copy-edit]
+  skills: [longform-post, copy-edit, seo-meta, link-audit, typography, cta-analytics]
   validators: [constitution, anti_slop, schema]
   gates: [G1-direction, G2-structure, G3-artifact, G4-final]
   tools: [validate_artifact, lint_slop]

@@ -1,0 +1,10 @@
+project_name: survey-app
+task: "сделать опросник как Telegram Mini App: три вопроса, черновик в CloudStorage, отправка ответов боту через sendData"
+loop:
+  max_iterations: 1
+generator:
+  type: mock
+context_builder:
+  type: studio_default
+validator:
+  type: vertical_project

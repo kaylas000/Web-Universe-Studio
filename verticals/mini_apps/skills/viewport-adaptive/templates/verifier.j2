@@ -1,0 +1,11 @@
+{# Верификатор · приём «viewport-adaptive» #}
+Проверить: {{ artifact }}
+
+Чек-лист адаптации:
+- [ ] media-запросы есть и ширина ограничена (V-01);
+- [ ] есть env(safe-area-inset-bottom) (V-05);
+- [ ] app.js подписан на viewportChanged → --vh (V-06);
+- [ ] нет жёсткого height: 100vh (B-02) и :hover без :active (B-01);
+- [ ] на 320px нет горизонтального скролла (проверка на тире).
+
+Прогнать: node scripts/validate.mjs && node scripts/lint-slop.mjs.

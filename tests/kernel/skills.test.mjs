@@ -11,8 +11,12 @@ const LEGAL = resolve(ROOT, "verticals/legal_docs");
 const WEB = resolve(ROOT, "verticals/web_studio");
 
 test("listSkills находит скиллы вертикали", () => {
-  assert.equal(listSkills(LEGAL).length, 2);
-  assert.ok(listSkills(LEGAL).every((d) => d.endsWith("contract-draft") || d.endsWith("legal-review")));
+  assert.ok(listSkills(LEGAL).length >= 6, "стандарт студии: ≥6 приёмов");
+  assert.ok(
+    listSkills(LEGAL).every((d) =>
+      /contract-draft|legal-review|requisites|dispute-clause|pdn-compliance|versioning$/.test(d),
+    ),
+  );
 });
 
 test("loadSkill читает метаданные, шаблоны и крючки", () => {

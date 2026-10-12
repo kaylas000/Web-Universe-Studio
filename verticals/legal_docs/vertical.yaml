@@ -8,11 +8,11 @@ metadata:
   description: "Готовит договоры, политики и претензии с проверяемой структурой: разделы, нумерация, реквизиты и ссылка на применимое право — всё машинно проверяется."
   version: "1.0.0"
   domain: legal_docs
-  tags: [contract-draft, legal-review]
+  tags: [contract-draft, legal-review, requisites, dispute-clause, pdn-compliance, versioning]
   deliverable: docs
   checks: [validate, lint-slop]
 spec:
-  skills: [contract-draft, legal-review]
+  skills: [contract-draft, legal-review, requisites, dispute-clause, pdn-compliance, versioning]
   validators: [constitution, anti_slop, schema]
   gates: [G1-direction, G2-structure, G3-artifact, G4-final]
   tools: [validate_artifact, lint_slop]

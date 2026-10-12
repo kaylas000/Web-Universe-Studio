@@ -1,0 +1,4 @@
+id: ref-06
+style: pdn
+source: references/sources.yaml#pdn-compliance
+takeaway: ПДн обрабатываются только при наличии цели, срока и согласия субъекта — иначе обработка без основания (К-07, 152-ФЗ).

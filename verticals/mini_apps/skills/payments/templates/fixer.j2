@@ -1,0 +1,11 @@
+{# Правщик · приём «payments» · точечно закрывает коды нарушений #}
+Нарушения: {{ errors }}
+
+Правила правки (К-10: точечные правки, не перезапуск):
+- V-07 → заменить внешнюю ссылку/QR на tg.openInvoice, данные — через tg.sendData в app.js;
+- V-15 → добавить в server.mjs HMAC-SHA256: секрет из createHmac("sha256", "WebAppData").update(botToken),
+  data_check_string по отсортированным парам, сверка с hash из initData;
+- V-14 → alert/confirm/prompt заменить на tg.showPopup;
+- V-10 → убрать target="_blank", открывать через tg.openLink;
+- Q-01/V-08 → сократить платёжный код, обновить app/bundle-size.json.
+После правки прогнать все три скрипта приёмки.

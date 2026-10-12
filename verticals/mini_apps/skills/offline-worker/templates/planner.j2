@@ -1,0 +1,15 @@
+{# Планировщик · приём «offline-worker» · offline и состояние #}
+Артефакт: {{ deliverable }}
+Задача: {{ brief }}
+
+План:
+1. Оболочка app/: index.html, style.css, app.js (и telegram-web-app.js — внешний, кэшировать нельзя).
+2. Стратегия: install → caches.open + addAll(оболочка); fetch → cache-first, fallback на сеть (К-12).
+3. Регистрация: navigator.serviceWorker.register("./sw.js") в app.js (V-12).
+4. Состояние: CloudStorage.getItem при старте, setItem при изменении, sendData при завершении (К-13).
+5. Проверить: без сети первый экран открывается (Lighthouse PWA на тире).
+
+Законы: К-12, К-13.
+{% if law is defined %}
+Конституция студии (первые 4KB): {{ law }}
+{% endif %}

@@ -1,0 +1,18 @@
+name: seo-meta
+title: "SEO-метаданные"
+description: "Собирает мету по закону студии: title 50–60 и description 120–158 символов (К-05), JSON-LD по типу контента (К-12), мета без кликбейта (B-04)."
+source: "REF-04"
+takeaway: "Метаданные — это обещание: title 50–60, description 120–158 символов, JSON-LD по типу контента."
+inputs: [brief, deliverable_dir, "content/meta.json", "content/structured-data.json"]
+outputs: [content]
+steps:
+  - "Собрать семантику из брифа: ключ и интент страницы"
+  - "Написать title в 50–60 символов с ключом в начале"
+  - "Написать description в 120–158 символов с выгодой"
+  - "Собрать JSON-LD по типу контента (Article/Product/FAQ)"
+  - "Проверить мету против К-05 и К-12"
+checks:
+  - "К-05 title 50–60, description 120–158 символов"
+  - "К-12 JSON-LD по типу контента (Article/Product/FAQ)"
+  - "B-04 мета без кликбейта без раскрытия"
+applies_to: [content_studio]

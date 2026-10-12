@@ -12,3 +12,15 @@ sources:
     title: "focus-visible"
     source: "references/sources.yaml#a11y-pass"
     takeaway: "Фокус виден на каждом интерактивном элементе; порядок обхода совпадает с визуальным."
+  - id: ref-04
+    title: "invoice-initdata"
+    source: "references/sources.yaml#payments"
+    takeaway: "Оплата — только Telegram Payments: openInvoice/sendData вместо внешних ссылок; перед обработкой платежа бэкенд проверяет подпись initData через HMAC-SHA256."
+  - id: ref-05
+    title: "viewport-safearea"
+    source: "references/sources.yaml#viewport-adaptive"
+    takeaway: "Адаптация 320/375/420 — media-запросы и ограниченная ширина; низ экрана — через env(safe-area-inset-bottom), высота — через viewportChanged, а не жёсткий 100vh."
+  - id: ref-06
+    title: "offline-sw"
+    source: "references/sources.yaml#offline-worker"
+    takeaway: "Базовый offline — кэш оболочки в Service Worker (install → addAll, fetch → cache-first) и его регистрация; состояние переживает закрытие через CloudStorage/sendData."

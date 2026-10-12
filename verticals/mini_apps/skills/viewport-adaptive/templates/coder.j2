@@ -1,0 +1,13 @@
+{# Исполнитель · приём «viewport-adaptive» · правит app/style.css и app/app.js #}
+План: {{ plan }}
+
+Внести в {{ deliverable }}/:
+- style.css:
+  - max-width: 24rem на контейнере, width: 100% на полях/кнопках;
+  - @media (max-width: 420px), (max-width: 375px), (max-width: 320px) — размеры типографики;
+  - нижний отступ: calc(1rem + env(safe-area-inset-bottom));
+  - --vh: 100vh как fallback в :root, дальше только min-height: var(--vh);
+  - без :hover-в-одиночку (B-01) и без кастомных скроллбаров (B-04).
+- app.js: tg.onEvent("viewportChanged", (e) => root.style.setProperty("--vh", e.height + "px")).
+
+Запрещено: height: 100vh (B-02), overflow-x видимый на 320px.

@@ -1,0 +1,4 @@
+id: ref-06
+style: i18n-keys
+source: references/sources.yaml#i18n-pass
+takeaway: Локализация живёт ключами: en.json и ru.json — единственный источник текста, в коде только ключи, без хардкода строк (К-14, B-04).

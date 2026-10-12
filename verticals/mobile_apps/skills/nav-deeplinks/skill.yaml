@@ -1,0 +1,25 @@
+name: nav-deeplinks
+title: "Навигация и deep links (nav-deeplinks)"
+description: >
+  Аудит навигации по законам К-08 и К-13: нативные стеки (React Navigation /
+  go_router / NavigationStack) без кастомных стеков без анимаций; deep links
+  (universal/app links) объявлены в Info.plist / AndroidManifest.xml и открывают
+  конкретный экран. Артефакт не меняет — только верифицирует и возвращает
+  точечные правки.
+source: "REF-02"
+takeaway: >
+  Навигация — нативные стеки платформы, а deep links держатся манифестом:
+  схема приложения открывает нужный экран с параметрами извне (К-08, К-13).
+inputs: [app, navigation]
+outputs: [nav_report]
+steps:
+  - "Проверить стек навигации: нативный (React Navigation / go_router / NavigationStack), не кастомный без анимаций (К-08)"
+  - "Проверить схему приложения в манифесте app.json: scheme объявлен (К-13)"
+  - "Проверить universal/app links: Info.plist / AndroidManifest.xml, intent-filter (К-13)"
+  - "Проверить обработку ссылки: deep link открывает конкретный экран с параметрами"
+  - "Проверить квоту Q-05: ≤5 экранов в одном стеке без навигации"
+checks:
+  - "К-08 Нативные стеки навигации"
+  - "К-13 Обработка deep links (universal/app links)"
+  - "Q-05 ≤5 экранов в одном стеке без навигации"
+applies_to: [mobile_apps]

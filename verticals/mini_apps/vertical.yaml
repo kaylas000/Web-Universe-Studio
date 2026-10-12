@@ -6,13 +6,13 @@ metadata:
   name: mini_apps
   displayName: "Студия мини-приложений"
   description: "Собирает Telegram/VK Mini Apps: магазины внутри Telegram, сервисы записи, мини-игры, дашборды. Стек React/Vue + Telegram WebApp SDK / VK Bridge; артефакт — лёгкий бандл app/ (< 300KB gzip), нативные элементы SDK, темы theme_params, safe area, Telegram Payments."
-  version: "2.0.0"
+  version: "2.1.0"
   domain: mini_apps
-  tags: [single-page-app, a11y-pass, telegram-sdk, telegram-bot-ui, mini-game, vk-bridge]
+  tags: [single-page-app, a11y-pass, telegram-sdk, payments, viewport-adaptive, offline-worker]
   deliverable: app
   checks: [validate, lint-slop]
 spec:
-  skills: [single-page-app, a11y-pass, telegram-sdk, telegram-bot-ui, mini-game, vk-bridge]
+  skills: [single-page-app, a11y-pass, telegram-sdk, payments, viewport-adaptive, offline-worker]
   validators: [constitution, anti_slop, schema, llm_judge]
   gates: [G1-direction, G2-structure, G3-artifact, G4-final]
   tools: [validate_artifact, lint_slop, lint_quotas, initdata_check]

@@ -1,0 +1,13 @@
+{# Исполнитель · приём «payments» · встраивает оплату в app/ #}
+План: {{ plan }}
+
+Встроить в {{ deliverable }}/:
+- app.js: открытая оплата tg.openInvoice(invoiceUrl) по нажатию MainButton; данные платежа/заказа
+  передаются через tg.sendData; отклик — tg.HapticFeedback.notificationOccurred("success");
+- app/server.mjs: проверка initData перед обработкой платежа —
+  createHmac("sha256", "WebAppData").update(botToken) → секрет, затем HMAC-SHA256 по
+  data_check_string; сверка с полем hash (К-15);
+- app/bundle-size.json: вес обновить после добавления платёжного кода (Q-01).
+
+Запрещено: внешние платёжные ссылки/QR вместо openInvoice (К-07), window.location.href (B-03),
+alert/confirm/prompt (К-14) — статус платежа показывать нативным tg.showPopup.

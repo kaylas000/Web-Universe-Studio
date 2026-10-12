@@ -1,0 +1,9 @@
+{# Правщик · приём «offline-worker» · точечно закрывает коды нарушений #}
+Нарушения: {{ errors }}
+
+Правила правки (К-10: точечные правки, не перезапуск):
+- V-12 → sw.js с addAll(оболочка) + регистрация navigator.serviceWorker.register в app.js;
+- V-13 → состояние в CloudStorage.setItem, восстановление getItem, отправка sendData;
+- V-18 → clearTimeout/clearInterval/removeEventListener при закрытии;
+- Q-05 → не хранить в localStorage больше 2MB, сжать/убрать тяжёлые поля.
+После правки прогнать validate.mjs и lint-quotas.mjs.
