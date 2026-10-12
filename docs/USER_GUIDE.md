@@ -9,13 +9,43 @@ node cli/main.mjs help          # список команд
 npm run acceptance              # полная приёмка DoD (§15)
 ```
 
+## 0. Работа в студии (оболочка)
+
+Платформа — оболочка из 7 студий: агент работает **внутри** студии, в папках
+`verticals/<студия>/projects/<имя>/`, по правилам и циклам этой студии — её
+конституции (К-xx), приёмам (`skills/`), примерам (`references/`) и скриптам
+приёмки (`scripts/`). Контракт каждой студии — её `AGENTS.md`.
+
+```bash
+# пример: ведём новый проект в юридической студии
+cd verticals/legal_docs
+mkdir -p projects/moj-dogovor/docs
+node scripts/validate.mjs projects/moj-dogovor      # приёмка V-xx → «ИТОГ: N/N · exit 0»
+node scripts/lint-slop.mjs projects/moj-dogovor     # запреты B-xx → «чисто:»
+node scripts/lint-quotas.mjs projects/moj-dogovor   # квоты Q-xx → «ИТОГ: Q/Q · exit 0»
+cd ../..
+node core/loop-engine/cli.mjs projects/moj-dogovor --studio-root verticals/legal_docs   # цикл студии
+```
+
+Сводка по студиям:
+
+| Студия | Контракт | Артефакт в | Приёмка |
+| --- | --- | --- | --- |
+| legal_docs | verticals/legal_docs/AGENTS.md | `docs/` | validate + lint-slop + lint-quotas |
+| content_studio | verticals/content_studio/AGENTS.md | `content/` | то же |
+| data_analytics | verticals/data_analytics/AGENTS.md | `analysis/` | то же |
+| education | verticals/education/AGENTS.md | `course/` | то же |
+| mini_apps | verticals/mini_apps/AGENTS.md | `app/` | то же |
+| mobile_apps | verticals/mobile_apps/AGENTS.md | `app/` | то же |
+| web_studio | verticals/web_studio/AGENTS.md | `site/` | сборка + validate |
+
 ## 1. Прогнать цикл по одному проекту (К-21)
 
 ```bash
-node core/loop-engine/cli.mjs projects/<имя> --validator ceh_project
+node core/loop-engine/cli.mjs projects/<имя> --studio-root verticals/<студия> --dry-run
 node core/loop-engine/cli.mjs projects/<имя> --json | head
 ```
-`exit 0` — закон исполнен. `exit 1` — в `feedback.codes` список точечных правок (`V-xx`/`B-xx`).
+`exit 0` — закон исполнен. `exit 1` — в `feedback.codes` список точечных правок (`V-xx`/`B-xx`/`Q-xx`).
 
 ## 2. Проверить всю платформу
 

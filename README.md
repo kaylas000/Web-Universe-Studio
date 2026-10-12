@@ -18,6 +18,29 @@ bash scripts/acceptance_test.sh        # полная приёмка DoD (§15)
 node core/gate.mjs                     # гейт К-21 по всем 7 вертикалям
 ```
 
+## Как работать в студии (оболочка, как в цеху)
+
+Платформа — не автономный конвейер «создай проект одной командой», а оболочка из 7 студий:
+агент (LLM) работает **внутри** выбранной студии и ведёт проекты в папках
+`verticals/<студия>/projects/<имя>/`. Работа идёт по правилам и циклам **этой студии**,
+с её приёмами (`skills/`), примерами (`references/`) и скриптами приёмки (`scripts/`).
+
+1. Войди в студию и прочитай её контракт: `verticals/<студия>/AGENTS.md`
+   (порядок чтения: CONSTITUTION → references → skills → anti-slop → gates → scripts).
+2. Заведи проект: `verticals/<студия>/projects/<имя>/`, артефакт — в подпапке
+   `deliverable` студии (docs/ · content/ · analysis/ · course/ · app/).
+3. Гоняй цикл студии, пока `exit 0`:
+
+```bash
+cd verticals/legal_docs                                # пример: юридическая студия
+node scripts/validate.mjs projects/<имя>               # приёмка V-xx
+node scripts/lint-slop.mjs projects/<имя>              # запреты B-xx
+node scripts/lint-quotas.mjs projects/<имя>            # квоты Q-xx
+cd ../.. && node core/loop-engine/cli.mjs projects/<имя> --studio-root verticals/legal_docs
+```
+
+4. Приёмка: `REVIEW.md` артдиректора → G4. Вердикт — за человеком (К-09).
+
 ## Структура
 
 ```
@@ -31,8 +54,10 @@ core/
   budget/          BudgetManager (§4.5)
   knowledge/       RAG/BM25 по архиву референсов (§4.7)
   observability/   метрики + экспорт Prometheus (§4.8)
-verticals/         эталон web_studio + legal_docs, content_studio, data_analytics,
-                   education, mini_apps, mobile_apps (по скелету §7.1)
+verticals/         каждая студия — оболочка цеха: свой AGENTS.md (контракт агента),
+                   CONSTITUTION, anti-slop, skills/, references/, gates/, scripts/
+                   приёмки и projects/<имя>/ для работы (web_studio — эталон, остальные 6
+                   доведены до стандарта docs/STUDIO-DEPTH-STANDARD.md)
 compositions/      декларативные сложные задачи (§13)
 configs/           llm.yaml, sandbox_templates.yaml, device-matrix.yaml, references_sources.yaml
 scripts/           bootstrap-verticals, index_references, scrape_references, run-tests,
