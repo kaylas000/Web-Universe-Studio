@@ -1,0 +1,8 @@
+{
+  "icon": "assets/icon-1024.png",
+  "screenshots": [
+    { "file": "screenshots/6.5in.png", "size": "6.5-inch", "px": "1290x2796" },
+    { "file": "screenshots/5.5in.png", "size": "5.5-inch", "px": "1242x2208" }
+  ],
+  "description_ru": "Быстрые заметки с офлайн-режимом и биометрией."
+}

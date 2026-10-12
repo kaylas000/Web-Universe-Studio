@@ -1,9 +1,21 @@
 name: sql-audit
-title: "sql-audit"
-description: "Приём студии «Студия данных»: sql-audit."
-inputs: [brief, deliverable_dir]
+title: "Аудит SQL"
+description: "Проверяет запросы по закону студии: явные колонки (без SELECT *), JOIN вместо коррелированных подзапросов, план под контролем (нет Seq Scan по большим таблицам), параметризация и фильтры/лимиты."
+source: "REF-03"
+takeaway: "Аудит SQL проверяет JOIN на размножение строк и обработку NULL в агрегатах."
+inputs: [brief, deliverable_dir, "analysis/queries.sql", "analysis/plan.txt"]
 outputs: [analysis]
 steps:
-  - "Разобрать бриф"
-  - "Собрать артефакт по закону студии"
-  - "Отдать на приёмку"
+  - "Собрать запросы и план EXPLAIN ANALYZE"
+  - "Проверить явные колонки и JOIN вместо подзапросов"
+  - "Оценить план: индексы, Seq Scan, Execution Time"
+  - "Проверить параметризацию и фильтры/лимиты"
+  - "Зафиксировать нарушения в отчёте"
+checks:
+  - "V-02 Нет SELECT *"
+  - "V-03 JOIN вместо коррелированных подзапросов"
+  - "V-04 EXPLAIN ANALYZE без Seq Scan по большим таблицам"
+  - "V-08 Параметризация против инъекций"
+  - "V-12 Контроль стоимости сканирования"
+  - "Q-02 Seq Scan на больших — 0"
+applies_to: [data]

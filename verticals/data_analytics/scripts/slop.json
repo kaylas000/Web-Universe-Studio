@@ -5,7 +5,8 @@
   ],
   "extensions": [
     ".md",
-    ".sql"
+    ".sql",
+    ".py"
   ],
   "rules": [
     {
@@ -14,13 +15,38 @@
       "message": "SELECT * в продакшн-запросе (B-01)"
     },
     {
+      "code": "B-02",
+      "pattern": "\\(\\s*SELECT\\b",
+      "message": "коррелированный подзапрос вместо JOIN (B-02)"
+    },
+    {
+      "code": "B-03",
+      "pattern": "f[\"']\\s*(SELECT|INSERT|UPDATE|DELETE|WITH)",
+      "message": "SQL через f-string — инъекция (B-03)"
+    },
+    {
       "code": "B-04",
-      "pattern": "except\\s*:\\s*pass",
-      "message": "проглоченная ошибка (B-04)"
+      "pattern": "except\\s*([A-Za-z_][\\w.]*)?\\s*:\\s*pass",
+      "message": "тихо проглоченная ошибка (B-04)"
+    },
+    {
+      "code": "B-05",
+      "pattern": "^(?!.*\\bORDER\\s+BY\\b).*\\bLIMIT\\b",
+      "message": "LIMIT без ORDER BY — недетерминированный порядок (B-05)"
+    },
+    {
+      "code": "B-06",
+      "pattern": "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}|\\+7\\s*\\(?\\d{3}\\)?[\\s-]?\\d{3}[\\s-]?\\d{2}[\\s-]?\\d{2}",
+      "message": "PII в открытом виде (email/телефон) (B-06)"
+    },
+    {
+      "code": "B-07",
+      "pattern": "=\\s*[0-9]{4,}\\b",
+      "message": "магическое число без комментария (B-07)"
     },
     {
       "code": "B-08",
-      "pattern": "password\\s*=\\s*[\"']",
+      "pattern": "(password|passwd|api[_-]?key|secret|token|dsn)\\s*[:=]\\s*[\"'][^\"']+",
       "message": "хардкод креденшела (B-08)"
     }
   ]

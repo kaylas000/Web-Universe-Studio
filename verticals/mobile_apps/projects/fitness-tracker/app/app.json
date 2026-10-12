@@ -1,0 +1,12 @@
+{
+  "name": "fitness-tracker",
+  "version": "1.0.0",
+  "entry": "src/App.mjs",
+  "displayName": "Тренировки",
+  "scheme": "fitlog",
+  "designSystem": "hig-material3",
+  "newArchEnabled": true,
+  "tabletSupport": true,
+  "cacheLimitMb": 80,
+  "permissionsOnDemand": true
+}

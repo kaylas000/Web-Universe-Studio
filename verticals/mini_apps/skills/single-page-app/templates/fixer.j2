@@ -1,2 +1,16 @@
-{# Правщик: точечно закрывает коды нарушений #}
+{# Правщик · приём «single-page-app» · точечно закрывает коды нарушений #}
 Нарушения: {{ errors }}
+
+Правила правки (К-10: точечные правки, не перезапуск):
+- V-01/V-11 → только app/style.css (media-запросы, min-height).
+- V-02/V-06/V-09/V-13/V-18 → только app/app.js (SDK-элементы, подписки, очистка).
+- V-05 → env(safe-area-inset-bottom) в style.css.
+- V-07 → openInvoice/sendData вместо внешних ссылок.
+- V-08/Q-01/Q-05 → уменьшить бандл; вес фиксируется в app/bundle-size.json.
+- V-10 → tg.openLink() вместо target="_blank".
+- V-14 → tg.showPopup() вместо alert/confirm/prompt.
+- V-15 → HMAC-проверка в app/server.mjs.
+- V-17 → пополнить app/devices-report.json (≥ 4 устройства).
+- B-01…B-05 → снять запрещённый паттерн из кода app/.
+
+После правки прогнать все три скрипта приёмки.

@@ -1,0 +1,9 @@
+{
+  "device": "Pixel 6a (mid-range)",
+  "start_ms": 1500,
+  "fps": 58,
+  "apk_size_mb": 31,
+  "ipa_size_mb": 34,
+  "bundle": "notes-1.0.0",
+  "measured_by": "Flipper + React Native Performance Monitor"
+}

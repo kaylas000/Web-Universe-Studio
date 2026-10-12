@@ -22,7 +22,7 @@
         }
       ],
       "ok": "учтены HIG и Material Design 3",
-      "fail": "нет привязки к гайдлайнам платформы (К-01) · LLM-критик + статанализ"
+      "fail": "нет привязки к гайдлайнам платформы (К-01) · гайдлайн-чек (HIG/M3) + LLM-judge (по умолчанию off)"
     },
     {
       "code": "V-02",
@@ -39,7 +39,7 @@
       "title": "Тач-таргеты ≥ 44/48",
       "kind": "regexAtLeast",
       "path": "app/src/App.mjs",
-      "pattern": "minHeight=\\{(44|48)\\}|hitSlop",
+      "pattern": "minHeight=\\{(44|48)\\}|minHeight:\\s*(44|48)|hitSlop",
       "min": 1,
       "ok": "тач-таргеты не меньше нормы",
       "fail": "мелкие тач-таргеты (К-03)"
@@ -90,23 +90,45 @@
     {
       "code": "V-06",
       "title": "Запуск < 2 c, FPS ≥ 55",
-      "kind": "allOf",
+      "kind": "anyOf",
       "rules": [
         {
-          "kind": "jsonNumberMax",
-          "path": "app/perf.json",
-          "key": "start_ms",
-          "max": 2000
+          "kind": "allOf",
+          "rules": [
+            {
+              "kind": "jsonNumberMax",
+              "path": "app/perf.json",
+              "key": "start_ms",
+              "max": 2000
+            },
+            {
+              "kind": "jsonNumberMin",
+              "path": "app/perf.json",
+              "key": "fps",
+              "min": 55
+            }
+          ]
         },
         {
-          "kind": "jsonNumberMin",
-          "path": "app/perf.json",
-          "key": "fps",
-          "min": 55
+          "kind": "allOf",
+          "rules": [
+            {
+              "kind": "jsonNumberMax",
+              "path": "app/bundle.json",
+              "key": "start_ms",
+              "max": 2000
+            },
+            {
+              "kind": "jsonNumberMin",
+              "path": "app/bundle.json",
+              "key": "fps",
+              "min": 55
+            }
+          ]
         }
       ],
       "ok": "производительность в бюджете",
-      "fail": "просадка старта/FPS (К-06) · Flipper/DevTools"
+      "fail": "просадка старта/FPS (К-06) · bundle.json/perf-report.json (jsonNumberMax, Flipper/DevTools)"
     },
     {
       "code": "V-07",
@@ -266,12 +288,27 @@
     {
       "code": "V-18",
       "title": "5+ разрешений экрана",
-      "kind": "jsonArrayMinItems",
-      "path": "app/screenshots.json",
-      "key": "phone",
-      "min": 5,
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "jsonArrayMinItems",
+          "path": "app/devices-report.json",
+          "key": "devices",
+          "min": 5
+        },
+        {
+          "kind": "jsonArrayEveryHas",
+          "path": "app/devices-report.json",
+          "key": "devices",
+          "fields": [
+            "device",
+            "width",
+            "height"
+          ]
+        }
+      ],
       "ok": "проверено на 5+ разрешениях",
-      "fail": "меньше 5 разрешений (К-18) · Detox/Appium"
+      "fail": "меньше 5 разрешений (К-18) · devices-report.json (Detox/Appium, iPhone SE…Android 600dp)"
     },
     {
       "code": "V-19",
@@ -293,6 +330,10 @@
           "path": "app/assets/icon-1024.png"
         },
         {
+          "kind": "fileExists",
+          "path": "app/screenshots/manifest.json"
+        },
+        {
           "kind": "jsonHas",
           "path": "app/store.json",
           "keys": [
@@ -303,7 +344,7 @@
         }
       ],
       "ok": "иконка 1024 и метаданные стора на месте",
-      "fail": "нет иконки/скриншотов/описания (К-20)"
+      "fail": "нет иконки/скриншотов/описания (К-20) · assets/icon-1024.png + screenshots/ (store-checklist.mjs)"
     }
   ]
 }

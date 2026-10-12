@@ -5,7 +5,7 @@
    демо-проектом и самотестом. Скрипт идемпотентен.
    Запуск: node scripts/bootstrap-verticals.mjs */
 
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -1226,6 +1226,22 @@ export default { createState, render, addItem, removeItem };
 /*__SPECS__*/
 
 const main = () => {
+  // ГАРД (К-10): студии после бутстрапа доводятся вручную до глубины эталона
+  // (docs/STUDIO-DEPTH-STANDARD.md). Этот скрипт — только первичный каркас:
+  // повторный запуск без `--force` перезаписал бы глубокое наполнение тонким, поэтому он запрещён.
+  const force = process.argv.includes("--force");
+  if (!force) {
+    const existing = SPECS.filter((s) => existsSync(join(V, s.slug, "CONSTITUTION.md")));
+    if (existing.length > 0) {
+      process.stderr.write(
+        `остановлено: студии ${existing.map((s) => s.slug).join(", ")} уже существуют.\n` +
+          `Бутстрап делает только первичный каркас. Глубокое наполнение ведётся вручную по ` +
+          `docs/STUDIO-DEPTH-STANDARD.md; повторный прогон затрёт его. Если каркас нужен заново — ` +
+          `вызови с --force (сознательно разрушительно).\n`,
+      );
+      process.exit(1);
+    }
+  }
   const dirs = SPECS.map((s) => T.writeVertical({ ...s, ...(TZ_OVERRIDES[s.slug] ?? {}), ...(TZ_ARTIFACTS[s.slug] ?? {}) }));
   for (const dir of dirs) process.stdout.write(`вертикаль создана: ${dir}\n`);
   process.stdout.write(`готово: ${dirs.length} вертикалей\n`);

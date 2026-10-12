@@ -1,0 +1,10 @@
+project_name: fitness-tracker
+task: "собрать MVP трекера тренировок на React Native с офлайн-режимом"
+loop:
+  max_iterations: 1
+generator:
+  type: mock
+context_builder:
+  type: studio_default
+validator:
+  type: vertical_project

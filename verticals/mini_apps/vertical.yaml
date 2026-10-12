@@ -5,17 +5,17 @@ kind: Vertical
 metadata:
   name: mini_apps
   displayName: "Студия мини-приложений"
-  description: "Собирает лёгкие веб-приложения: разметка, скрипт и стиль, без инлайновых обработчиков и тяжёлых эффектов — с проверкой доступности цели нажатия."
-  version: "1.0.0"
+  description: "Собирает Telegram/VK Mini Apps: магазины внутри Telegram, сервисы записи, мини-игры, дашборды. Стек React/Vue + Telegram WebApp SDK / VK Bridge; артефакт — лёгкий бандл app/ (< 300KB gzip), нативные элементы SDK, темы theme_params, safe area, Telegram Payments."
+  version: "2.0.0"
   domain: mini_apps
-  tags: [single-page-app, a11y-pass]
+  tags: [single-page-app, a11y-pass, telegram-sdk, telegram-bot-ui, mini-game, vk-bridge]
   deliverable: app
   checks: [validate, lint-slop]
 spec:
-  skills: [single-page-app, a11y-pass]
-  validators: [constitution, anti_slop, schema]
+  skills: [single-page-app, a11y-pass, telegram-sdk, telegram-bot-ui, mini-game, vk-bridge]
+  validators: [constitution, anti_slop, schema, llm_judge]
   gates: [G1-direction, G2-structure, G3-artifact, G4-final]
-  tools: [validate_artifact, lint_slop]
+  tools: [validate_artifact, lint_slop, lint_quotas, initdata_check]
   registry: "registry.mjs"
   models:
     planner: "ollama/llama3.1:8b"

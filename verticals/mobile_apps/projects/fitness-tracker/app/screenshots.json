@@ -1,0 +1,14 @@
+{
+  "phone": [
+    "iPhone SE 375x667",
+    "iPhone 13 390x844",
+    "iPhone 15 Pro Max 430x932",
+    "Pixel 6a 412x915",
+    "Galaxy S23 360x780",
+    "Android 600dp 600x960"
+  ],
+  "tablet": [
+    "iPad 10.9 820x1180",
+    "Android tablet 800x1280"
+  ]
+}

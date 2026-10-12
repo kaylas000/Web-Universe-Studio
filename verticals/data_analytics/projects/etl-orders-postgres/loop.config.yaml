@@ -1,0 +1,10 @@
+project_name: etl-orders-postgres
+task: "построить ETL заказов в PostgreSQL и посчитать метрики за ноябрь 2025"
+loop:
+  max_iterations: 1
+generator:
+  type: mock
+context_builder:
+  type: studio_default
+validator:
+  type: vertical_project

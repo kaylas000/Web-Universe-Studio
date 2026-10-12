@@ -1,0 +1,76 @@
+{
+  "vertical": "mobile_apps",
+  "rules": [
+    {
+      "code": "Q-01",
+      "title": "Размер APK / IPA ≤ 50MB",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "jsonNumberMax",
+          "path": "app/bundle.json",
+          "key": "apk_size_mb",
+          "max": 50
+        },
+        {
+          "kind": "jsonNumberMax",
+          "path": "app/bundle.json",
+          "key": "ipa_size_mb",
+          "max": 50
+        }
+      ],
+      "ok": "APK и IPA в бюджете 50MB",
+      "fail": "бандл больше 50MB (Q-01) · bundle.json apk_size_mb/ipa_size_mb"
+    },
+    {
+      "code": "Q-02",
+      "title": "Прямые npm-зависимости ≤ 50",
+      "kind": "jsonNumberMax",
+      "path": "app/deps.json",
+      "key": "count",
+      "max": 50,
+      "ok": "зависимостей не больше 50",
+      "fail": "более 50 прямых npm-зависимостей (Q-02) · deps.json count"
+    },
+    {
+      "code": "Q-03",
+      "title": "Холодный старт ≤ 2 c",
+      "kind": "jsonNumberMax",
+      "path": "app/perf.json",
+      "key": "start_ms",
+      "max": 2000,
+      "ok": "холодный старт в бюджете",
+      "fail": "холодный старт дольше 2 c (Q-03) · perf.json start_ms"
+    },
+    {
+      "code": "Q-04",
+      "title": "Память ≤ 150MB",
+      "kind": "jsonNumberMax",
+      "path": "app/perf.json",
+      "key": "memory_mb",
+      "max": 150,
+      "ok": "память в активном состоянии в бюджете",
+      "fail": "память больше 150MB (Q-04) · perf.json memory_mb"
+    },
+    {
+      "code": "Q-05",
+      "title": "Экраны в стеке без навигации ≤ 5",
+      "kind": "jsonNumberMax",
+      "path": "app/navigation.json",
+      "key": "screens_in_stack",
+      "max": 5,
+      "ok": "глубина стека не выше 5",
+      "fail": "глубина стека больше 5 без навигации (Q-05) · navigation.json screens_in_stack"
+    },
+    {
+      "code": "Q-06",
+      "title": "Кэш на диске ≤ 100MB",
+      "kind": "jsonNumberMax",
+      "path": "app/app.json",
+      "key": "cacheLimitMb",
+      "max": 100,
+      "ok": "кэш не превышает лимит",
+      "fail": "кэш на диске больше 100MB (Q-06) · app.json cacheLimitMb"
+    }
+  ]
+}

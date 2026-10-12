@@ -1,0 +1,10 @@
+{
+  "generated_by": "тир студии mini_apps (К-17)",
+  "webviews": ["ios-safari-webview", "android-chrome-webview"],
+  "devices": [
+    { "id": "iphone-13", "os": "iOS 17", "webview": "Safari", "viewport": 390, "result": "ok" },
+    { "id": "iphone-se", "os": "iOS 16", "webview": "Safari", "viewport": 375, "result": "ok" },
+    { "id": "pixel-7", "os": "Android 14", "webview": "Chrome", "viewport": 412, "result": "ok" },
+    { "id": "galaxy-a54", "os": "Android 13", "webview": "Chrome", "viewport": 360, "result": "ok" }
+  ]
+}

@@ -1,9 +1,27 @@
 name: a11y-pass
-title: "a11y-pass"
-description: "Приём студии «Студия мини-приложений»: a11y-pass."
-inputs: [brief, deliverable_dir]
-outputs: [app]
+title: "Доступность мини-приложения"
+description: "Доводит мини-приложение до доступности: фокус виден на каждом интерактивном элементе, порядок обхода совпадает с визуальным (REF-03), тач-таргеты ≥ 44×44px (К-11), контраст на темах Telegram, никаких hover-в-одиночку (B-01)."
+source: REF-03
+takeaway: "Фокус виден на каждом интерактивном элементе, порядок обхода совпадает с визуальным (REF-03); доступность проверяется не глазами, а скриптом."
+inputs:
+  - artifact_dir
+  - audit_targets
+outputs:
+  - app/style.css (поправки)
+  - app/index.html (поправки)
+  - app/app.js (поправки)
+  - a11y-report.md
 steps:
-  - "Разобрать бриф"
-  - "Собрать артефакт по закону студии"
-  - "Отдать на приёмку"
+  - "Прогнать скан: интерактивные элементы, role, aria-live, lang, порядок tab"
+  - "Проверить тач-таргеты ≥ 44×44px и отсутствие :hover в одиночку (B-01)"
+  - "Проверить контраст на светлой/тёмной темах Telegram (var(--tg-theme-*))"
+  - "Проверить: фокус-стиль :focus-visible есть у каждого интерактивного элемента"
+  - "Зафиксировать вывод в a11y-report.md"
+checks:
+  - "V-11 (тач-таргеты) и V-14 (popup вместо alert) из validate.mjs"
+  - "B-01 отсутствие :hover без :active из slop.json"
+applies_to:
+  - mini_apps
+  - telegram-mini-app
+  - vk-mini-app
+  - accessibility

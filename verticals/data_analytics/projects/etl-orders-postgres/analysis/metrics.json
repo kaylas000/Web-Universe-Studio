@@ -1,0 +1,8 @@
+{
+  "period": { "from": "2025-11-01", "to": "2025-11-30" },
+  "metrics": [
+    { "name": "Валовая выручка", "formula": "SUM(p.amount) WHERE p.status='paid'", "value": 124420000 },
+    { "name": "Средний чек", "formula": "SUM(p.amount)/COUNT(DISTINCT o.id) WHERE p.status='paid'", "value": 3888 },
+    { "name": "Доля отмен", "formula": "COUNT(cancelled)/COUNT(all orders)", "value": 0.027 }
+  ]
+}

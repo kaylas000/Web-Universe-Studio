@@ -1,0 +1,8 @@
+EXPLAIN ANALYZE
+Hash Join  (cost=183.12..8421.10 rows=120000 width=24) (actual time=0.45..38.20 rows=120000 loops=1)
+  Hash Cond: (p.order_id = o.id)
+  -> Index Scan using payments_order_idx on payments p  (cost=0.42..6100.20 rows=120000 width=16) (actual time=0.05..12.10 rows=120000 loops=1)
+  -> Hash  (cost=120.00..120.00 rows=320000 width=16) (actual time=0.30..0.30 rows=320000 loops=1)
+       -> Index Scan using orders_created_idx on orders o  (cost=0.43..6530.10 rows=320000 width=16) (actual time=0.02..22.40 rows=320000 loops=1)
+Planning Time: 0.52 ms
+Execution Time: 71.30 ms

@@ -1,2 +1,16 @@
-{# Исполнитель: собирает только app/ #}
-Собрать артефакт по плану: {{ plan }}
+{# Исполнитель · приём «single-page-app» · собирает только app/ #}
+План: {{ plan }}
+
+Собрать в {{ deliverable }}/:
+- index.html — разметка одного экрана, <script src="...telegram-web-app.js"></script>, никаких inline-обработчиков;
+- app.js — addEventListener (не inline), MainButton/BackButton/HapticFeedback, tg.onEvent("viewportChanged"),
+  обработка web_app_data, openLink (без target="_blank"), openInvoice|sendData, serviceWorker.register,
+  clearInterval/clearTimeout/removeEventListener при завершении;
+- style.css — var(--tg-theme-*), env(safe-area-inset-bottom), media 320/375/420, min-height ≥ 44px,
+  без :hover-в-одиночку (B-01) и без height: 100vh (B-02);
+- sw.js — кэш оболочки;
+- server.mjs — проверка initData: createHmac("sha256", secret) (К-15);
+- bundle-size.json (gzip_kb < 300, localstorage_kb ≤ 2048), lighthouse.json (tti_ms < 2000), devices-report.json (≥ 4 устройства).
+
+Запрещено: alert/confirm/prompt (К-14), window.location.href (B-03), ::-webkit-scrollbar (B-04),
+модалки при загрузке (B-05), fetch на старте > 3 (Q-04).

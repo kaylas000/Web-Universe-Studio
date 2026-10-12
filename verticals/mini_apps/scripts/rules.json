@@ -3,7 +3,7 @@
   "rules": [
     {
       "code": "V-01",
-      "title": "Адаптация под viewport Telegram",
+      "title": "Адаптация под viewport Telegram (320/375/420)",
       "kind": "allOf",
       "rules": [
         {
@@ -19,18 +19,18 @@
           "min": 1
         }
       ],
-      "ok": "есть media-запросы под узкие экраны",
-      "fail": "нет адаптации под 320/375/420px (К-01) · прокси Playwright"
+      "ok": "есть media-запросы под 320/375/420px, ширина ограничена",
+      "fail": "нет адаптации под viewport Telegram (К-01) · прокси: статический скан CSS (media + width); без горизонтального скролла в 3 viewport'ах проверяет Playwright на тире"
     },
     {
       "code": "V-02",
-      "title": "Нативная интеграция SDK",
+      "title": "Нативная интеграция SDK (MainButton/BackButton/HapticFeedback)",
       "kind": "regexAtLeast",
       "path": "app/app.js",
       "pattern": "MainButton|BackButton|HapticFeedback",
       "min": 1,
-      "ok": "используются нативные кнопки SDK",
-      "fail": "нет MainButton/BackButton/HapticFeedback (К-02)"
+      "ok": "используются нативные элементы Telegram SDK, а не кастомные кнопки внизу",
+      "fail": "нет MainButton/BackButton/HapticFeedback (К-02) · прокси: статический скан JS"
     },
     {
       "code": "V-03",
@@ -39,18 +39,18 @@
       "path": "app/style.css",
       "pattern": "var\\(--tg-theme",
       "min": 1,
-      "ok": "цвета берутся из theme_params",
-      "fail": "нет var(--tg-theme-*) (К-03)"
+      "ok": "цвета берутся из theme_params через CSS-переменные",
+      "fail": "нет var(--tg-theme-*) (К-03) · прокси: статический скан CSS"
     },
     {
       "code": "V-04",
-      "title": "TTI < 2 c",
+      "title": "TTI < 2 c на 3G",
       "kind": "jsonNumberMax",
       "path": "app/lighthouse.json",
       "key": "tti_ms",
       "max": 2000,
-      "ok": "TTI в бюджете",
-      "fail": "TTI превышает 2 c (К-04) · Lighthouse Mobile"
+      "ok": "TTI в бюджете 2 c",
+      "fail": "TTI превышает 2 c (К-04) · прокси: декларативный отчёт app/lighthouse.json от Lighthouse Mobile с 3G-throttling на сборке"
     },
     {
       "code": "V-05",
@@ -59,8 +59,8 @@
       "path": "app/style.css",
       "pattern": "env\\(safe-area-inset",
       "min": 1,
-      "ok": "учтён safe area",
-      "fail": "нет env(safe-area-inset-bottom) (К-05)"
+      "ok": "низ учтён через env(safe-area-inset-bottom)",
+      "fail": "нет env(safe-area-inset-bottom) (К-05) · прокси: статический скан CSS"
     },
     {
       "code": "V-06",
@@ -69,8 +69,8 @@
       "path": "app/app.js",
       "pattern": "viewportChanged",
       "min": 1,
-      "ok": "высота обновляется по событию",
-      "fail": "нет подписки на viewportChanged (К-06)"
+      "ok": "высота/клавиатура обновляются по событию viewportChanged",
+      "fail": "нет подписки на viewportChanged (К-06) · прокси: статический скан JS"
     },
     {
       "code": "V-07",
@@ -79,8 +79,8 @@
       "path": "app/app.js",
       "pattern": "openInvoice|sendData",
       "min": 1,
-      "ok": "оплата/данные идут через SDK",
-      "fail": "нет openInvoice/sendData (К-07)"
+      "ok": "оплата/передача данных идут через openInvoice/sendData",
+      "fail": "нет openInvoice/sendData — оплата внешними ссылками (К-07) · прокси: статический скан JS"
     },
     {
       "code": "V-08",
@@ -89,8 +89,8 @@
       "path": "app/bundle-size.json",
       "key": "gzip_kb",
       "max": 300,
-      "ok": "бандл в бюджете",
-      "fail": "бандл больше 300KB (К-08) · bundle-analyzer"
+      "ok": "бандл в бюджете 300KB gzip",
+      "fail": "бандл больше 300KB gzip (К-08) · прокси: декларативный вес app/bundle-size.json (gzip_kb) — меряется анализатором бандла на сборке"
     },
     {
       "code": "V-09",
@@ -110,8 +110,8 @@
           "min": 1
         }
       ],
-      "ok": "BackButton и web_app_data обработаны",
-      "fail": "нет обработки BackButton/web_app_data (К-09)"
+      "ok": "навигация через BackButton, событие web_app_data обработано",
+      "fail": "нет обработки BackButton/web_app_data (К-09) · прокси: статический скан JS"
     },
     {
       "code": "V-10",
@@ -130,8 +130,8 @@
           "pattern": "target=\"_blank\""
         }
       ],
-      "ok": "ссылки открываются через SDK",
-      "fail": "target=_blank без SDK (К-10)"
+      "ok": "внешние ссылки открываются через tg.openLink, target=_blank нет",
+      "fail": "target=_blank без SDK (К-10) · прокси: статический скан HTML/JS"
     },
     {
       "code": "V-11",
@@ -141,7 +141,7 @@
       "pattern": "min-height:\\s*(4[4-9]|[5-9][0-9]|[1-9][0-9]{2,})px",
       "min": 1,
       "ok": "тач-таргеты не меньше 44px",
-      "fail": "мелкие тач-таргеты (К-11)"
+      "fail": "мелкие тач-таргеты (К-11) · прокси: статический скан CSS (min-height ≥ 44px); фактический тап проверяет тир"
     },
     {
       "code": "V-12",
@@ -159,18 +159,18 @@
           "min": 1
         }
       ],
-      "ok": "Service Worker зарегистрирован",
-      "fail": "нет offline-кэша (К-12) · Lighthouse PWA"
+      "ok": "Service Worker зарегистрирован, кэш оболочки есть",
+      "fail": "нет offline-кэша (К-12) · прокси: sw.js + регистрация; стратегию кэша проверяет Lighthouse PWA на тире"
     },
     {
       "code": "V-13",
-      "title": "Сохранение состояния при закрытии",
+      "title": "Сохранение состояния",
       "kind": "regexAtLeast",
       "path": "app/app.js",
       "pattern": "CloudStorage|sendData|mainButtonClicked",
       "min": 1,
-      "ok": "состояние сохраняется",
-      "fail": "нет сохранения состояния (К-13)"
+      "ok": "состояние сохраняется через sendData/mainButtonClicked/CloudStorage",
+      "fail": "нет сохранения состояния (К-13) · прокси: статический скан JS"
     },
     {
       "code": "V-14",
@@ -178,8 +178,8 @@
       "kind": "regexAbsent",
       "path": "app/app.js",
       "pattern": "\\balert\\(|\\bconfirm\\(|\\bprompt\\(",
-      "ok": "нативных popup нет, заглушек нет",
-      "fail": "использован alert/confirm/prompt (К-14)"
+      "ok": "нативных popup нет — только showPopup Telegram",
+      "fail": "использован alert/confirm/prompt (К-14) · прокси: статический скан JS"
     },
     {
       "code": "V-15",
@@ -188,8 +188,8 @@
       "path": "app/server.mjs",
       "pattern": "createHmac|HMAC|sha256",
       "min": 1,
-      "ok": "подпись initData проверяется",
-      "fail": "нет HMAC-проверки initData (К-15)"
+      "ok": "бэкенд проверяет подпись initData через HMAC-SHA256",
+      "fail": "нет HMAC-проверки initData (К-15) · прокси: статический скан server.mjs; сам тест — tools/initdata-check.mjs"
     },
     {
       "code": "V-16",
@@ -200,26 +200,28 @@
       "then": [
         "vk-bridge|@vkontakte"
       ],
-      "ok": "для VK подключён vk-bridge (или продукт не VK)",
-      "fail": "VK без vk-bridge (К-16)"
+      "ok": "для VK подключён @vkontakte/vk-bridge (или продукт не VK)",
+      "fail": "VK без vk-bridge (К-16) · прокси: каждый API-вызов VK обязан идти через vk-bridge — описан в приёме"
     },
     {
       "code": "V-17",
-      "title": "Тесты на реальных устройствах",
-      "kind": "fileExists",
-      "path": "app/devices.md",
-      "ok": "зафиксированы устройства iOS/Android",
-      "fail": "нет матрицы устройств (К-17) · скриншоты"
+      "title": "Тесты на 4 устройствах (iOS Safari + Android Chrome)",
+      "kind": "jsonArrayMinItems",
+      "path": "app/devices-report.json",
+      "key": "devices",
+      "min": 4,
+      "ok": "матрица из 4+ устройств зафиксирована",
+      "fail": "нет матрицы устройств (К-17) · прокси: app/devices-report.json (массив devices из ≥ 4 устройств: iOS Safari WebView и Android Chrome WebView); скриншоты собираются на прогоне тира"
     },
     {
       "code": "V-18",
-      "title": "Нет утечек памяти",
+      "title": "Нет утечек памяти при открытии/закрытии",
       "kind": "regexAtLeast",
       "path": "app/app.js",
       "pattern": "clearInterval|clearTimeout|removeEventListener",
       "min": 1,
-      "ok": "таймеры/слушатели снимаются",
-      "fail": "нет очистки таймеров/слушателей (К-18) · Memory profiler"
+      "ok": "таймеры и слушатели снимаются",
+      "fail": "нет очистки таймеров/слушателей (К-18) · прокси: статический скан JS; 3 итерации открытия/закрытия гоняет Memory profiler на тире"
     }
   ]
 }

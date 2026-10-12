@@ -1,10 +1,33 @@
 name: single-page-app
-title: "Одностраничное приложение"
-description: "Собирает мини-приложение: разметка, скрипт с addEventListener, стиль."
-inputs: [brief, deliverable_dir]
-outputs: [app]
+title: "Одностраничное мини-приложение"
+description: "Собирает одностраничное Telegram/VK Mini App без сборщика: разметка, скрипт с addEventListener, стиль. Один экран решает одну задачу (REF-01), каждое нажатие отвечает мгновенным состоянием (REF-02)."
+source: REF-01
+takeaway: "Один экран — одна задача: вторичные действия уходят в нативные элементы SDK (MainButton/BackButton), а не теснятся рядом (REF-01, REF-02)."
+inputs:
+  - brief
+  - deliverable_dir
+outputs:
+  - app/index.html
+  - app/app.js
+  - app/style.css
+  - app/sw.js
+  - app/server.mjs
+  - app/bundle-size.json
+  - app/lighthouse.json
+  - app/devices-report.json
 steps:
-  - "Собрать разметку"
-  - "Навесить обработчики через addEventListener"
-  - "Оформить стиль без transition: all"
-  - "Проверить анти-слоп"
+  - "Разобрать бриф: тип мини-приложения (магазин/запись/игра/дашборд) и экраны"
+  - "Собрать разметку app/index.html: один экран, кнопки-действия нативно (MainButton)"
+  - "Навесить обработчики через addEventListener (не inline), подписаться на viewportChanged"
+  - "Оформить стиль: var(--tg-theme-*), env(safe-area-inset-bottom), media под 320/375/420, тач-таргеты ≥ 44px"
+  - "Добавить sw.js (offline-кэш), server.mjs (HMAC-проверка initData), отчёты bundle-size/lighthouse/devices-report"
+  - "Проверить анти-слоп и квоты"
+checks:
+  - "V-01..V-18 из scripts/rules.json (validate.mjs)"
+  - "B-01..B-05 из scripts/slop.json (lint-slop.mjs)"
+  - "Q-01..Q-05 из scripts/quotas.json (lint-quotas.mjs)"
+applies_to:
+  - mini_apps
+  - telegram-mini-app
+  - vk-mini-app
+  - single-screen

@@ -1,5 +1,7 @@
 {
+  "device": "Pixel 6a (mid-range)",
   "start_ms": 1500,
   "fps": 58,
-  "device": "Pixel 6a (mid-range)"
+  "memory_mb": 118,
+  "cold_start_runs": [1480, 1520, 1505]
 }

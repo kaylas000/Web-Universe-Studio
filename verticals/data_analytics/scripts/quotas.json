@@ -1,0 +1,51 @@
+{
+  "vertical": "data_analytics",
+  "quotas": [
+    {
+      "code": "Q-01",
+      "title": "Время запроса в бюджете песочницы",
+      "kind": "planExecutionTimeUnder",
+      "path": "analysis/plan.txt",
+      "maxMs": 5000,
+      "ok": "Execution Time ≤ 5 с",
+      "fail": "запрос вне бюджета времени (Q-01)"
+    },
+    {
+      "code": "Q-02",
+      "title": "Seq Scan на больших таблицах — 0",
+      "kind": "regexAbsent",
+      "path": "analysis/plan.txt",
+      "pattern": "Seq Scan on (payments|refunds|orders|deliveries)",
+      "ok": "нет Seq Scan по большим таблицам",
+      "fail": "Seq Scan по большой таблице (Q-02)"
+    },
+    {
+      "code": "Q-03",
+      "title": "Докстринги/комментарии для непубличных блоков",
+      "kind": "pythonDocstringEveryDef",
+      "path": "analysis/etl.py",
+      "ok": "каждый def с докстрингом назначения",
+      "fail": "есть def без докстринга (Q-03)"
+    },
+    {
+      "code": "Q-04",
+      "title": "Дубликаты в результате — 0",
+      "kind": "resultDuplicatesZero",
+      "paths": [
+        "analysis/metrics.json",
+        "analysis/profile.json"
+      ],
+      "ok": "ключи метрик и ключевые поля профиля без дублей",
+      "fail": "найдены дубликаты в результате (Q-04)"
+    },
+    {
+      "code": "Q-05",
+      "title": "Доля null в ключевых полях — под порогом",
+      "kind": "nullsUnderThreshold",
+      "path": "analysis/profile.json",
+      "maxNullRatio": 0.05,
+      "ok": "доля null в ключевых полях ≤ 5 %",
+      "fail": "доля null выше порога (Q-05)"
+    }
+  ]
+}

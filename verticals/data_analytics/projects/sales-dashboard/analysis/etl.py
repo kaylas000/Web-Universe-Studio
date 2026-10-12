@@ -21,6 +21,7 @@ def mask_user(user):
 
 
 def load(rows):
+    """Загрузка платежей с обработкой ошибок и пустого входа."""
     if not rows:
         return 0
     loaded = 0

@@ -1,0 +1,11 @@
+{
+  "screens_in_stack": 4,
+  "stack": [
+    "NotesList",
+    "NoteEdit",
+    "NoteDetail",
+    "Settings"
+  ],
+  "navigation": "react-navigation native-stack",
+  "deep_links": ["notes://", "https://notes.example.com"]
+}

@@ -11,14 +11,29 @@
   ],
   "rules": [
     {
+      "code": "B-01",
+      "pattern": ":hover(?!.*:active)",
+      "message": "hover как единственный способ взаимодействия: на тач нет hover (B-01) — добавь :active/:focus-visible"
+    },
+    {
+      "code": "B-02",
+      "pattern": "height:\\s*100vh(?!.*safe-area-inset)",
+      "message": "жёсткий height: 100vh перекрывается клавиатурой/шапкой (B-02) — используй --vh из viewportChanged и env(safe-area-inset)"
+    },
+    {
       "code": "B-03",
       "pattern": "window\\.location\\.href",
-      "message": "навигация закроет Mini App (B-03)"
+      "message": "навигация через window.location.href закроет Mini App (B-03) — только SDK"
     },
     {
       "code": "B-04",
       "pattern": "::-webkit-scrollbar",
-      "message": "кастомный скроллбар ломает momentum iOS (B-04)"
+      "message": "кастомный скроллбар ломает momentum-скролл iOS (B-04)"
+    },
+    {
+      "code": "B-05",
+      "pattern": "DOMContentLoaded[^\\n]*\\.show\\(\\)|\\.showModal\\(\\)",
+      "message": "блокирующая модалка при загрузке < 500ms (B-05) — не блокируй первый экран"
     }
   ]
 }

@@ -1,10 +1,12 @@
 {
-  "name": "notes",
+  "name": "{{ project }}",
   "version": "1.0.0",
   "entry": "src/App.mjs",
-  "displayName": "Заметки",
-  "scheme": "notes",
+  "displayName": "Экран {{ project }}",
+  "scheme": "{{ project }}",
   "designSystem": "hig-material3",
   "newArchEnabled": true,
-  "tabletSupport": true
+  "tabletSupport": true,
+  "cacheLimitMb": 64,
+  "permissionsOnDemand": true
 }

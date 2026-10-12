@@ -1,0 +1,25 @@
+name: telegram-sdk
+title: "Интеграция Telegram WebApp SDK"
+description: "Подключает Telegram WebApp SDK к мини-приложению: MainButton/BackButton/HapticFeedback вместо кастомных кнопок внизу (К-02), темы через theme_params/var(--tg-theme-*) (К-03), обработка viewportChanged (К-06), safe area (К-05), ссылки только через openLink (К-10)."
+source: REF-04
+takeaway: "Нативные элементы SDK (MainButton, BackButton, HapticFeedback) вместо кастомных кнопок внизу; темы — только через theme_params; высота — через viewportChanged (REF-04)."
+inputs:
+  - brief
+  - deliverable_dir
+outputs:
+  - app/index.html (подключение telegram-web-app.js)
+  - app/app.js (инициализация tg, подписки)
+  - app/style.css (var(--tg-theme-*), safe area)
+steps:
+  - "Подключить telegram-web-app.js и вызвать tg.ready()/tg.expand()"
+  - "Перевести кнопки-действия на MainButton/BackButton, отклик — HapticFeedback"
+  - "Вынести цвета в var(--tg-theme-*) и обработать viewportChanged → --vh"
+  - "Добавить env(safe-area-inset-bottom) и openLink для внешних ссылок"
+  - "Проверить validate/lint-slop/lint-quotas"
+checks:
+  - "V-02, V-03, V-05, V-06, V-10 из scripts/rules.json"
+  - "B-01, B-02 из scripts/slop.json"
+applies_to:
+  - mini_apps
+  - telegram-mini-app
+  - telegram-bot-ui

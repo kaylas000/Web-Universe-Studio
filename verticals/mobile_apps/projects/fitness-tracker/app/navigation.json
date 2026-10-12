@@ -1,0 +1,12 @@
+{
+  "screens_in_stack": 5,
+  "stack": [
+    "Today",
+    "WorkoutList",
+    "WorkoutDetail",
+    "History",
+    "Settings"
+  ],
+  "navigation": "react-navigation native-stack",
+  "deep_links": ["fitlog://", "https://fitlog.example.com"]
+}

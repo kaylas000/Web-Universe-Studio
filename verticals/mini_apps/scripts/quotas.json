@@ -1,0 +1,61 @@
+{
+  "vertical": "mini_apps",
+  "rules": [
+    {
+      "code": "Q-01",
+      "title": "JS-бандл ≤ 300KB gzip",
+      "kind": "jsonNumberMax",
+      "path": "app/bundle-size.json",
+      "key": "gzip_kb",
+      "max": 300,
+      "ok": "бандл в квоте 300KB gzip",
+      "fail": "бандл превышает 300KB gzip (Q-01) · прокси: декларативный вес app/bundle-size.json (gzip_kb)"
+    },
+    {
+      "code": "Q-02",
+      "title": "≤ 2 внешних шрифта",
+      "kind": "regexCount",
+      "path": "app/style.css",
+      "pattern": "@font-face|fonts\\.googleapis\\.com|fonts\\.gstatic\\.com",
+      "max": 2,
+      "ok": "внешних шрифтов не больше двух (или нет вовсе)",
+      "fail": "внешних шрифтов больше двух (Q-02) · прокси: счёт @font-face/гиперссылок Google Fonts в CSS"
+    },
+    {
+      "code": "Q-03",
+      "title": "Изображение ≤ 100KB",
+      "kind": "assetSizeMaxKb",
+      "path": "app",
+      "extensions": [
+        ".jpg",
+        ".jpeg",
+        ".png",
+        ".webp",
+        ".gif"
+      ],
+      "max": 100,
+      "ok": "самое тяжёлое растровое изображение ≤ 100KB",
+      "fail": "есть растровое изображение больше 100KB (Q-03) · прокси: вес самого тяжёлого файла app/** (jpg/png/webp/gif)"
+    },
+    {
+      "code": "Q-04",
+      "title": "≤ 3 параллельных API-запроса при старте",
+      "kind": "regexCount",
+      "path": "app/app.js",
+      "pattern": "fetch\\(",
+      "max": 3,
+      "ok": "запросов при старте не больше трёх",
+      "fail": "больше трёх fetch при старте (Q-04) · прокси: счёт вызовов fetch( в app.js"
+    },
+    {
+      "code": "Q-05",
+      "title": "localStorage ≤ 2MB",
+      "kind": "jsonNumberMax",
+      "path": "app/bundle-size.json",
+      "key": "localstorage_kb",
+      "max": 2048,
+      "ok": "localStorage в квоте 2MB",
+      "fail": "localStorage превышает 2MB (Q-05) · прокси: декларативный объём app/bundle-size.json (localstorage_kb) от лимита CloudStorage/WebApp"
+    }
+  ]
+}

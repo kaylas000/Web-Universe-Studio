@@ -1,2 +1,11 @@
-{# Верификатор: сверяет артефакт с законами студии #}
+{# Верификатор · приём «a11y-pass» #}
 Проверить: {{ artifact }}
+
+Чек-лист:
+- [ ] тач-таргеты ≥ 44px (V-11);
+- [ ] нет :hover без :active/:focus-visible (B-01);
+- [ ] нет alert/confirm/prompt (V-14);
+- [ ] контраст 4.5:1 на светлой/тёмной теме Telegram;
+- [ ] порядок обхода совпадает с визуальным (REF-03).
+Закрыть V-11 (regex min-height), V-14 (regex), B-01 (regex) — штатными скриптами:
+node scripts/validate.mjs && node scripts/lint-slop.mjs.

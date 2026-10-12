@@ -1,9 +1,23 @@
 name: a11y-pass
-title: "a11y-pass"
-description: "Приём студии «Студия мобильных приложений»: a11y-pass."
-inputs: [brief, deliverable_dir]
-outputs: [app]
+title: "Доступность (a11y-pass)"
+description: >
+  Аудит доступности экрана: тач-таргеты ≥44×44 pt (iOS) / ≥48×48 dp (Android),
+  semantic-подписи accessibilityLabel/semanticLabel, контраст, порядок фокуса
+  и взаимодействие со скринридером (VoiceOver/TalkBack). Артефакт не меняет —
+  только верифицирует и возвращает точечные правки.
+source: "references/metadata/ref-03.yaml"
+takeaway: >
+  Каждый интерактивный элемент подписан для скринридера и имеет цель нажатия
+  не меньше 44×44 px, отделённую от соседей видимым зазором.
+inputs: [app, audit_report]
+outputs: [a11y_report]
 steps:
-  - "Разобрать бриф"
-  - "Собрать артефакт по закону студии"
-  - "Отдать на приёмку"
+  - "Пройти по интерактивным элементам экрана: кнопки, поля, списки (REF-03, REF-09)"
+  - "Проверить тач-таргеты: iOS ≥44×44 pt, Android ≥48×48 dp (К-03)"
+  - "Проверить подписи accessibilityLabel/semanticLabel на каждом элементе (К-11)"
+  - "Проверить порядок фокуса и отсутствие дублей подписей (Accessibility Inspector)"
+  - "Прогнать lint-slop (B-06: key в списках) и вернуть точечные правки"
+checks:
+  - "V-03"
+  - "V-11"
+applies_to: [mobile_apps]

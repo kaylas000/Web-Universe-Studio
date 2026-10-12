@@ -10,14 +10,34 @@
   ],
   "rules": [
     {
-      "code": "B-05",
-      "pattern": "Alert\\.alert\\(",
-      "message": "alert вместо нативного UI (B-05)"
+      "code": "B-01",
+      "pattern": "UIScreen\\.main|UIApplication\\.shared|UIAlertController|UITableViewController",
+      "message": "iOS-only API без Platform.OS-адаптации (B-01) — LLM-критик + Platform.OS"
+    },
+    {
+      "code": "B-02",
+      "pattern": "execSync|spawnSync|readFileSync|writeFileSync|deflateSync\\(",
+      "message": "синхронная операция в UI-потоке (ANR) (B-02) — нужен async/Worker/executeAsync"
     },
     {
       "code": "B-03",
       "pattern": "javaScriptEnabled:\\s*true",
-      "message": "WebView без sandbox (B-03)"
+      "message": "WebView с javaScriptEnabled без sandbox/ограничений (B-03)"
+    },
+    {
+      "code": "B-04",
+      "pattern": ">[А-Яа-яЁё][^<]*<",
+      "message": "хардкод строки в разметке без i18n (B-04) — тексты в locales/"
+    },
+    {
+      "code": "B-05",
+      "pattern": "Alert\\.alert\\(|\\balert\\(|window\\.alert\\(",
+      "message": "alert вместо нативного UI (B-05) — Alert/snackbar/toast по платформе"
+    },
+    {
+      "code": "B-06",
+      "pattern": "key=\\{index\\}|key=\\{\\s*index\\s*\\}|rowKey=\"index\"",
+      "message": "key по индексу в FlatList/ListView (B-06) — нужен стабильный key (id)"
     }
   ]
 }

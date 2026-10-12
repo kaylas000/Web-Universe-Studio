@@ -1,11 +1,29 @@
 name: screen-composer
-title: "Экран приложения"
-description: "Собирает экран: манифест, модуль с состоянием, доступная разметка."
-inputs: [brief, deliverable_dir]
+title: "Композиция экрана"
+description: >
+  Собирает экран MVP: манифест app.json, модуль экрана с четырьмя состояниями
+  (Loading/Empty/Error/Success), safe area, тач-таргеты ≥44/48, доступную разметку
+  и отчёты производительности. Единственный приём с генератором артефакта
+  (deliverable/): рендерит app/, который проходит все 20 правил V-xx.
+source: "references/metadata/ref-01.yaml"
+takeaway: >
+  Главные действия — в нижней трети экрана (зона большого пальца), навигация следует
+  платформе (HIG / Material 3), а каждый экран имеет 4 состояния.
+inputs: [brief, deliverable_dir, app]
 outputs: [app]
 steps:
-  - "Описать манифест"
-  - "Собрать состояние экрана"
-  - "Отрисовать разметку"
-  - "Добавить подписи доступности"
-  - "Проверить анти-слоп"
+  - "Разобрать бриф и выбрать платформу (HIG / Material 3), REF-01, REF-02, REF-04"
+  - "Описать манифест app.json: scheme, дизайн-система, tabletSupport, cacheLimitMb"
+  - "Собрать состояние экрана: Loading/Empty/Error/Success в едином сторе"
+  - "Отрисовать разметку: SafeAreaView, KeyboardAvoidingView, состояния и тач-таргеты ≥44/48"
+  - "Добавить подписи доступности accessibilityLabel (К-11)"
+  - "Прогнать приёмку: validate (V-01…V-20), lint-slop (B-01…B-06), lint-quotas (Q-01…Q-06)"
+checks:
+  - "V-01"
+  - "V-02"
+  - "V-03"
+  - "V-04"
+  - "V-08"
+  - "V-09"
+  - "V-16"
+applies_to: [mobile_apps]
