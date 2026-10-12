@@ -60,7 +60,7 @@ node --test tests/*.test.mjs                  # самотесты студии
 Цикл принуждения (из корня платформы):
 
 ```bash
-node core/loop-engine/cli.mjs projects/<имя> --studio-root verticals/legal_docs          # реальный генератор (ключ из env)
+node core/loop-engine/cli.mjs projects/<имя> --studio-root verticals/legal_docs          # прогон ворот по собранному артефакту
 node core/loop-engine/cli.mjs projects/<имя> --studio-root verticals/legal_docs --dry-run # офлайн-проверка связки (mock)
 ```
 

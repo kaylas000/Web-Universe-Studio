@@ -33,7 +33,7 @@ projects/_LOOP_TEMPLATE/
     └── loop-result.json     итог прогона: вердикт, коды, история, метрики
 ```
 
-## Три сценария
+## Сценарии
 
 ### 1. Офлайн-проверка связки (по умолчанию)
 
@@ -44,45 +44,22 @@ projects/_LOOP_TEMPLATE/
 node run.mjs "выдай ES-модуль с функцией hello"
 ```
 
-### 2. Генерация кода настоящей моделью
+### 2. Генерация — агентом в сессии
 
-В `loop.config.yaml` убери `type: "mock"` и раскомментируй блок `type: "llm"`:
+Автономной генерации моделью нет: студия — оболочка, артефакт собирает агент внутри папки
+проекта по контракту (BRIEF → G4), а цикл используется как **проверка** собранного.
+Генератор всегда `mock` (офлайн, без сети и ключей).
 
-```yaml
-generator:
-  type: "llm"
-  provider: "openai"          # любой OpenAI-совместимый эндпоинт: OpenAI, OpenRouter, vLLM, Ollama
-  model: "gpt-4o-mini"
-  client:
-    api_key_env: "OPENAI_API_KEY"   # ключ — только из окружения, никогда из файла
-    base_url: "https://api.openai.com/v1"
-  response_format: "text"     # text | json | files
-```
+### 3. Проверка проекта воротами цеха
 
-```bash
-OPENAI_API_KEY=sk-… node run.mjs "собери модуль расчёта стоимости"
-```
-
-### 3. Сборка сайта с автоприёмкой воротами цеха
-
-Для проектов с досье (`SEED/DIRECTION/STRUCTURE/SOURCES`) переключи валидатор на `ceh_project` —
-он прогонит **существующие** `scripts/validate.mjs` (V-01…V-17) и линтеры, а их вердикт
-вернётся модели как фидбек следующей итерации:
+Для проектов с досье (`SEED/DIRECTION/STRUCTURE/SOURCES`) валидатор `ceh_project` прогоняет
+**существующие** `scripts/validate.mjs` (V-01…V-17) и линтеры — это и есть ворота G3:
 
 ```yaml
-generator:
-  type: "llm"
-  provider: "openai"
-  model: "gpt-4o-mini"
-  response_format: "files"    # модель выдаёт {"site/index.html": "…", "site/styles.css": "…"}
-
 validator:
   type: "ceh_project"
   checks: ["validate", "lint-slop", "lint-copy", "lint-marketing"]
   ignore_codes: []            # например ["V-15"], если code-video в проекте не нужен
-  materialize: true
-  materialize_target: "project"   # запись в projects/<имя>/site/
-  allow_project_writes: true      # БЕЗ этого флага движок откажется писать в проект (E-WRITE-GUARD)
 ```
 
 Проверка на уже принятом проекте (ничего не пишем, только прогоняем ворота):

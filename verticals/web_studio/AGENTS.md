@@ -44,8 +44,7 @@ node core/loop-engine/cli.mjs projects/<имя> --validator ceh_project
 - `exit 0` — закон исполнен: ворота зелёные, evidence прогона сохранён в `projects/<имя>/workspace/loop-result.json`.
 - `exit 1` — в `feedback.codes` коды `V-xx`/`B-xx`/`M-xx`: это список точечных правок по К-10, а не повод начинать заново.
 - В сессии с агентом — одна итерация (`--iterations 1`): сборка уже на диске, цикл нужен как проверка.
-  Автономный прогон — генератор `llm` (ключ только из переменных окружения, например `OPENAI_API_KEY`)
-  и повтор до `max_iterations`: коды нарушений возвращаются в задачу блоком «ПРЕДЫДУЩАЯ ПОПЫТКА ПРОВАЛЕНА».
+  Автономного прогона нет: генератор `mock` (офлайн), артефакт собирает агент в сессии.
 - Контекст цикл собирает из архива: `CONSTITUTION.md`, `anti-slop/BANNED.md` + `QUOTAS.md`, `AGENTS.md`,
   `gates/G1–G4`, `skills/`, `references/`, `motion/`, досье проекта (`SEED/DIRECTION/STRUCTURE/SOURCES/…`)
   и `projects/_history/` как few-shot.

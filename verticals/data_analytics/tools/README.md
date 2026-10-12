@@ -14,7 +14,7 @@ node tools/explain-lint.mjs plan.txt --big=payments,refunds,orders --budget-ms=5
 
 - находит узлы плана: Seq Scan / Index Scan / Bitmap Heap Scan / Hash / Join-узлы;
 - флагает `Seq Scan` по «большим» таблицам (по умолчанию payments, refunds, orders, deliveries);
-- контролирует `Execution Time` против бюджета песочницы;
+- контролирует `Execution Time` против бюджета (`--budget-ms`);
 - exit 0 — план в норме; 1 — есть нарушения; 2 — нет аргумента.
 
 ESM-API: `parsePlan(text)` → `{ nodes, executionMs, planningMs }`, `lintPlan(text, opts)` → `{ ok, findings, plan }`.
