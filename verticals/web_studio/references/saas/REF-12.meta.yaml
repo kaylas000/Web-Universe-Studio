@@ -1,0 +1,11 @@
+id: REF-12
+source: https://saaslandingpage.com
+style: [saas, landing, conversion]
+techniques:
+  - hero = одно обещание + одна кнопка, без каруселей
+  - секции «проблема → решение → результат» с цифрами
+  - тарифы — таблицей, рекомендуемый вариант подсвечен
+motion: [sticky-scene, counter-tick]
+palette: ['#0B1F3A', '#FFFFFF', '#3DD68C']
+takeaway: «SaaS-лендинг — это одно обещание в hero и доказательство цифрами ниже, а не каталог фич.»
+screenshot: pending

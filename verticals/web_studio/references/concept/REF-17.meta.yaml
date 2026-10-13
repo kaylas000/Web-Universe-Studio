@@ -1,0 +1,11 @@
+id: REF-17
+source: https://dribbble.com
+style: [concept, poster]
+techniques:
+  - концепт = привычная сетка + одна необычная деталь
+  - градиент и текстура — для подачи, не для продукта
+  - CTA с заметным состоянием наведения
+motion: [mask-reveal, scramble-decode]
+palette: ['#1E1B4B', '#E0E7FF', '#F59E0B']
+takeaway: «Концепт продаёт одна деталь: необычный акцент на привычной сетке, остальное — по правилам.»
+screenshot: pending

@@ -1,4 +1,4 @@
-/* tests/verticals/verticals.test.mjs — инварианты платформы по всем 7 вертикалям (§2, §7, §8). */
+/* tests/verticals/verticals.test.mjs — инварианты платформы по всем 6 вертикалям (§2, §7, §8). */
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, readdirSync } from "node:fs";
@@ -7,9 +7,9 @@ import { basename, join } from "node:path";
 import { listVerticals, readVerticalMeta } from "../../core/gate.mjs";
 import { listProjects } from "../../core/gate.mjs";
 
-const EXPECTED = ["content_studio", "data_analytics", "education", "legal_docs", "mini_apps", "mobile_apps", "web_studio"];
+const EXPECTED = ["content_studio", "data_analytics", "education", "mini_apps", "mobile_apps", "web_studio"];
 
-test("платформа содержит ровно 7 вертикалей", () => {
+test("платформа содержит ровно 6 вертикалей", () => {
   const names = listVerticals().map((d) => basename(d));
   assert.deepEqual(names, EXPECTED);
 });

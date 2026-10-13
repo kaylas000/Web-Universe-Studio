@@ -1,0 +1,11 @@
+id: REF-14
+source: https://godly.website
+style: [animation, scroll]
+techniques:
+  - анимация по скроллу: сцена меняет одно состояние на шаг
+  - движение с массой и инерцией, а не «всё прыгает»
+  - курсор-интерактив только там, где он реально управляет
+motion: [sticky-scene, timeline-scrub]
+palette: ['#EDEAE4', '#1C1C1C', '#C9F24B']
+takeaway: «Анимация усиливает рассказ, если на шаг текста — одно движение; хаос из движений убивает доверие.»
+screenshot: pending

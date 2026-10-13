@@ -1,7 +1,7 @@
 # Студия Юнивёрс
 
 Мета-платформа ИИ-студий (Agentic Studio Platform): **Node/ESM ядро без зависимостей**, цикл
-принуждения К-21, **7 вертикалей**, anti-slop, скиллы, композиции (CEO-агент), API и подсистемы
+принуждения К-21, **6 вертикалей**, anti-slop, скиллы, композиции (CEO-агент), API и подсистемы
 (бюджет, RAG, метрики).
 
 Источник истины — [`TECHNICAL_SPECIFICATION.md`](TECHNICAL_SPECIFICATION.md) (v3.0).
@@ -15,12 +15,12 @@ Node ≥18 (проверено на Node 24). `core/`, `scripts/`, `cli/` — **
 ```bash
 node cli/main.mjs help                 # единый CLI
 bash scripts/acceptance_test.sh        # полная приёмка DoD (§15)
-node core/gate.mjs                     # гейт К-21 по всем 7 вертикалям
+node core/gate.mjs                     # гейт К-21 по всем 6 вертикалям
 ```
 
 ## Как работать в студии (оболочка, как в цеху)
 
-Платформа — не автономный конвейер «создай проект одной командой», а оболочка из 7 студий:
+Платформа — не автономный конвейер «создай проект одной командой», а оболочка из 6 студий:
 агент (LLM) работает **внутри** выбранной студии и ведёт проекты в папках
 `verticals/<студия>/projects/<имя>/`. Работа идёт по правилам и циклам **этой студии**,
 с её приёмами (`skills/`), примерами (`references/`) и скриптами приёмки (`scripts/`).
@@ -32,11 +32,11 @@ node core/gate.mjs                     # гейт К-21 по всем 7 верт
 3. Гоняй цикл студии, пока `exit 0`:
 
 ```bash
-cd verticals/legal_docs                                # пример: юридическая студия
-node scripts/validate.mjs projects/<имя>               # приёмка V-xx
-node scripts/lint-slop.mjs projects/<имя>              # запреты B-xx
-node scripts/lint-quotas.mjs projects/<имя>            # квоты Q-xx
-cd ../.. && node core/loop-engine/cli.mjs projects/<имя> --studio-root verticals/legal_docs
+cd verticals/content_studio                          # пример: контент-студия
+node scripts/validate.mjs projects/<имя>             # приёмка V-xx
+node scripts/lint-slop.mjs projects/<имя>            # запреты B-xx
+node scripts/lint-quotas.mjs projects/<имя>          # квоты Q-xx
+cd ../.. && node core/loop-engine/cli.mjs projects/<имя> --studio-root verticals/content_studio
 ```
 
 4. Приёмка: `REVIEW.md` артдиректора → G4. Вердикт — за человеком (К-09).

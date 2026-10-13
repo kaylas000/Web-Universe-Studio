@@ -1,0 +1,11 @@
+id: REF-09
+source: https://brutalistwebsites.com
+style: [brutalist, raw]
+techniques:
+  - сырая типографика: системный шрифт, жирный, размер до 8vw
+  - жёсткие рамки и плашки-подложки вместо теней и скруглений
+  - контраст ч/б, цвет — только одна сигнальная деталь
+motion: [scramble-decode, counter-tick]
+palette: ['#F2F2EA', '#0D0D0D', '#E4572E']
+takeaway: «Брутализм работает, когда честная конструкция сильнее украшения: рамки, плашки, системный шрифт.»
+screenshot: pending

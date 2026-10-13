@@ -1,0 +1,11 @@
+id: REF-18
+source: https://behance.net
+style: [case, portfolio]
+techniques:
+  - кейс — рассказ «задача → решение → результат» с цифрами
+  - скриншоты по шагам работы, а не просто галерея
+  - итог — одна метрика до/после
+motion: [timeline-scrub, counter-tick]
+palette: ['#FAFAFA', '#18181B', '#0EA5E9']
+takeaway: «Кейс убеждает историей: задача, решение, метрика до/после — а не галереей красивых картинок.»
+screenshot: pending

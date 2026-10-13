@@ -1,23 +1,239 @@
-# ЦЕХ · метаплатформа — источники архива референсов (§12.1, §12.2 ТЗ).
-# Используется scripts/scrape_references.mjs: обход источников, изъятие приёмов с обязательным takeaway (К-04).
+# ЦЕХ · метаплатформа — источники архива референсов (§12.4 ТЗ).
+# Каждая студия при создании заполняет базу референсов из каталогов-доноров своего домена
+# (полные таблицы — TECHNICAL_SPECIFICATION.md §12.4). Используется scripts/scrape_references.mjs:
+# обход источников, изъятие приёмов с обязательным takeaway (К-04).
+# По умолчанию всё OFFLINE: сетевой обход включается только явным --fetch и без ключей.
 default_policy: manual
 
 sources:
-  - id: web-gallery
+  # ── web_studio · лендинги и одностраничники (§12.4.1) ─────────────────────────────
+  - id: wb-land-book
+    vertical: web_studio
+    kind: catalog
+    url: "https://land-book.com"
+    enabled: false
+    take: Скриншоты полных страниц
+    filters: [цвет, тип, индустрия]
+  - id: wb-lapa-ninja
+    vertical: web_studio
+    kind: catalog
+    url: "https://lapa.ninja"
+    enabled: false
+    take: 7300+ лендингов с полностраничными скриншотами
+    filters: [SaaS, крипто, образование]
+  - id: wb-landingfolio
+    vertical: web_studio
+    kind: catalog
+    url: "https://landingfolio.com"
+    enabled: false
+    take: Лендинги и UI-компоненты
+    filters: [hero, pricing, FAQ]
+  - id: wb-onepagelove
+    vertical: web_studio
+    kind: catalog
+    url: "https://onepagelove.com"
+    enabled: false
+    take: Одностраничники
+    filters: [портфолио, продукт, ивент]
+  - id: wb-saaslandingpage
+    vertical: web_studio
+    kind: catalog
+    url: "https://saaslandingpage.com"
+    enabled: false
+    take: SaaS-лендинги
+    filters: [стиль, конверсия]
+
+  # ── web_studio · полноценные сайты и стили (§12.4.2) ─────────────────────────────
+  - id: wb-awwwards
     vertical: web_studio
     kind: gallery
-    url: "https://example.org/galleries"
+    url: "https://awwwards.com"
     enabled: false
-  - id: legal-samples
-    vertical: legal_docs
-    kind: documents
-    url: "https://example.org/contracts"
+    take: Премиум-дизайн
+    filters: [технологии, стили, оценки]
+  - id: wb-siteinspire
+    vertical: web_studio
+    kind: gallery
+    url: "https://siteinspire.com"
     enabled: false
-  - id: content-blog
-    vertical: content_studio
-    kind: articles
-    url: "https://example.org/blog"
+    take: Чистый минимализм
+    filters: [стиль, CMS, тип]
+  - id: wb-httpster
+    vertical: web_studio
+    kind: gallery
+    url: "https://httpster.net"
     enabled: false
+    take: Трендовая типографика
+    filters: [год, стиль]
+  - id: wb-godly
+    vertical: web_studio
+    kind: gallery
+    url: "https://godly.website"
+    enabled: false
+    take: Анимированные сайты
+    filters: [тип анимации]
+  - id: wb-minimal-gallery
+    vertical: web_studio
+    kind: gallery
+    url: "https://minimal.gallery"
+    enabled: false
+    take: Строгий минимализм
+    filters: [индустрия]
+  - id: wb-brutalist
+    vertical: web_studio
+    kind: gallery
+    url: "https://brutalistwebsites.com"
+    enabled: false
+    take: Брутализм
+    filters: [тип]
+
+  # ── web_studio · каталоги и e-commerce (§12.4.3) ──────────────────────────────────
+  - id: wb-ecommercetemplates
+    vertical: web_studio
+    kind: catalog
+    url: "https://ecommercetemplates.com"
+    enabled: false
+    take: Шаблоны магазинов
+    filters: [платформа, ниша]
+  - id: wb-mobbin
+    vertical: web_studio
+    kind: patterns
+    url: "https://mobbin.com"
+    enabled: false
+    take: UX-паттерны мобильных и веб
+    filters: [flow, экран]
+  - id: wb-pageflows
+    vertical: web_studio
+    kind: patterns
+    url: "https://pageflows.com"
+    enabled: false
+    take: Записи пользовательских потоков
+    filters: "регистрация, чекаут"
+
+  # ── web_studio · UI-компоненты (§12.4.4) ──────────────────────────────────────────
+  - id: wb-collectui
+    vertical: web_studio
+    kind: components
+    url: "https://collectui.com"
+    enabled: false
+    take: Реальные UI-паттерны
+    filters: [кнопки, формы, карточки]
+  - id: wb-uisources
+    vertical: web_studio
+    kind: components
+    url: "https://uisources.com"
+    enabled: false
+    take: Скриншоты интерфейсов компаний
+    filters: [приложение]
+  - id: wb-dribbble
+    vertical: web_studio
+    kind: concept
+    url: "https://dribbble.com"
+    enabled: false
+    take: Концепты
+    filters: "начала: landing, catalog, dashboard"
+  - id: wb-behance
+    vertical: web_studio
+    kind: concept
+    url: "https://behance.net"
+    enabled: false
+    take: Портфолио
+    filters: [запрос, индустрия]
+
+  # ── web_studio · тёмные темы (§12.4.5) ────────────────────────────────────────────
+  - id: wb-darkmodedesign
+    vertical: web_studio
+    kind: dark
+    url: "https://darkmodedesign.com"
+    enabled: false
+    take: Тёмные интерфейсы
+  - id: wb-dark-design
+    vertical: web_studio
+    kind: dark
+    url: "https://dark.design"
+    enabled: false
+    take: Тёмные лендинги
+
+  # ── mini_apps · Telegram Mini Apps и мессенджеры (§12.4.6) ───────────────────────
+  - id: tma-gallery
+    vertical: mini_apps
+    kind: tma
+    url: "https://tma.gallery"
+    enabled: false
+    take: Реальные скриншоты и ссылки на работающие Telegram Mini Apps
+    filters: [Shop, Game, Utility, Finance]
+  - id: tma-miniapp-cafe
+    vertical: mini_apps
+    kind: tma
+    url: "https://miniapp.cafe"
+    enabled: false
+    take: Каталог и обзоры лучших мини-приложений в Telegram
+    filters: [ниша, функционал]
+  - id: tma-tgstat
+    vertical: mini_apps
+    kind: tma
+    url: "https://tgstat.ru"
+    enabled: false
+    take: Статистика и скриншоты интерфейсов ботов и мини-аппов (RU-сегмент)
+    filters: [топ-чарты, примеры онбординга]
+  - id: tma-dribbble
+    vertical: mini_apps
+    kind: concept
+    url: "https://dribbble.com"
+    enabled: false
+    take: Концепты UI/UX
+    filters: "Telegram Mini App UI, TMA design"
+  - id: tma-behance
+    vertical: mini_apps
+    kind: concept
+    url: "https://behance.net"
+    enabled: false
+    take: Кейсы и портфолио
+    filters: "Telegram bot UI, Mini app case study"
+
+  # ── mobile_apps · мобильные приложения iOS/Android (§12.4.7) ─────────────────────
+  - id: mob-mobbin
+    vertical: mobile_apps
+    kind: patterns
+    url: "https://mobbin.com"
+    enabled: false
+    take: Полные скриншоты реальных приложений из App Store и Google Play
+    filters: [iOS, Android, onboarding, checkout, settings]
+  - id: mob-pttrns
+    vertical: mobile_apps
+    kind: patterns
+    url: "https://pttrns.com"
+    enabled: false
+    take: Мобильные UI-паттерны (кнопки, формы, табы, пустые состояния)
+    filters: [тип экрана]
+  - id: mob-mobile-patterns
+    vertical: mobile_apps
+    kind: patterns
+    url: "https://mobile-patterns.com"
+    enabled: false
+    take: Библиотека лучших практик iOS и Android
+    filters: [Apple HIG, Material Design]
+  - id: mob-scrnshts
+    vertical: mobile_apps
+    kind: gallery
+    url: "https://scrnshts.club"
+    enabled: false
+    take: Скриншоты из App Store (маркетинговые экраны)
+    filters: [превью приложения]
+  - id: mob-uigarage
+    vertical: mobile_apps
+    kind: patterns
+    url: "https://uigarage.net"
+    enabled: false
+    take: Вдохновение для мобильной навигации и интерактива
+    filters: [Tab Bar, Navigation, Cards]
+  - id: mob-collectui
+    vertical: mobile_apps
+    kind: components
+    url: "https://collectui.com"
+    enabled: false
+    take: Реальные компоненты
+    filters: [Mobile, 2000+ паттернов]
 
 rules:
   require_takeaway: true      # запись без takeaway не принимается (К-04)

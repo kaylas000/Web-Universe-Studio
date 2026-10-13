@@ -48,7 +48,7 @@ node core/loop-engine/gate.mjs                                         # гей�
 ## Платформенный гейт (`core/gate.mjs`)
 
 Отличие от ядрового гейта: валидатор — `vertical_project` (у каждой студии свой `scripts/validate.mjs`),
-поэтому гейт проходит по **всем 7 вертикалям**:
+поэтому гейт проходит по **всем 6 вертикалям**:
 
 ```bash
 node core/gate.mjs                       # все вертикали и их проекты
@@ -60,14 +60,14 @@ node core/gate.mjs --vertical web_studio --json
 
 ## Вертикали (`verticals/<name>`)
 
-Семь студий: `web_studio` (эталон, корень ceh-veb), `legal_docs`, `content_studio`, `data_analytics`,
+Шесть студий: `web_studio` (эталон, корень ceh-veb), `content_studio`, `data_analytics`,
 `education`, `mini_apps`, `mobile_apps`. Скелет §7.1: `vertical.yaml` (§8), `CONSTITUTION.md`,
 `AGENTS.md`, `anti-slop/`, `skills/`, `references/`, `gates/`, `validators/`, `scripts/{validate,lint-slop}.mjs`,
 `projects/<demo>/`. Общий контракт отчёта и декларативный движок правил — `core/vertical-kit/index.mjs`.
 
-Шесть новых вертикалей порождены идемпотентным генератором `scripts/bootstrap-verticals.mjs`.
+Шесть вертикалей порождены идемпотентным генератором `scripts/bootstrap-verticals.mjs`.
 
-Полные конституции (§9 ТЗ) и анти-слоп (§10 ТЗ) шести вертикалей лежат в `scripts/tz-verticals.mjs`
+Полные конституции (§9 ТЗ) и анти-слоп (§10 ТЗ) пяти вертикалей лежат в `scripts/tz-verticals.mjs`
 (слой `TZ_OVERRIDES`, дословные тексты статей `К-xx`, запретов `B-xx` и квот `Q-xx`).
 
 Точные правила приёмки §9 и эталонные артефакты каждой студии — в `scripts/tz-artifacts.mjs`
@@ -116,7 +116,7 @@ node core/gate.mjs --vertical web_studio --json
 ```bash
 bash scripts/acceptance_test.sh     # DoD §15: тесты движка, selftest, гейт, индекс, аудит, CEO, тесты
 npm test                            # полная цепочка: engine + selftest + gate + platform + verticals
-npm run gate                        # CI-слой К-15/К-21: цикл по всем 7 вертикалям × проектам
+npm run gate                        # CI-слой К-15/К-21: цикл по всем 6 вертикалям × проектам
 ```
 
 DoD §15.1 (цикл К-21 по одному проекту) в метаплатформе запускается с указанием корня студии —

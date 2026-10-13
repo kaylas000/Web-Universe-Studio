@@ -49,7 +49,7 @@ test("parseReferencesIndex берёт только строки с REF/SK-иде
 });
 
 test("documentsFromDirectory дедуплицирует INDEX.md и metadata по id", () => {
-  const docs = documentsFromDirectory(resolve(ROOT, "verticals/legal_docs/references"));
+  const docs = documentsFromDirectory(resolve(ROOT, "verticals/data_analytics/references"));
   const ids = docs.map((d) => d.id);
   assert.equal(new Set(ids).size, ids.length, "id должны быть уникальны");
   assert.ok(docs.every((d) => d.takeaway.length > 0), "без takeaway записи нет (К-04)");

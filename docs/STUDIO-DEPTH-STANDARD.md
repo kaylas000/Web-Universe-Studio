@@ -1,6 +1,6 @@
 # STUDIO-DEPTH-STANDARD.md — стандарт «полной» студии
 
-Стандарт применяется к **6 не-веб студиям** (`legal_docs`, `content_studio`, `data_analytics`,
+Стандарт применяется к **5 не-веб студиям** (`content_studio`, `data_analytics`,
 `education`, `mini_apps`, `mobile_apps`), чтобы они были не каркасом, а полноценными студиями
 уровня эталона `verticals/web_studio`. Источник требований — `TECHNICAL_SPECIFICATION.md`
 (§7.1 скелет, §8 vertical.yaml, §9 конституция, §10 anti-slop, §11 скиллы, §15 приёмка).

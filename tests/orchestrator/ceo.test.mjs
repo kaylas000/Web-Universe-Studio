@@ -12,17 +12,17 @@ const comp = (tasks, aggregate = { mode: "all" }, name = "t") =>
 
 test("shortAlias укорачивает имена вертикалей", () => {
   assert.equal(shortAlias("web_studio"), "web");
-  assert.equal(shortAlias("legal_docs"), "legal");
+  assert.equal(shortAlias("data_analytics"), "data");
   assert.equal(shortAlias("content_studio"), "content");
   assert.equal(shortAlias("education"), "education");
 });
 
 test("route сопоставляет цель с доменами по ключевым словам", () => {
   const agent = new CeoAgent();
-  const routed = agent.route("Нужен лендинг запуска и договор с подрядчиком");
+  const routed = agent.route("Нужен лендинг запуска и пост в блог по запуску");
   const domains = routed.map((r) => r.domain);
   assert.ok(domains.includes("web"));
-  assert.ok(domains.includes("legal"));
+  assert.ok(domains.includes("content"));
 });
 
 test("plan строит валидную композицию с needs-цепочкой", () => {
@@ -49,10 +49,10 @@ test("run: все задачи зелёные → ok, без HITL", async () => 
 
 test("run: HITL-задача не закрывается без человека (К-09)", async () => {
   const agent = new CeoAgent({ runTask: okRunner });
-  const c = comp([{ id: "docs", vertical: "legal", gate: "G4", hitl: true }]);
+  const c = comp([{ id: "review", vertical: "content", gate: "G4", hitl: true }]);
   const blocked = await agent.run(c);
   assert.equal(blocked.ok, false);
-  assert.deepEqual(blocked.hitl_pending, ["docs"]);
+  assert.deepEqual(blocked.hitl_pending, ["review"]);
   assert.ok(blocked.codes.includes("E-COMPOSITION-HITL"));
   const accepted = await agent.run(c, { acceptedHitl: true });
   assert.equal(accepted.ok, true);

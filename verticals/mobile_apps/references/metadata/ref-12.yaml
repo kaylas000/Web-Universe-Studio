@@ -1,0 +1,4 @@
+id: ref-12
+style: mobile-components
+source: references/sources.yaml#collectui-mobile
+takeaway: Компонент мобильного экрана берётся из реальных паттернов (фильтр Mobile), а не рисуется с нуля.

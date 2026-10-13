@@ -5,7 +5,7 @@
 
    Использование:
      node cli/references_cli.mjs search "вертикальный ритм заголовка"
-     node cli/references_cli.mjs search "договор поставки" --vertical legal_docs --top 3
+     node cli/references_cli.mjs search "пост для канала" --vertical content_studio --top 3
      node cli/references_cli.mjs stats
    Выход: 0 — поиск выполнен; 1 — ошибка/нет результатов не является ошибкой (пустой список → 0).
 */

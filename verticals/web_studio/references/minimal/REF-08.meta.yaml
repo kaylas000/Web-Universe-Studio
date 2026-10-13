@@ -1,0 +1,11 @@
+id: REF-08
+source: https://siteinspire.com
+style: [minimal, whitespace]
+techniques:
+  - сетка без рамок: воздух — это и есть дизайн
+  - один цветовой акцент на нейтральном фоне #FAF9F7
+  - типографика вместо декора: вес и кегль задают иерархию
+motion: [mask-reveal]
+palette: ['#FAF9F7', '#111111', '#C8A96A']
+takeaway: «Минимализм — это один акцент на пустом фоне, а не пустой фон без акцента.»
+screenshot: pending

@@ -11,28 +11,27 @@ npm run acceptance              # полная приёмка DoD (§15)
 
 ## 0. Работа в студии (оболочка)
 
-Платформа — оболочка из 7 студий: агент работает **внутри** студии, в папках
+Платформа — оболочка из 6 студий: агент работает **внутри** студии, в папках
 `verticals/<студия>/projects/<имя>/`, по правилам и циклам этой студии — её
 конституции (К-xx), приёмам (`skills/`), примерам (`references/`) и скриптам
 приёмки (`scripts/`). Контракт каждой студии — её `AGENTS.md`.
 
 ```bash
-# пример: ведём новый проект в юридической студии
-cd verticals/legal_docs
-mkdir -p projects/moj-dogovor/docs
-node scripts/validate.mjs projects/moj-dogovor      # приёмка V-xx → «ИТОГ: N/N · exit 0»
-node scripts/lint-slop.mjs projects/moj-dogovor     # запреты B-xx → «чисто:»
-node scripts/lint-quotas.mjs projects/moj-dogovor   # квоты Q-xx → «ИТОГ: Q/Q · exit 0»
+# пример: ведём новый проект в контент-студии
+cd verticals/content_studio
+mkdir -p projects/moj-post/content
+node scripts/validate.mjs projects/moj-post           # приёмка V-xx → «ИТОГ: N/N · exit 0»
+node scripts/lint-slop.mjs projects/moj-post          # запреты B-xx → «чисто:»
+node scripts/lint-quotas.mjs projects/moj-post        # квоты Q-xx → «ИТОГ: Q/Q · exit 0»
 cd ../..
-node core/loop-engine/cli.mjs projects/moj-dogovor --studio-root verticals/legal_docs   # цикл студии
+node core/loop-engine/cli.mjs projects/moj-post --studio-root verticals/content_studio   # цикл студии
 ```
 
 Сводка по студиям:
 
 | Студия | Контракт | Артефакт в | Приёмка |
 | --- | --- | --- | --- |
-| legal_docs | verticals/legal_docs/AGENTS.md | `docs/` | validate + lint-slop + lint-quotas |
-| content_studio | verticals/content_studio/AGENTS.md | `content/` | то же |
+| content_studio | verticals/content_studio/AGENTS.md | `content/` | validate + lint-slop + lint-quotas |
 | data_analytics | verticals/data_analytics/AGENTS.md | `analysis/` | то же |
 | education | verticals/education/AGENTS.md | `course/` | то же |
 | mini_apps | verticals/mini_apps/AGENTS.md | `app/` | то же |
@@ -50,7 +49,7 @@ node core/loop-engine/cli.mjs projects/<имя> --json | head
 ## 2. Проверить всю платформу
 
 ```bash
-node core/gate.mjs                       # все 7 вертикалей
+node core/gate.mjs                       # все 6 вертикалей
 node core/gate.mjs --vertical web_studio --json
 ```
 
@@ -59,10 +58,10 @@ node core/gate.mjs --vertical web_studio --json
 ```bash
 # готовые композиции
 node core/orchestrator/cli.mjs compositions/sales-post-with-data/composition.yaml
-node core/orchestrator/cli.mjs compositions/launch-landing-with-legal/composition.yaml   # HITL → exit 1
+node core/orchestrator/cli.mjs compositions/launch-landing-with-review/composition.yaml   # HITL → exit 1
 
 # спланировать из цели
-node core/orchestrator/cli.mjs --plan-only --goal "лендинг запуска и договор"
+node core/orchestrator/cli.mjs --plan-only --goal "лендинг запуска и пост"
 node core/orchestrator/cli.mjs --goal "дашборд продаж и пост" --accept-hitl
 ```
 Правило К-09: композиция с `hitl: true` не сдаётся без явного вердикта человека (`--accept-hitl`).
@@ -108,7 +107,7 @@ node scripts/scrape_references.mjs          # каждая запись обяз
 | `core/gate.mjs` | платформенный гейт |
 | `core/orchestrator` | CEO-агент и композиции |
 | `core/{budget,knowledge,observability}` | подсистемы |
-| `verticals/<name>` | 7 студий |
+| `verticals/<name>` | 6 студий |
 | `compositions/` | декларативные сложные задачи |
 | `configs/` | провайдеры LLM, песочницы, матрица устройств, источники архива |
 | `docs/` | эта документация |

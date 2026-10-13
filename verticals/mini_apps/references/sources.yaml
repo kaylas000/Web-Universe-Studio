@@ -24,3 +24,23 @@ sources:
     title: "offline-sw"
     source: "references/sources.yaml#offline-worker"
     takeaway: "Базовый offline — кэш оболочки в Service Worker (install → addAll, fetch → cache-first) и его регистрация; состояние переживает закрытие через CloudStorage/sendData."
+  - id: ref-07
+    title: "tma-entry"
+    source: "references/sources.yaml#tma-gallery"
+    takeaway: "Витрина TMA — категория (Shop/Game/Utility/Finance), описание и сразу живая кнопка: понятно за секунду, зачем открывать (tma.gallery)."
+  - id: ref-08
+    title: "tma-review"
+    source: "references/sources.yaml#miniapp-cafe"
+    takeaway: "Обзор мини-приложения начинается с назначения и аудитории, а не с перечисления фич (miniapp.cafe)."
+  - id: ref-09
+    title: "tma-niche-charts"
+    source: "references/sources.yaml#tgstat"
+    takeaway: "Нишу проверяй статистикой RU-сегмента: топ-чарты и онбординги, которые реально привели пользователей (tgstat.ru)."
+  - id: ref-10
+    title: "tma-ui-concept"
+    source: "references/sources.yaml#dribbble-tma"
+    takeaway: "Концепт TMA-интерфейса — платформенная сетка плюс одна яркая деталь, а не перерисовка всего с нуля (dribbble: Telegram Mini App UI)."
+  - id: ref-11
+    title: "tma-case"
+    source: "references/sources.yaml#behance-tma"
+    takeaway: "Кейс мини-приложения убеждает метриками (установки, удержание), а не только скриншотами (behance: Mini app case study)."

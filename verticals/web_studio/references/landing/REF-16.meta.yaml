@@ -1,0 +1,11 @@
+id: REF-16
+source: https://land-book.com
+style: [landing, fullpage]
+techniques:
+  - полноэкранная секция = один смысл, переход по якорям
+  - слайд из фото и двух строк вместо простыни текста
+  - меню-якоря с активным состоянием и плавным скроллом
+motion: [ken-burns, sticky-scene]
+palette: ['#102A43', '#F0F4F8', '#F9A03F']
+takeaway: «Одностраничник — это серия полноэкранных секций, каждая с одним смыслом и якорем.»
+screenshot: pending

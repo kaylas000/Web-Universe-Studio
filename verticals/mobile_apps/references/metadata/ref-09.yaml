@@ -1,0 +1,4 @@
+id: ref-09
+style: platform-lang
+source: references/sources.yaml#mobile-patterns
+takeaway: iOS и Android говорят по-разному (HIG vs Material): дизайн следует платформе, иначе приложение кажется чужим.

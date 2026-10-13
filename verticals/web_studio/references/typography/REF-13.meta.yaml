@@ -1,0 +1,11 @@
+id: REF-13
+source: https://httpster.net
+style: [typography, poster]
+techniques:
+  - заголовок до 10vw, перенос по смыслу
+  - эксперимент с весом и наклоном: одна фраза — два шрифта
+  - гигантская буква как фон-пласт за контентом
+motion: [scramble-decode, mask-reveal]
+palette: ['#111111', '#F5F2EB', '#FF4B3A']
+takeaway: «Типографика — это дизайн: размер до 10vw и игра весов заменяют любые картинки.»
+screenshot: pending

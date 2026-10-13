@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "type": "module",
-  "description": "Мета-платформа ИИ-студий: Node/ESM zero-dep ядро (цикл К-21) + 7 вертикалей (§ТЗ v3.0).",
+  "description": "Мета-платформа ИИ-студий: Node/ESM zero-dep ядро (цикл К-21) + 6 вертикалей (§ТЗ v3.0).",
   "engines": {
     "node": ">=18"
   },

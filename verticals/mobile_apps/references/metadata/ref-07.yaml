@@ -1,0 +1,4 @@
+id: ref-07
+style: flow-real-apps
+source: references/sources.yaml#mobbin-flows
+takeaway: Флоу рисуй по реальным приложениям: онбординг → чекаут → настройки, по OS, а не из головы.

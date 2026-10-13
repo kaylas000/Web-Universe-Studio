@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* ЦЕХ · Метаплатформа — scripts/bootstrap-verticals.mjs
-   Бутстрап 6 вертикалей (§7.1 ТЗ): самодостаточный каталог verticals/<name>/ со своей
+   Бутстрап 5 вертикалей (§7.1 ТЗ): самодостаточный каталог verticals/<name>/ со своей
    конституцией (§9), анти-слопом (§10), скиллом (§11), детерминированной приёмкой (§15),
    демо-проектом и самотестом. Скрипт идемпотентен.
    Запуск: node scripts/bootstrap-verticals.mjs */
@@ -519,117 +519,6 @@ T.writeVertical = (s) => {
 const SPECS = [];
 
 SPECS.push({
-  slug: "legal_docs",
-  title: "Юридическая студия",
-  deliverable: "docs",
-  summary: "Готовит договоры, политики и претензии с проверяемой структурой: разделы, нумерация, реквизиты и ссылка на применимое право — всё машинно проверяется.",
-  checks: ["validate", "lint-slop"],
-  skills: ["contract-draft", "legal-review"],
-  references: [
-    { id: "ref-01", style: "structure-nesting", source: "references/sources.yaml#contract-draft", takeaway: "Договор членится на разделы «Предмет → Обязанности → Ответственность → Срок»; нумерация 1.1/1.2 однозначна." },
-    { id: "ref-02", style: "defined-terms", source: "references/sources.yaml#contract-draft", takeaway: "Термины определяются один раз в разделе «Термины» и далее используются без синонимов." },
-    { id: "ref-03", style: "review-checklist", source: "references/sources.yaml#legal-review", takeaway: "Ревью идёт по чек-листу: стороны, предмет, цена, срок, ответственность, применимое право." },
-  ],
-  skill: {
-    slug: "contract-draft",
-    title: "Составление договора",
-    description: "Собирает договор из обязательных разделов с нумерацией пунктов и реквизитами сторон.",
-    steps: ["Определить предмет и стороны", "Заполнить обязательные разделы", "Сверить нумерацию и реквизиты", "Проверить анти-слоп студии"],
-  },
-  constitution: [
-    { code: "К-01", title: "Предмет и стороны", text: "Договор содержит разделы «Предмет» и «Стороны» с полными реквизитами." },
-    { code: "К-02", title: "Нумерация", text: "Пункты нумеруются иерархически: 1.1, 1.2, …; ссылка на пункт однозначна." },
-    { code: "К-03", title: "Ответственность", text: "Раздел «Ответственность» фиксирует конкретные санкции, а не общие слова." },
-    { code: "К-04", title: "Применимое право", text: "Указано применимое право; при спорах — конкретная подсудность." },
-    { code: "К-05", title: "Источник норм", text: "Норма, на которую опирается документ, записана в docs/SOURCES.md с реквизитами акта." },
-    { code: "К-06", title: "Резюме для клиента", text: "docs/README.md объясняет риски и обязательства человеческим языком." },
-  ],
-  banned: [
-    { code: "B-01", title: "«настоящий Договор»", text: "канцелярит; пишем «договор»." },
-    { code: "B-02", title: "«в соответствии с действующим законодательством»", text: "пустая отсылка без нормы." },
-    { code: "B-03", title: "«надлежащим образом»", text: "оценка без критерия." },
-    { code: "B-04", title: "«вступает в силу с момента подписания»", text: "штамп; указываем дату и порядок." },
-  ],
-  quotas: [
-    { code: "Q-01", title: "Реквизиты сторон — один раз в разделе «Реквизиты»." },
-    { code: "Q-02", title: "Не более одной общей отсылки к праву на документ." },
-  ],
-  rules: [
-    { code: "V-01", title: "Договор на месте", kind: "fileExists", path: "docs/dogovor.md", ok: "docs/dogovor.md найден", fail: "нет docs/dogovor.md" },
-    { code: "V-02", title: "Обязательные разделы", kind: "textHasAll", path: "docs/dogovor.md", patterns: ["^##\\s+Предмет", "^##\\s+Стороны", "^##\\s+Права и обязанности", "^##\\s+Ответственность", "^##\\s+Реквизиты"], ok: "все пять разделов", fail: "пропущен обязательный раздел (К-01, К-03)" },
-    { code: "V-03", title: "Нумерованные пункты", kind: "regexAtLeast", path: "docs/dogovor.md", pattern: "^\\d+\\.\\d+", min: 6, ok: "нумерация иерархическая", fail: "меньше шести пунктов вида 1.1 (К-02)" },
-    { code: "V-04", title: "Дата и место", kind: "regexAtLeast", path: "docs/dogovor.md", pattern: "\\d{2}\\.\\d{2}\\.\\d{4}", min: 1, ok: "дата в формате ДД.ММ.ГГГГ", fail: "нет даты договора" },
-    { code: "V-05", title: "Применимое право", kind: "regexAtLeast", path: "docs/dogovor.md", pattern: "применимое право", min: 1, ok: "право указано", fail: "не указано применимое право (К-04)" },
-    { code: "V-06", title: "Реквизиты с ИНН", kind: "regexAtLeast", path: "docs/dogovor.md", pattern: "ИНН", min: 2, ok: "ИНН обеих сторон", fail: "не хватает ИНН сторон" },
-    { code: "V-07", title: "Источник норм", kind: "fileExists", path: "docs/SOURCES.md", ok: "docs/SOURCES.md найден", fail: "нет docs/SOURCES.md (К-05)" },
-    { code: "V-08", title: "Резюме для клиента", kind: "fileExists", path: "docs/README.md", ok: "docs/README.md найден", fail: "нет docs/README.md (К-06)" },
-  ],
-  slopExtensions: [".md"],
-  slop: [
-    { code: "B-01", pattern: "настоящий [Дд]оговор", message: "канцелярит" },
-    { code: "B-02", pattern: "в соответствии с действующим законодательством", message: "пустая отсылка" },
-    { code: "B-03", pattern: "надлежащим образом", message: "оценка без критерия" },
-    { code: "B-04", pattern: "вступает в силу с момента подписания", message: "штамп" },
-  ],
-  demo: {
-    slug: "dogovor-postavki",
-    task: "составить договор поставки оборудования для ООО «Речной порт»",
-    files: {
-      "docs/dogovor.md": `# Договор поставки № П-2026/014
-
-г. Москва · 01.02.2026
-
-## Предмет
-
-1.1. Поставщик передаёт Покупателю оборудование по Спецификации (Приложение № 1), Покупатель принимает и оплачивает его.
-1.2. Наименование, количество и сроки поставки определяются Спецификацией.
-
-## Стороны
-
-2.1. Поставщик: ООО «Северный контур», ИНН 7701234567, ОГРН 1157746000000.
-2.2. Покупатель: ООО «Речной порт», ИНН 7709876543, ОГРН 1157746000001.
-2.3. Стороны подтверждают полномочия подписантов приложениями к договору.
-
-## Права и обязанности
-
-3.1. Поставщик поставляет оборудование в срок из Спецификации.
-3.2. Покупатель принимает оборудование и подписывает акт приёмки.
-3.3. Покупатель вправе проверить комплектность до подписания акта.
-
-## Ответственность
-
-4.1. За просрочку поставки Поставщик уплачивает пеню 0,1 % от стоимости за каждый день.
-4.2. Убытки возмещаются в части, не покрытой пенёй.
-
-## Реквизиты
-
-5.1. Поставщик: ООО «Северный контур», 127015, Москва, ул. Лесная, д. 5, ИНН 7701234567.
-5.2. Покупатель: ООО «Речной порт», 115184, Москва, ул. Большая, д. 12, ИНН 7709876543.
-5.3. К договору применяется применимое право Российской Федерации; споры — в Арбитражном суде города Москвы.
-`,
-      "docs/SOURCES.md": `# Источники норм
-
-| Норма | Реквизиты акта | Что берём |
-| --- | --- | --- |
-| Ст. 506 ГК РФ | ГК РФ, часть вторая | договор поставки |
-| Ст. 330 ГК РФ | ГК РФ, часть первая | неустойка (пеня) |
-| Ст. 309 ГК РФ | ГК РФ, часть первая | исполнение обязательств |
-`,
-      "docs/README.md": `# Резюме договора поставки
-
-Клиент получает оборудование по Спецификации и платит за него. Срок поставки — в Приложении № 1.
-
-## Что важно знать
-
-- Просрочка Поставщика: пеня 0,1 % в день.
-- Убытки сверх пени возмещаются в непокрытой части.
-- Споры разбирает Арбитражный суд города Москвы.
-`,
-    },
-  },
-});
-
-SPECS.push({
   slug: "content_studio",
   title: "Контент-студия",
   deliverable: "content",
@@ -946,6 +835,14 @@ SPECS.push({
     { id: "ref-01", style: "one-screen", source: "references/sources.yaml#single-page-app", takeaway: "Экран решает одну задачу; вторичные действия уходят в меню, а не теснятся рядом." },
     { id: "ref-02", style: "instant-feedback", source: "references/sources.yaml#single-page-app", takeaway: "Каждое нажатие отвечает в пределах 100 мс — сменой состояния, а не спиннером." },
     { id: "ref-03", style: "focus-visible", source: "references/sources.yaml#a11y-pass", takeaway: "Фокус виден на каждом интерактивном элементе; порядок обхода совпадает с визуальным." },
+    { id: "ref-04", style: "invoice-initdata", source: "references/sources.yaml#payments", takeaway: "Оплата — только Telegram Payments: openInvoice/sendData вместо внешних ссылок; перед обработкой платежа бэкенд проверяет подпись initData через HMAC-SHA256." },
+    { id: "ref-05", style: "viewport-safearea", source: "references/sources.yaml#viewport-adaptive", takeaway: "Адаптация 320/375/420 — media-запросы и ограниченная ширина; низ экрана — через env(safe-area-inset-bottom), высота — через viewportChanged, а не жёсткий 100vh." },
+    { id: "ref-06", style: "offline-sw", source: "references/sources.yaml#offline-worker", takeaway: "Базовый offline — кэш оболочки в Service Worker (install → addAll, fetch → cache-first) и его регистрация; состояние переживает закрытие через CloudStorage/sendData." },
+    { id: "ref-07", style: "tma-entry", source: "references/sources.yaml#tma-gallery", takeaway: "Витрина TMA — категория (Shop/Game/Utility/Finance), описание и сразу живая кнопка: понятно за секунду, зачем открывать (tma.gallery)." },
+    { id: "ref-08", style: "tma-review", source: "references/sources.yaml#miniapp-cafe", takeaway: "Обзор мини-приложения начинается с назначения и аудитории, а не с перечисления фич (miniapp.cafe)." },
+    { id: "ref-09", style: "tma-niche-charts", source: "references/sources.yaml#tgstat", takeaway: "Нишу проверяй статистикой RU-сегмента: топ-чарты и онбординги, которые реально привели пользователей (tgstat.ru)." },
+    { id: "ref-10", style: "tma-ui-concept", source: "references/sources.yaml#dribbble-tma", takeaway: "Концепт TMA-интерфейса — платформенная сетка плюс одна яркая деталь, а не перерисовка всего с нуля (dribbble: Telegram Mini App UI)." },
+    { id: "ref-11", style: "tma-case", source: "references/sources.yaml#behance-tma", takeaway: "Кейс мини-приложения убеждает метриками (установки, удержание), а не только скриншотами (behance: Mini app case study)." },
   ],
   skill: {
     slug: "single-page-app",
@@ -1123,6 +1020,15 @@ SPECS.push({
     { id: "ref-01", style: "thumb-zone", source: "references/sources.yaml#screen-composer", takeaway: "Главные действия — в нижней трети экрана, в зоне большого пальца." },
     { id: "ref-02", style: "platform-nav", source: "references/sources.yaml#screen-composer", takeaway: "Навигация следует платформе: таб-бар снизу на iOS, системная панель на Android." },
     { id: "ref-03", style: "touch-target", source: "references/sources.yaml#a11y-pass", takeaway: "Цель нажатия не меньше 44×44 px и отделена от соседей видимым зазором." },
+    { id: "ref-04", style: "offline-cache", source: "references/sources.yaml#offline-queue", takeaway: "Offline-режим — это кэш последних данных плюс очередь мутирующих запросов: сеть пропала — экран живёт кэшем, запросы встают в очередь и уходят при восстановлении (К-07, К-17)." },
+    { id: "ref-05", style: "store-assets", source: "references/sources.yaml#store-release", takeaway: "Стор принимает приложение по трём артефактам: иконка 1024×1024 без прозрачности, скриншоты 6.5\" и 5.5\", и описание ценности для пользователя (К-20)." },
+    { id: "ref-06", style: "i18n-keys", source: "references/sources.yaml#i18n-pass", takeaway: "Локализация живёт ключами: en.json и ru.json — единственный источник текста, в коде только ключи, без хардкода строк (К-14, B-04)." },
+    { id: "ref-07", style: "flow-real-apps", source: "references/sources.yaml#mobbin-flows", takeaway: "Флоу рисуй по реальным приложениям: онбординг → чекаут → настройки, по OS, а не из головы (mobbin.com)." },
+    { id: "ref-08", style: "pattern-library", source: "references/sources.yaml#pttrns", takeaway: "Пустые состояния, кнопки и табы берутся из библиотек паттернов, а не придумываются заново (pttrns.com)." },
+    { id: "ref-09", style: "platform-lang", source: "references/sources.yaml#mobile-patterns", takeaway: "iOS и Android говорят по-разному (HIG vs Material): дизайн следует платформе, иначе приложение кажется чужим (mobile-patterns.com)." },
+    { id: "ref-10", style: "store-preview", source: "references/sources.yaml#scrnshts", takeaway: "Превью в сторе — маркетинговые скриншоты 6.5\" и 5.5\" как продающая история, а не снимок экрана (scrnshts.club)." },
+    { id: "ref-11", style: "nav-patterns", source: "references/sources.yaml#uigarage", takeaway: "Навигацию выбирай из проверенных паттернов (Tab Bar, Navigation, Cards), а не изобретай с нуля (uigarage.net)." },
+    { id: "ref-12", style: "mobile-components", source: "references/sources.yaml#collectui-mobile", takeaway: "Компонент мобильного экрана берётся из реальных паттернов (фильтр Mobile), а не рисуется с нуля (collectui.com)." },
   ],
   skill: {
     slug: "screen-composer",

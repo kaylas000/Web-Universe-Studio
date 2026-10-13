@@ -24,14 +24,14 @@ test("API Gateway: health, роли, generate+идемпотентность, к
 
   const health = await (await fetch(`${base}/health`)).json();
   assert.equal(health.status, "ok");
-  assert.equal(health.verticals, 7);
+  assert.equal(health.verticals, 6);
 
   assert.equal((await fetch(`${base}/v1/verticals`)).status, 401, "без токена — 401");
   assert.equal((await fetch(`${base}/health`)).status, 200, "health открыт");
   assert.equal((await fetch(`${base}/nope`, { headers: H })).status, 404);
 
   const verts = await (await fetch(`${base}/v1/verticals`, { headers: H })).json();
-  assert.equal(verts.verticals.length, 7);
+  assert.equal(verts.verticals.length, 6);
 
   const gen = await (await fetch(`${base}/v1/generate`, { method: "POST", headers: H, body: JSON.stringify({ vertical: "data", idempotency_key: "k1" }) })).json();
   const gen2 = await (await fetch(`${base}/v1/generate`, { method: "POST", headers: H, body: JSON.stringify({ vertical: "data", idempotency_key: "k1" }) })).json();

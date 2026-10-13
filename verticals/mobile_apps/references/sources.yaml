@@ -24,3 +24,27 @@ sources:
     title: "i18n-keys"
     source: "references/sources.yaml#i18n-pass"
     takeaway: "Локализация живёт ключами: en.json и ru.json — единственный источник текста, в коде только ключи, без хардкода строк (К-14, B-04)."
+  - id: ref-07
+    title: "flow-real-apps"
+    source: "references/sources.yaml#mobbin-flows"
+    takeaway: "Флоу рисуй по реальным приложениям: онбординг → чекаут → настройки, по OS, а не из головы (mobbin.com)."
+  - id: ref-08
+    title: "pattern-library"
+    source: "references/sources.yaml#pttrns"
+    takeaway: "Пустые состояния, кнопки и табы берутся из библиотек паттернов, а не придумываются заново (pttrns.com)."
+  - id: ref-09
+    title: "platform-lang"
+    source: "references/sources.yaml#mobile-patterns"
+    takeaway: "iOS и Android говорят по-разному (HIG vs Material): дизайн следует платформе, иначе приложение кажется чужим (mobile-patterns.com)."
+  - id: ref-10
+    title: "store-preview"
+    source: "references/sources.yaml#scrnshts"
+    takeaway: "Превью в сторе — маркетинговые скриншоты 6.5\" и 5.5\" как продающая история, а не снимок экрана (scrnshts.club)."
+  - id: ref-11
+    title: "nav-patterns"
+    source: "references/sources.yaml#uigarage"
+    takeaway: "Навигацию выбирай из проверенных паттернов (Tab Bar, Navigation, Cards), а не изобретай с нуля (uigarage.net)."
+  - id: ref-12
+    title: "mobile-components"
+    source: "references/sources.yaml#collectui-mobile"
+    takeaway: "Компонент мобильного экрана берётся из реальных паттернов (фильтр Mobile), а не рисуется с нуля (collectui.com)."

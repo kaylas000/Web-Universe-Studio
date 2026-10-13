@@ -17,14 +17,14 @@
 ## СОДЕРЖАНИЕ
 
 1. Назначение и принципы
-2. Домены (7 вертикалей)
+2. Домены (6 вертикалей)
 3. Архитектура системы (Node)
 4. Ядро (Kernel)
 5. Протоколы взаимодействия
 6. Стандарт кодов ошибок
 7. Структура студии (вертикали)
 8. Декларативное описание студии (`vertical.yaml`)
-9. Конституции 7 доменов (полные тексты)
+9. Конституции 6 доменов (полные тексты)
 10. Anti-slop система (BANNED + QUOTAS)
 11. Система скиллов
 12. Референсы и RAG
@@ -78,17 +78,16 @@
 
 ---
 
-## 2. ДОМЕНЫ (7 ВЕРТИКАЛЕЙ)
+## 2. ДОМЕНЫ (6 ВЕРТИКАЛЕЙ)
 
 | № | Вертикаль | Продукты | Стек артефактов |
 |---|---|---|---|
 | 1 | `web_studio` | лендинги, каталоги, портфолио, интернет-магазины, корпоративные сайты | HTML/CSS/JS, Vite/React |
-| 2 | `legal_docs` | договоры, оферты, NDA, согласия на ПДн, пользовательские соглашения | Markdown/DOCX |
-| 3 | `content_studio` | SEO-статьи, описания товаров, email-цепочки, посты для каналов | Markdown/HTML |
-| 4 | `data_analytics` | SQL, Python-скрипты, отчёты, дашборды | SQL, Python |
-| 5 | `education` | уроки, курсы, тесты, онбординг | Markdown/HTML |
-| 6 | `mini_apps` | Telegram/VK Mini Apps: магазины, боты, игры, сервисы записи | React + Telegram WebApp SDK / VK Bridge |
-| 7 | `mobile_apps` | React Native / Flutter / SwiftUI / Compose MVP, UI-киты, ассеты сторов | RN/Expo, Flutter, Swift, Kotlin |
+| 2 | `content_studio` | SEO-статьи, описания товаров, email-цепочки, посты для каналов | Markdown/HTML |
+| 3 | `data_analytics` | SQL, Python-скрипты, отчёты, дашборды | SQL, Python |
+| 4 | `education` | уроки, курсы, тесты, онбординг | Markdown/HTML |
+| 5 | `mini_apps` | Telegram/VK Mini Apps: магазины, боты, игры, сервисы записи | React + Telegram WebApp SDK / VK Bridge |
+| 6 | `mobile_apps` | React Native / Flutter / SwiftUI / Compose MVP, UI-киты, ассеты сторов | RN/Expo, Flutter, Swift, Kotlin |
 
 ---
 
@@ -133,10 +132,10 @@
             │
     ┌───────┼───────┬──────────┬───────────┐
     ▼       ▼       ▼          ▼           ▼
-┌───────┐┌───────┐┌───────┐┌───────┐┌───────┐┌───────┐┌───────┐
-│Web    ││Legal  ││Content││Data   ││Educa- ││Mini   ││Mobile │
-│Studio ││Docs   ││Studio ││Analyt.││tion   ││Apps   ││Apps   │
-└───────┘└───────┘└───────┘└───────┘└───────┘└───────┘└───────┘
+┌───────┐┌───────┐┌───────┐┌───────┐┌───────┐┌───────┐
+│Web    ││Content││Data   ││Educa- ││Mini   ││Mobile │
+│Studio ││Studio ││Analyt.││tion   ││Apps   ││Apps   │
+└───────┘└───────┘└───────┘└───────┘└───────┘└───────┘
             ▲
             │
 ┌───────────┴───────────────────────────────┐
@@ -603,10 +602,10 @@ autogen-platform/
 │   ├── knowledge/                  #   RAG (local / Qdrant*)
 │   ├── observability/              #   метрики, трейсы
 │   └── orchestrator/               #   CEO-агент, DAG-планировщик
-├── verticals/                      # 7 СТУДИЙ (по скелету §7.1)
+├── verticals/                      # 6 СТУДИЙ (по скелету §7.1)
 │   ├── web_studio/                 #   эталон = корень ceh-veb
-│   ├── legal_docs/  content_studio/  data_analytics/  education/
-│   └── mini_apps/   mobile_apps/
+│   ├── content_studio/  data_analytics/  education/  mini_apps/
+│   └── mobile_apps/
 ├── compositions/                   # *.yaml — сложные задачи (§13)
 ├── configs/                        # references_sources.yaml, llm.yaml, sandbox_templates.yaml, device-matrix
 ├── scripts/                        # scrape_references.mjs, index_references.mjs, acceptance_test.sh, deploy.sh
@@ -630,7 +629,7 @@ metadata:
   displayName: "Mini Apps Studio"
   description: "Telegram / VK Mini Apps: магазины, боты, игры, сервисы"
   version: "1.0.0"
-  domain: mini_apps          # web | legal | content | data | education | mini_apps | mobile_apps
+  domain: mini_apps          # web | content | data | education | mini_apps | mobile_apps
   tags: [telegram, vk, miniapp]
 
 spec:
@@ -668,7 +667,7 @@ spec:
 
 ---
 
-## 9. КОНСТИТУЦИИ 7 ДОМЕНОВ (ПОЛНЫЕ ТЕКСТЫ)
+## 9. КОНСТИТУЦИИ 6 ДОМЕНОВ (ПОЛНЫЕ ТЕКСТЫ)
 
 > В v2.0 конституции 5 базовых студий были помечены как «полный текст сохранён из предыдущего ТЗ»
 > и в документе отсутствовали. Здесь они раскрыты полностью. Коды `V-xx` в каждом разделе
@@ -1091,6 +1090,18 @@ applies_to: [web, mini_apps, mobile_apps, content]
 | REF-05 | poster-type | readymag.com | Набирай заголовок как плакат: до 10vw, перенос по смыслу. |
 | REF-06 | archive, ledger | fontsinuse.com | Архив живёт плотностью записей, а не декором обложки. |
 | REF-07 | industrial, poster, ledger | pcpolimer | Промышленную тему открывай характерным артефактом, акцент — из рабочей палитры отрасли. |
+| REF-08 | minimal, whitespace | siteinspire.com | Минимализм — это один акцент на пустом фоне, а не пустой фон без акцента. |
+| REF-09 | brutalist, raw | brutalistwebsites.com | Брутализм работает, когда честная конструкция сильнее украшения: рамки, плашки, системный шрифт. |
+| REF-10 | dark, night | darkmodedesign.com | Тёмная тема — фон уровня #0E1116, иерархия прозрачностью белого и один яркий акцент. |
+| REF-11 | catalog, ecommerce, cards | ecommercetemplates.com | Каталог живёт плотностью карточек: фото, название, цена — и корзина всегда на виду. |
+| REF-12 | saas, landing, conversion | saaslandingpage.com | SaaS-лендинг — это одно обещание в hero и доказательство цифрами ниже, а не каталог фич. |
+| REF-13 | typography, poster | httpster.net | Типографика — это дизайн: размер до 10vw и игра весов заменяют любые картинки. |
+| REF-14 | animation, scroll | godly.website | Анимация усиливает рассказ, если на шаг текста — одно движение; хаос из движений убивает доверие. |
+| REF-15 | ui-patterns, components | collectui.com | Компонент ясен без подписи: одно действие, видные состояния, пустое состояние с подсказкой. |
+| REF-16 | landing, fullpage | land-book.com | Одностраничник — это серия полноэкранных секций, каждая с одним смыслом и якорем. |
+| REF-17 | concept, poster | dribbble.com | Концепт продаёт одна деталь: необычный акцент на привычной сетке, остальное — по правилам. |
+| REF-18 | case, portfolio | behance.net | Кейс убеждает историей: задача, решение, метрика до/после — а не галереей красивых картинок. |
+| REF-19 | premium, refined | awwwards.com | Премиум — это целостность: типографика, ритм и паузы, и ни одной случайной детали. |
 
 Скриншот добавляет куратор-человек: файл `<id>.png` рядом с `<id>.meta.yaml`.
 
@@ -1112,6 +1123,80 @@ applies_to: [web, mini_apps, mobile_apps, content]
 Изъятие удачного из проекта (К-11): приём → `references/`, скилл → `skills/`, рецепт → `motion/`.
 Правило входа: запись без `takeaway` не принимается (иначе архив превращается в свалку картинок).
 
+### 12.4. Источники референсов (каталоги-доноры)
+
+Каждая студия при создании заполняет базу референсов из каталогов-доноров своего домена: обход
+(`scripts/scrape_references.mjs --fetch`) парсит скриншоты, структуры и цвета, изъятые приёмы
+сохраняются в `references/` с обязательным `takeaway` (К-04). Машиночитаемый реестр источников —
+`configs/references_sources.yaml`; по умолчанию все источники `enabled: false`, сетевой обход
+включается только явным `--fetch` (ядро остаётся zero-dep и офлайн, §14.3).
+
+#### 12.4.1. Лендинги и одностраничники — `web_studio`
+
+| Сайт | Что брать | Фильтры |
+|---|---|---|
+| land-book.com | Скриншоты полных страниц | По цвету, типу, индустрии |
+| lapa.ninja | 7300+ лендингов с full-page скриншотами | По категории (SaaS, крипто, образование) |
+| landingfolio.com | Лендинги + UI-компоненты | По секциям (hero, pricing, FAQ) |
+| onepagelove.com | Одностраничники | По типу (портфолио, продукт, ивент) |
+| saaslandingpage.com | SaaS-лендинги | По стилю и конверсии |
+
+#### 12.4.2. Полноценные сайты и стили — `web_studio`
+
+| Сайт | Что брать | Фильтры |
+|---|---|---|
+| awwwards.com | Премиум-дизайн | По технологиям, стилям, оценкам |
+| siteinspire.com | Чистый минимализм | По стилю, CMS, типу |
+| httpster.net | Трендовая типографика | По году, стилю |
+| godly.website | Анимированные сайты | По типу анимации |
+| minimal.gallery | Строгий минимализм | По индустрии |
+| brutalistwebsites.com | Брутализм | По типу |
+
+#### 12.4.3. Каталоги и E-commerce — `web_studio`
+
+| Сайт | Что брать | Фильтры |
+|---|---|---|
+| ecommercetemplates.com | Шаблоны магазинов | По платформе, нише |
+| mobbin.com | UX-паттерны мобильных и веб | По flow, экрану |
+| pageflows.com | Записи пользовательских потоков | По задаче (регистрация, чекаут) |
+
+#### 12.4.4. UI-компоненты — все вертикали
+
+| Сайт | Что брать | Фильтры |
+|---|---|---|
+| collectui.com | Реальные UI-паттерны | По компоненту (кнопки, формы, карточки) |
+| uisources.com | Скриншоты интерфейсов компаний | По приложению |
+| dribbble.com | Концепты | По запросу «landing», «catalog», «dashboard» |
+| behance.net | Портфолио | По запросу, индустрии |
+
+#### 12.4.5. Тёмные темы — `web_studio`
+
+| Сайт | Что брать |
+|---|---|
+| darkmodedesign.com | Тёмные интерфейсы |
+| dark.design | Тёмные лендинги |
+
+#### 12.4.6. Telegram Mini Apps и мессенджеры — `mini_apps`
+
+| Сайт | Что брать | Фильтры / особенности |
+|---|---|---|
+| tma.gallery | Реальные скриншоты и ссылки на работающие Telegram Mini Apps | Категории: Shop, Game, Utility, Finance |
+| miniapp.cafe | Каталог и обзоры лучших мини-приложений в Telegram | Фильтр по нише и функционалу |
+| tgstat.ru | Статистика и скриншоты интерфейсов ботов и мини-аппов (RU-сегмент) | Топ-чарты, примеры онбординга |
+| dribbble.com | Концепты UI/UX | Поиск: «Telegram Mini App UI», «TMA design» |
+| behance.net | Кейсы и портфолио | Поиск: «Telegram bot UI», «Mini app case study» |
+
+#### 12.4.7. Мобильные приложения (iOS / Android) — `mobile_apps`
+
+| Сайт | Что брать | Фильтры / особенности |
+|---|---|---|
+| mobbin.com | Полные скриншоты реальных приложений из App Store/Google Play | По OS (iOS/Android), потокам (onboarding, checkout, settings) |
+| pttrns.com | Мобильные UI-паттерны (кнопки, формы, табы, пустые состояния) | Категории по типам экранов |
+| mobile-patterns.com | Библиотека лучших практик iOS и Android | По гайдлайнам (Apple HIG, Material Design) |
+| scrnshts.club | Скриншоты из App Store (маркетинговые экраны) | Для генерации превью приложения |
+| uigarage.net | Вдохновение для мобильной навигации и интерактива | Категории: Tab Bar, Navigation, Cards |
+| collectui.com | Реальные компоненты | Фильтр «Mobile» (2000+ паттернов) |
+
 ---
 
 ## 13. КОМПОЗИЦИИ И CEO-АГЕНТ
@@ -1126,22 +1211,22 @@ applies_to: [web, mini_apps, mobile_apps, content]
 apiVersion: autogen/v1
 kind: Composition
 metadata:
-  name: launch-landing-with-legal
-  goal: "Лендинг запуска + пакет документов + 3 поста"
+  name: launch-landing-with-review
+  goal: "Лендинг запуска + ревью текстов + 3 поста"
 tasks:
   - id: brief
-    vertical: content          # одна из 7 вертикалей §2
+    vertical: content          # одна из 6 вертикалей §2
     gate: G1
     output: MARKETING.md
   - id: landing
     vertical: web
     gate: G4
     needs: [brief]
-  - id: docs
-    vertical: legal
+  - id: review
+    vertical: content
     gate: G4
     needs: [brief]
-    hitl: true                 # юр-ревью человеком обязательна (§9.2)
+    hitl: true                 # ревью человеком обязательна (К-09)
   - id: posts
     vertical: content
     gate: G4
@@ -1179,7 +1264,7 @@ CEO-агент — верхнеуровневый агент платформы.
 
 - **CEO-агент** — декомпозиция, маршрутизация, агрегация; вердикт без «мне не нравится».
 - **Агент-вертикаль** — собирает артефакт строго из архива своей вертикали по G1–G4.
-- **Агент-маркетолог/копирайтер** — MARKETING.md + COPYWRITING.md (web/content/legal).
+- **Агент-маркетолог/копирайтер** — MARKETING.md + COPYWRITING.md (web/content).
 - **Арт-директор (LLM-judge)** — вторая модель оценивает по рубрике, порог `pass_threshold`.
 - **Куратор-человек** — пополняет архив, калибрует правила, финальная приёмка (К-09).
 
@@ -1384,7 +1469,7 @@ node core/loop-engine/gate.mjs                                          # гей
 ### 18.1. Что описывает ТЗ v3.0
 
 Единая мета-платформа ИИ-студий: **Node/ESM zero-dep ядро** (`core/loop-engine`, цикл К-21),
-**7 вертикалей** (web, legal, content, data, education, mini_apps, mobile_apps) с полными
+**6 вертикалей** (web, content, data, education, mini_apps, mobile_apps) с полными
 конституциями (§9), anti-slop системами (§10), скиллами (§11), референс-архивом и RAG (§12),
 композициями и CEO-агентом (§13), инфраструктурой/CI (§14) и критериями приёмки (§15).
 Эталонная реализация веб-вертикали — сам репозиторий `ceh-veb`.

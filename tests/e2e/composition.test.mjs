@@ -9,7 +9,7 @@ import { loadComposition, validateComposition } from "../../core/orchestrator/co
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const GREEN = resolve(ROOT, "compositions", "sales-post-with-data", "composition.yaml");
-const HITL = resolve(ROOT, "compositions", "launch-landing-with-legal", "composition.yaml");
+const HITL = resolve(ROOT, "compositions", "launch-landing-with-review", "composition.yaml");
 
 test("зелёная композиция проходит насквозь (реальные студии)", async () => {
   const agent = new CeoAgent();
@@ -25,7 +25,7 @@ test("композиция с HITL блокируется — человек з�
   const composition = loadComposition(HITL);
   const blocked = await agent.run(composition);
   assert.equal(blocked.ok, false);
-  assert.ok(blocked.hitl_pending.includes("docs"));
+  assert.ok(blocked.hitl_pending.includes("review"));
   const accepted = await agent.run(composition, { acceptedHitl: true });
   assert.equal(accepted.ok, true, JSON.stringify(accepted.codes));
 });

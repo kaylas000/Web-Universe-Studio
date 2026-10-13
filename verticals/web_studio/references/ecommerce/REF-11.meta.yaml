@@ -1,0 +1,11 @@
+id: REF-11
+source: https://ecommercetemplates.com
+style: [catalog, ecommerce, cards]
+techniques:
+  - плотная сетка карточек: крупное фото, название, цена — три строки
+  - один параметр фильтра на карточку (размер/цвет), без перегрузки
+  - корзина не прячется: счётчик и шторка видны сразу
+motion: [cart-assembly, conveyor-marquee]
+palette: ['#FFFFFF', '#1A1A1A', '#D94F2B']
+takeaway: «Каталог живёт плотностью карточек: фото, название, цена — и корзина всегда на виду.»
+screenshot: pending

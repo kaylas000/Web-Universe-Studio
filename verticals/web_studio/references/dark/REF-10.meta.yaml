@@ -1,0 +1,11 @@
+id: REF-10
+source: https://darkmodedesign.com
+style: [dark, night]
+techniques:
+  - фон не чисто чёрный, а тёмно-серый #0E1116, чтобы не «звенел»
+  - светлый текст с иерархией: 87% / 60% / 38% белого
+  - один яркий акцент #7C5CFF на тёмный фон
+motion: [mask-reveal, ken-burns]
+palette: ['#0E1116', '#E8E6E3', '#7C5CFF']
+takeaway: «Тёмная тема — фон уровня #0E1116, иерархия прозрачностью белого и один яркий акцент.»
+screenshot: pending

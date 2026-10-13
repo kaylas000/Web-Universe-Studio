@@ -1,0 +1,11 @@
+id: REF-15
+source: https://collectui.com
+style: [ui-patterns, components]
+techniques:
+  - компонент решает одну задачу: кнопка = действие, форма = ввод
+  - состояния hover/active/disabled видны до клика
+  - пустые состояния — с подсказкой, что делать дальше
+motion: [mask-reveal]
+palette: ['#F7F7F5', '#222222', '#2F6FED']
+takeaway: «Компонент ясен без подписи: одно действие, видные состояния, пустое состояние с подсказкой.»
+screenshot: pending

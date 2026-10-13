@@ -18,7 +18,6 @@ import { normalizeComposition, topologicalOrder, validateComposition } from "./c
 /** Ключевые слова маршрутизации: домен → леммы цели (§13.2, шаг Route). */
 export const DOMAIN_KEYWORDS = Object.freeze({
   web: ["сайт", "лендинг", "страниц", "вёрстк", "верстк", "дизайн", "витрин", "промо"],
-  legal: ["договор", "юрид", "прав", "политик", "претенз", "нда", "соглашен", "документ"],
   content: ["пост", "стать", "контент", "текст", "блог", "лонгрид", "рассылк", "копирайт"],
   data: ["данн", "метрик", "аналит", "отчёт", "отчет", "sql", "дашборд", "продаж", "график"],
   education: ["курс", "урок", "обучен", "тест", "программ", "лекц", "модул", "школ"],
@@ -26,7 +25,7 @@ export const DOMAIN_KEYWORDS = Object.freeze({
   mobile: ["мобильн", "экран", "ios", "android", "смартфон", "приложени"],
 });
 
-/** Из имени вертикали — короткий алиас для композиций: web_studio → web, legal_docs → legal. */
+/** Из имени вертикали — короткий алиас для композиций: web_studio → web, content_studio → content. */
 export function shortAlias(name) {
   const base = String(name).replace(/_studio$/, "").replace(/_docs$/, "").replace(/_apps$/, "_apps");
   const first = base.split("_")[0];
@@ -99,7 +98,7 @@ export class CeoAgent {
       vertical: r.vertical.aliases[0],
       gate: "G4",
       needs: i === 0 ? [] : [`${routed[0].domain}-1`],
-      hitl: r.domain === "legal",
+      hitl: false, // HITL (К-09) задаётся декларативно в композиции, а не авто-правилом
       output: undefined,
       project: undefined,
       skill: undefined,
