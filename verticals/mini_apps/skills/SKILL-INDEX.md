@@ -14,5 +14,6 @@
 | `offline-worker` | Базовый offline через Service Worker + сохранение состояния. | Список оболочки → sw.js (cache-first) → регистрация → CloudStorage/sendData → Проверка V-12/V-13 |
 | `usability-heuristics` | Эвристики NN/g: статус, выход, распознавание, отклик, справка (К-22). | Карта 10 эвристик → Статус (aria-live) → Выход (BackButton) → Подписи → HapticFeedback → Справка через SDK → Отчёт heuristics-report.md |
 | `conversion` | Конверсия: одна цель (MainButton), CTA-глагол (К-20), конкретика цифрами (К-23). | Одна цель → MainButton.setText единожды → regexAbsent на дубль → Число на экране → Отчёт conversion-report.md |
+| `motion-pass` | Анимации: лёгкий отклик + prefers-reduced-motion, без длинных задержек (К-24). | Движение в CSS → reduce-motion → regexAbsent setTimeout≥500 → Отчёт motion-report.md |
 
 Загрузчик — `core/loop-engine/skills.mjs`; рендер шаблонов — `core/loop-engine/template.mjs`.

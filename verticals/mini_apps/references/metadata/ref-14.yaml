@@ -1,0 +1,4 @@
+id: ref-14
+style: usability-cra
+source: references/sources.yaml#baymard-cta
+takeaway: Конверсия — одна цель и конкретика: единственный primary CTA (MainButton), CTA-глагол, число вместо абстракций (исследования CTA-форм, baymard.com); проверяемое ядро машинизируется прокси-сканом V-23.

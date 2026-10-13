@@ -352,6 +352,32 @@
       ],
       "ok": "конверсия в форме: одна первичная цель в MainButton, CTA-глагол (V-20), на экране есть конкретные цифры (К-23)",
       "fail": "конверсия вне норм (К-23) · прокси: одна MainButton.setText (regexAbsent рубит дубль цели), конкретное число на экране (вместо «много/быстро»); цифры-оффер и A/B считаются на тире"
+    },
+    {
+      "code": "V-24",
+      "title": "Анимации: лёгкий отклик + prefers-reduced-motion, без длинных задержек (К-24)",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "app/style.css",
+          "pattern": "@keyframes|transition|animation:",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/style.css",
+          "pattern": "prefers-reduced-motion",
+          "min": 1
+        },
+        {
+          "kind": "regexAbsent",
+          "path": "app/app.js",
+          "pattern": "setTimeout\\([\\s\\S]{0,120}?[5-9]\\d\\d\\)|setTimeout\\([\\s\\S]{0,120}?\\d{4,}\\)"
+        }
+      ],
+      "ok": "анимации в норме: движение объявлено (transition/keyframes), уважается prefers-reduced-motion, нет блокирующих задержек (К-24)",
+      "fail": "анимации вне норм (К-24) · прокси: движение в style.css (@keyframes/transition/animation), @media (prefers-reduced-motion: reduce), regexAbsent на setTimeout ≥500 мс в app.js; плавность 60fps — инструменты на тире"
     }
   ]
 }

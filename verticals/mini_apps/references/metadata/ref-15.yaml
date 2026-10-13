@@ -1,0 +1,4 @@
+id: ref-15
+style: motion-pass
+source: references/sources.yaml#wm-3
+takeaway: Движение уважает систему: лёгкий CSS-отклик, отключаемый через prefers-reduced-motion, и никаких блокирующих задержек в JS (V-24).

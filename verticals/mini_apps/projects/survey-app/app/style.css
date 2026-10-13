@@ -85,3 +85,14 @@ body {
   .survey__select,
   .survey__input { min-height: 44px; }
 }
+
+/* Анимации (К-24): лёгкий отклик полей, уважение prefers-reduced-motion. */
+.survey__select, .survey__input {
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.survey__select:focus, .survey__input:focus {
+  border-color: var(--tg-theme-button-color, #2481cc);
+}
+@media (prefers-reduced-motion: reduce) {
+  .survey__select, .survey__input { transition: none; }
+}

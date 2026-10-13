@@ -1,0 +1,9 @@
+{# Фиксер · приём «motion-pass» #}
+Возврат с ворот (К-10): править только пункты V-24 из feedback.
+{{ feedback }}
+
+Типичные правки:
+- нет движения — задать переход отклика на кнопках/полях;
+- нет reduce-motion — добавить @media (prefers-reduced-motion: reduce);
+- setTimeout ≥ 500 мс — заменить на таймлайн/переход.
+Затем: node scripts/validate.mjs projects/{{ project }} && node scripts/lint-slop.mjs projects/{{ project }}.

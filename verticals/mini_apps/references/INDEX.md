@@ -18,3 +18,4 @@
 | ref-12 | contrast-ratio | references/sources.yaml#a11y-pass | Контраст текста к фону — не ниже 4.5:1 (WCAG 2.1 AA); пары темы выносятся в токены (app/theme.json) и проверяются расчётом, а не глазами. |
 | ref-13 | nng-heuristics | references/sources.yaml#nng-heuristics | Десять эвристик NN/g: видимость статуса, соответствие реальному миру, свобода и контроль, консистентность, предотвращение ошибок, распознавание вместо припоминания, гибкость, эстетика, восстановление после ошибки, справка; проверяемое ядро машинизируется прокси-сканом V-22. |
 | ref-14 | cta-conversion | references/sources.yaml#baymard-cta | Конверсия — одна цель и конкретика: единственный primary CTA (MainButton), CTA-глагол, число вместо абстракций (baymard.com). |
+| ref-15 | motion-reduce | references/sources.yaml#wm-3 | Движение уважает систему: лёгкий CSS-отклик, отключаемый через prefers-reduced-motion, и никаких блокирующих задержек в JS (V-24). |

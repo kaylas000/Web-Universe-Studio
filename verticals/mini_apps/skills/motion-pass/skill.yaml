@@ -1,0 +1,23 @@
+name: motion-pass
+title: "Анимации с уважением к системе (motion-pass)"
+description: >
+  Аудит движения мини-приложения: лёгкий отклик в CSS (transition/@keyframes),
+  уважение prefers-reduced-motion и отсутствие блокирующих setTimeout ≥ 500 мс
+  (V-24, К-24). Артефакт не меняет — только верифицирует и возвращает точечные
+  правки деклараций движения.
+source: REF-15
+takeaway: >
+  Движение в мини-приложении — это лёгкий CSS-отклик, который выключается
+  для prefers-reduced-motion, и никаких длинных задержек в JS.
+inputs: [app, motion_report]
+outputs: [motion_report]
+steps:
+  - "Найти движение в style.css (@keyframes/transition/animation)"
+  - "Проверить доступность: @media (prefers-reduced-motion: reduce)"
+  - "Прогнать regexAbsent: нет setTimeout ≥ 500 мс в app.js"
+  - "Зафиксировать motion_report.md"
+checks:
+  - "V-24 (allOf: движение + reduce-motion) из validate.mjs"
+  - "плавность 60fps на тире: DevTools Performance"
+applies_to:
+  - mini_apps

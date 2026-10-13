@@ -801,7 +801,7 @@ spec:
 
 ---
 
-### 9.6. Mini Apps Studio (Telegram / VK Mini Apps) — К-01…К-23
+### 9.6. Mini Apps Studio (Telegram / VK Mini Apps) — К-01…К-24
 
 **Продукты:** магазины внутри Telegram, сервисы записи, мини-игры, дашборды.
 **Стек:** React/Vue + Telegram WebApp SDK / VK Bridge.
@@ -829,6 +829,7 @@ spec:
 **К-21.** Контраст текста к фону — не ниже 4.5:1 (WCAG 2.1 AA) на светлой и тёмной темах Telegram; пары темы выносятся в токены `app/theme.json`. *Проверка:* kind `themeContrast` — каждая пара `contrast` проходит порог (V-21), расчёт по WCAG 2.1.
 **К-22.** Эвристики юзабилити NN/g: видимый системный статус (`role="status"`/`aria-live`), свобода выхода (`BackButton`), распознавание вместо припоминания (подписи `<label>`/кнопок), отклик на действие (`HapticFeedback`), вход в справку (`openDocs`/`openHelp`/`openLink`). *Проверка:* kind `allOf` — пять детерминированных прокси (V-22); карта 10 эвристик — `HEURISTICS.md`.
 **К-23.** Конверсия: одна первичная цель на экран — главная кнопка Telegram (`MainButton.setText` вызывается ровно один раз), CTA — глагол действия (К-20), в разметке экрана есть конкретные числа. *Проверка:* kind `allOf` — `regexAtLeast` MainButton.setText + `regexAbsent` на дубль цели в окне 300 символов + число `\d{1,4}` в разметке (V-23).
+**К-24.** Анимации: движение объявлено в CSS (`transition`/`@keyframes`/`animation`) и уважает `prefers-reduced-motion`; в JS нет блокирующих `setTimeout` ≥ 500 мс. *Проверка:* kind `allOf` — движение + `@media (prefers-reduced-motion: reduce)` + `regexAbsent` на длинные задержки (V-24).
 
 *Гейты:* G1 Бриф/тип продукта → G2 Экраны/навигация → G3 Сборка/вьюпорты → G4 Устройства.
 

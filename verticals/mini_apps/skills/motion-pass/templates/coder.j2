@@ -1,0 +1,6 @@
+{# Кодер · приём «motion-pass» #}
+Собрать в {{ deliverable }} ({{ brief }}) движение с уважением к системе:
+- transition: transform .15s ease / background-color .2s ease на кнопках и полях;
+- @media (prefers-reduced-motion: reduce) { … transition: none; … };
+- никаких setTimeout ≥ 500 мс в путях анимации (regexAbsent).
+После сборки прогнать V-24; движение без reduce-motion — нарушение К-24.

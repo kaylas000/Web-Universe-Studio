@@ -1,0 +1,8 @@
+{# Верификатор · приём «motion-pass» #}
+Проверить: {{ artifact }}
+
+Чек-лист (К-24, прокси V-24):
+- [ ] движение объявлено: @keyframes/transition/animation в style.css;
+- [ ] доступность: @media (prefers-reduced-motion: reduce) присутствует;
+- [ ] нет блокировок: setTimeout ≥ 500 мс отсутствует в app.js.
+Закрыть: node scripts/validate.mjs (V-24) + node scripts/lint-slop.mjs.

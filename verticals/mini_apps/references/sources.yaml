@@ -56,3 +56,7 @@ sources:
     title: "cta-conversion"
     source: "references/sources.yaml#baymard-cta"
     takeaway: "Конверсия — одна цель и конкретика: единственный primary CTA (MainButton), CTA-глагол, число вместо абстракций (исследования CTA-форм, baymard.com)."
+  - id: ref-15
+    title: "motion-reduce"
+    source: "references/sources.yaml#wm-3"
+    takeaway: "Движение уважает систему: лёгкий CSS-отклик, отключаемый через prefers-reduced-motion, и никаких блокирующих задержек в JS (V-24)."

@@ -1,0 +1,11 @@
+{# Планировщик · приём «motion-pass» #}
+Артефакт: {{ deliverable }}
+Задача: {{ brief }}
+
+План — собрать экран с доступным движением (К-24):
+1. Лёгкий отклик интерактива: transition/@keyframes/animation в style.css.
+2. Доступность: @media (prefers-reduced-motion: reduce) выключает движение.
+3. Запрет блокировок: нет setTimeout ≥ 500 мс в app.js.
+Проверить штатно: node scripts/validate.mjs (V-24) + node scripts/lint-slop.mjs.
+
+Закон: К-24.
