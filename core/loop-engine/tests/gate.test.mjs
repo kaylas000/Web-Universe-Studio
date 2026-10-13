@@ -38,7 +38,7 @@ const PCPOLIMER = join(STUDIO_ROOT, "projects", "pcpolimer");
 const NODE = process.execPath;
 
 const BROKEN_CODES = [
-  "V-01", "V-02", "V-03", "V-04", "V-05", "V-07", "V-08", "V-10", "V-12", "V-15", "V-17", "B-01", "M-01", "M-02",
+  "V-01", "V-02", "V-03", "V-04", "V-05", "V-07", "V-08", "V-10", "V-12", "V-15", "V-17", "V-18", "B-01", "M-01", "M-02",
 ];
 
 /** Битый проект: inline `transition: all`, ни meta, ни досье — ворота обязаны зашуметь. */
