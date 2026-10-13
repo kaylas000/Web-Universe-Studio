@@ -7,10 +7,38 @@ const value = document.querySelector("#value");
 let left = TOTAL;
 let tick = null;
 
+/* Состояния экрана (V-19): loading / empty / error / success. */
+const SCREENS = ["loading", "empty", "error", "success"];
+const setScreen = (name) => {
+  const target = SCREENS.includes(name) ? name : "empty";
+  for (const key of SCREENS) {
+    const el = document.querySelector("[data-screen=\"" + key + "\"]");
+    if (el) el.hidden = key !== target;
+  }
+};
+
 const render = () => {
   const m = String(Math.floor(left / 60)).padStart(2, "0");
   const s = String(left % 60).padStart(2, "0");
   value.textContent = m + ":" + s;
+};
+
+const boot = () => {
+  if (!tg || !tg.CloudStorage) {
+    setScreen("empty");
+    render();
+    return;
+  }
+  setScreen("loading");
+  tg.CloudStorage.getItem("left", (err, val) => {
+    if (!err && val !== null && Number.isFinite(Number(val))) {
+      left = Number(val);
+      setScreen("empty");
+    } else {
+      setScreen("error");
+    }
+    render();
+  });
 };
 
 const stop = () => {
@@ -22,12 +50,14 @@ const stop = () => {
 
 const toggle = () => {
   if (tick === null) {
+    setScreen("empty");
     tick = setInterval(() => {
       left -= 1;
       render();
       if (left <= 0) {
         stop();
         left = TOTAL;
+        setScreen("success");
         render();
       }
     }, 1000);
@@ -74,6 +104,7 @@ document.querySelector("#start").addEventListener("click", toggle);
 document.querySelector("#reset").addEventListener("click", () => {
   stop();
   left = TOTAL;
+  setScreen("empty");
   render();
 });
-render();
+boot();

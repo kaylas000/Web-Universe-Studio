@@ -6,7 +6,7 @@ metadata:
   name: mobile_apps
   displayName: "Студия мобильных приложений"
   description: "Собирает экран мобильного приложения: манифест, модуль экрана с состоянием и разметкой, доступные подписи и README."
-  version: "1.0.0"
+  version: "1.1.0"
   domain: mobile_apps
   tags: [screen-composer, a11y-pass, offline-queue, store-release, i18n-pass, nav-deeplinks]
   deliverable: app

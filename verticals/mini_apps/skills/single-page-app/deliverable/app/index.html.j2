@@ -10,6 +10,10 @@
   </head>
   <body>
     <main class="timer">
+      <p class="timer__state" data-screen="loading">Читаем сохранённое состояние…</p>
+      <p class="timer__state" data-screen="empty">Сессий пока нет — нажмите «Старт» и начните первый помидор.</p>
+      <p class="timer__state" data-screen="error">Не удалось прочитать сохранённое значение. Проверьте соединение и нажмите «Старт».</p>
+      <p class="timer__state" data-screen="success">Помидор завершён — нажмите «Старт» для следующей сессии.</p>
       <p class="timer__value" id="value" role="timer" aria-live="polite">25:00</p>
       <div class="timer__controls">
         <button class="timer__button" id="start" type="button">Старт</button>

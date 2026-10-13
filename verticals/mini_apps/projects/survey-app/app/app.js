@@ -13,21 +13,28 @@ const answers = () => ({
   nps: pick("q3").value,
 });
 
-const report = (text) => {
-  note.textContent = text;
+/* V-19: экран живёт четырьмя состояниями (loading/empty/error/success). */
+const setState = (name, message) => {
+  document.body.dataset.state = name;
+  note.textContent = message;
 };
 
 const restore = () => {
   if (!tg) return;
+  setState("loading", "Загружаем черновик…");
   tg.CloudStorage.getItem("survey-draft", (err, raw) => {
-    if (err || !raw) return;
+    if (err || !raw) {
+      setState("empty", "Черновика нет — выберите ответы и нажмите «Отправить»");
+      return;
+    }
     try {
       const saved = JSON.parse(raw);
       if (saved.freq) pick("q1").value = saved.freq;
       if (saved.priority) pick("q2").value = saved.priority;
       if (saved.nps) pick("q3").value = saved.nps;
+      setState("success", "Черновик восстановлен — можно продолжить");
     } catch {
-      report("Черновик повреждён — начните заново");
+      setState("error", "Черновик повреждён — начните заново");
     }
   });
 };
@@ -49,7 +56,7 @@ const submit = () => {
   if (tg.CloudStorage) tg.CloudStorage.setItem("survey-draft", JSON.stringify(data));
   tg.sendData(JSON.stringify(data));
   tg.HapticFeedback.notificationOccurred("success");
-  report("Ответы отправлены");
+  setState("success", "Ответы отправлены — бот пришлёт отчёт");
 };
 
 const buyReport = () => {
@@ -96,4 +103,4 @@ form.addEventListener("input", scheduleSave);
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");
 
-report("Выберите ответы — черновик сохраняется");
+setState("empty", "Выберите ответы — черновик сохраняется");
