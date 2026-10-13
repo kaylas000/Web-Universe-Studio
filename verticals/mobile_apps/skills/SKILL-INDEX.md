@@ -13,5 +13,6 @@
 | `i18n-pass` | Локализация en+ru через i18n, без хардкода строк (К-14, B-04). | Собрать строки → Сверить ключи en/ru → Плюралы и форматы → Переводы → lint-slop |
 | `nav-deeplinks` | Нативные стеки и deep links (К-08, К-13). | Стек навигации → Схема приложения → Universal/app links → Обработка ссылки → Квота Q-05 |
 | `usability-heuristics` | Эвристики NN/g: статус, выход, ошибки, распознавание, справка (К-23). | Карта 10 эвристик → Статус (NetInfo) → Стек (выход) → Retry → Подписи → Справка (i18n) → Отчёт heuristics_report.md |
+| `typography-pass` | Типографика: базовый кегль ≥16, контент ≥14, интерлиньяж ≥20 (К-24). | Скан fontSize/lineHeight в App.mjs → Базовый ≥16 → Контент ≥14 → regexAbsent мелких → Точечные правки → Отчёт typography_report.md |
 
 Загрузчик — `core/loop-engine/skills.mjs`; рендер шаблонов — `core/loop-engine/template.mjs`.

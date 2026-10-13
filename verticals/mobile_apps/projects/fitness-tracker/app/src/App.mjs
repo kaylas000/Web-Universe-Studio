@@ -95,8 +95,8 @@ export function createState() {
 const item = (workout) =>
   [
     '<li class="workout">',
-    '<span class="workout__name" accessibilityLabel="' + workout.text + '">' + workout.text + "</span>",
-    '<button accessibilityLabel="' + i18n.t("remove") + '" accessibilityRole="button" data-action="remove" data-id="' + workout.id + '">×</button>',
+    '<span class="workout__name" fontSize={17} lineHeight={24} accessibilityLabel="' + workout.text + '">' + workout.text + "</span>",
+    '<button fontSize={16} lineHeight={22} accessibilityLabel="' + i18n.t("remove") + '" accessibilityRole="button" data-action="remove" data-id="' + workout.id + '">×</button>',
     "</li>",
   ].join("");
 
@@ -106,13 +106,13 @@ export function render(state, colorScheme) {
   return [
     '<SafeAreaView class="screen" data-theme="' + theme + '">',
     '<KeyboardAvoidingView behavior="padding">',
-    "<h1>" + i18n.t("title") + "</h1>",
-    '<ul class="workouts">' + list + "</ul>",
-    '<form class="compose">',
-    '<input class="compose__field" accessibilityLabel="' + i18n.t("add") + '" data-role="draft" minHeight={48} />',
-    '<button accessibilityLabel="' + i18n.t("add") + '" data-action="add" minHeight={48}>' + i18n.t("add") + "</button>",
+    "<h1 fontSize={24} lineHeight={33}>" + i18n.t("title") + "</h1>",
+    '<ul class="workouts" fontSize={17} lineHeight={24}>' + list + "</ul>",
+    '<form class="compose" fontSize={16} lineHeight={22}>',
+    '<input class="compose__field" fontSize={16} lineHeight={22} accessibilityLabel="' + i18n.t("add") + '" data-role="draft" minHeight={48} />',
+    '<button fontSize={16} lineHeight={22} accessibilityLabel="' + i18n.t("add") + '" data-action="add" minHeight={48}>' + i18n.t("add") + "</button>",
     "</form>",
-    '<button accessibilityLabel="' + i18n.t("help") + '" data-action="help" minHeight={48}>' + i18n.t("help") + "</button>",
+    '<button fontSize={16} lineHeight={22} accessibilityLabel="' + i18n.t("help") + '" data-action="help" minHeight={48}>' + i18n.t("help") + "</button>",
     "</KeyboardAvoidingView>",
     "</SafeAreaView>",
   ].join("");

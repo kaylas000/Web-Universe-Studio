@@ -1,0 +1,7 @@
+{# Фиксер · приём «typography-pass» #}
+Возврат с ворот (К-10): править только пункты V-24 из feedback.
+{{ feedback }}
+
+На каждый пункт — одна точечная правка атрибута fontSize/lineHeight
+в рендер-разметке. Затем:
+node scripts/validate.mjs projects/{{ project }} && node scripts/lint-slop.mjs projects/{{ project }}.

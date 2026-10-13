@@ -1,0 +1,9 @@
+{# Верификатор · приём «typography-pass» #}
+Проверить: {{ artifact }}
+
+Чек-лист (К-24, прокси V-24):
+- [ ] базовый кегль: fontSize={≥16} есть;
+- [ ] контент: минимум два элемента fontSize={≥14};
+- [ ] нет мелких кеглей fontSize={<14};
+- [ ] интерлиньяж lineHeight={≥20} минимум на двух, нет {<20}.
+Закрыть: node scripts/validate.mjs (V-24) + node scripts/lint-slop.mjs.

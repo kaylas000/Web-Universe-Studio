@@ -1,0 +1,24 @@
+name: typography-pass
+title: "Типографика (typography-pass)"
+description: >
+  Аудит типографики экрана: базовый кегль ≥ 16, контентный ≥ 14, интерлиньяж ≥ 20
+  (V-24, К-24). Артефакт не меняет — только верифицирует и возвращает точечные
+  правки атрибутов fontSize/lineHeight.
+source: "references/metadata/ref-15.yaml"
+takeaway: >
+  Кегль — это не данность шрифта, а явные атрибуты разметки: базовый ≥ 16,
+  контент ≥ 14, интерлиньяж ≥ 20; мелкие кегли и удушающее межстрочное рубятся
+  скриптом.
+inputs: [app, typography_report]
+outputs: [typography_report]
+steps:
+  - "Найти все fontSize/lineHeight в рендер-разметке App.mjs (V-24)"
+  - "Проверить базовый кегль: есть fontSize ≥ 16"
+  - "Проверить контент: минимум два элемента с fontSize ≥ 14"
+  - "Прогнать regexAbsent: нет fontSize < 14 и lineHeight < 20"
+  - "Точечные правки: где кегль мельче — поднять до базовых значений"
+  - "Зафиксировать typography_report.md"
+checks:
+  - "V-24 (allOf: кегль/интерлиньяж) из validate.mjs"
+  - "реальные pt/dp на тире: Flipper / Flutter DevTools"
+applies_to: [mobile_apps]

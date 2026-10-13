@@ -415,6 +415,43 @@
       ],
       "ok": "эвристики NN/g закрыты: системный статус (NetInfo/status), нативный стек (выход), предотвращение ошибок (retry), распознавание (подписи), справка (i18n help)",
       "fail": "провалена эвристика NN/g (К-23) · прокси: NetInfo/status, createNativeStackNavigator, attempts/retry, accessibilityLabel, i18n.t(\"help\") — карта в HEURISTICS.md"
+    },
+    {
+      "code": "V-24",
+      "title": "Типографика: кегль ≥16 базовый, контент ≥14, интерлиньяж ≥20 (К-24)",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "fontSize=\\s*\\{\\s*(1[6-9]|2\\d|3\\d)\\s*\\}",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "fontSize=\\s*\\{\\s*(1[4-9]|2\\d|3\\d)\\s*\\}",
+          "min": 2
+        },
+        {
+          "kind": "regexAbsent",
+          "path": "app/src/App.mjs",
+          "pattern": "fontSize=\\s*\\{\\s*1[0-3]\\s*\\}"
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "lineHeight=\\s*\\{\\s*(2\\d|3\\d)\\s*\\}",
+          "min": 2
+        },
+        {
+          "kind": "regexAbsent",
+          "path": "app/src/App.mjs",
+          "pattern": "lineHeight=\\s*\\{\\s*1[0-9]\\s*\\}"
+        }
+      ],
+      "ok": "типографика в нормах: базовый кегль ≥16, контент ≥14, нет мелких кеглей и удушающего межстрочного (V-24)",
+      "fail": "типографика вне норм (К-24) · прокси: fontSize={≥16} базовый, {≥14} контент (regexAbsent рубит {<14}), lineHeight={≥20}; реальные pt/dp меряет Flipper/Flutter DevTools на тире"
     }
   ]
 }
