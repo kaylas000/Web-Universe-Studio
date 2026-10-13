@@ -287,6 +287,45 @@
       "min": 4.5,
       "ok": "все пары текст/фон на светлой и тёмной темах Telegram проходят WCAG AA (≥ 4.5:1)",
       "fail": "есть пара текст/фон ниже 4.5:1 (К-21) · таблица токенов app/theme.json (пары contrast); расчёт по WCAG 2.1"
+    },
+    {
+      "code": "V-22",
+      "title": "Эвристики NN/g: статус, выход, распознавание, отклик, помощь",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "app/index.html",
+          "pattern": "role=\"status\"|aria-live",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/app.js",
+          "pattern": "BackButton",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/index.html",
+          "pattern": "<label|<button[^>]*>[^<]+</button>",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/app.js",
+          "pattern": "HapticFeedback",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/app.js",
+          "pattern": "openDocs|openHelp|openLink",
+          "min": 1
+        }
+      ],
+      "ok": "эвристики NN/g закрыты: системный статус, выход (BackButton), распознавание (подписи), отклик (haptic), вход в справку",
+      "fail": "провалена эвристика NN/g (К-22) · прокси: role/aria-live, BackButton, подписи <label>/<button>, HapticFeedback, вход в справку (openDocs/openHelp/openLink) — карта в HEURISTICS.md"
     }
   ]
 }

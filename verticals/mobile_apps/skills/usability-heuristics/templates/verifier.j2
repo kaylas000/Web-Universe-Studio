@@ -1,0 +1,10 @@
+{# Верификатор · приём «usability-heuristics» #}
+Проверить: {{ artifact }}
+
+Чек-лист (HEURISTICS.md, прокси V-23):
+- [ ] NetInfo/status — видимый системный статус (H1);
+- [ ] нативный стек навигации, выход доступен (H3);
+- [ ] retry/attempts у API (H5);
+- [ ] accessibilityLabel/semanticLabel на интерактиве (H6);
+- [ ] справка: i18n.t("help") + ключ в locales (H10).
+Закрыть: node scripts/validate.mjs (V-23) + node scripts/lint-slop.mjs (B-04, B-09, B-10).

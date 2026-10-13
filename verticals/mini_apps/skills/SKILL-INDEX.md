@@ -12,5 +12,6 @@
 | `payments` | Оплата через Telegram Payments (openInvoice/sendData) + HMAC-проверка initData. | Сценарий оплаты → openInvoice/sendData → Без внешних ссылок → HMAC-SHA256 в server.mjs → Проверка V-07/V-15 |
 | `viewport-adaptive` | Адаптация 320/375/420, safe area клавиатуры, viewportChanged. | Контрольные точки → media-запросы → env(safe-area-inset-bottom) → viewportChanged → --vh → Проверка V-01/V-05/V-06 |
 | `offline-worker` | Базовый offline через Service Worker + сохранение состояния. | Список оболочки → sw.js (cache-first) → регистрация → CloudStorage/sendData → Проверка V-12/V-13 |
+| `usability-heuristics` | Эвристики NN/g: статус, выход, распознавание, отклик, справка (К-22). | Карта 10 эвристик → Статус (aria-live) → Выход (BackButton) → Подписи → HapticFeedback → Справка через SDK → Отчёт heuristics-report.md |
 
 Загрузчик — `core/loop-engine/skills.mjs`; рендер шаблонов — `core/loop-engine/template.mjs`.

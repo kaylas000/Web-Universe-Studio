@@ -1,5 +1,6 @@
 /* tests/validate.test.mjs — самотест студии «Веб-студия (эталон)»: демо-проекты
-   обязаны пройти приёмку 20/20 (V-01…V-20), включая SEO-аудит, типографику и перфоманс. */
+   обязаны пройти приёмку 21/21 (V-01…V-21), включая SEO-аудит, типографику, перфоманс
+   и эвристики NN/g. */
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
@@ -12,8 +13,8 @@ const DEMOS = ["projects/pcpolimer", "projects/dezobrabotka", "projects/lazer-re
 const run = (script, project) => execFileSync(process.execPath, [script, project], { cwd: VERTICAL, encoding: "utf8" });
 
 for (const demo of DEMOS) {
-  test(`validate: ${demo} проходит приёмку 20/20`, () => {
-    assert.match(run("scripts/validate.mjs", demo), /ИТОГ: 20\/20 · exit 0/);
+  test(`validate: ${demo} проходит приёмку 21/21`, () => {
+    assert.match(run("scripts/validate.mjs", demo), /ИТОГ: 21\/21 · exit 0/);
   });
 
   test(`seo-audit: ${demo} чист`, () => {
@@ -26,5 +27,9 @@ for (const demo of DEMOS) {
 
   test(`lint-performance: ${demo} чист`, () => {
     assert.match(run("scripts/lint-performance.mjs", demo), /Бюджеты в норме/);
+  });
+
+  test(`lint-heuristics: ${demo} в норме`, () => {
+    assert.match(run("scripts/lint-heuristics.mjs", demo), /Эвристики NN\/g в норме/);
   });
 }

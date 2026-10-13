@@ -104,4 +104,6 @@ document.querySelector("#reset").addEventListener("click", () => {
   left = TOTAL;
   render();
 });
+/* К-22 (H10): справка — вход в документацию через SDK, а не мёртвый текст. */
+document.querySelector("#help").addEventListener("click", () => open("https://core.telegram.org/bots/webapps"));
 render();

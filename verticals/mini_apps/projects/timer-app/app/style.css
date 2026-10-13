@@ -38,6 +38,25 @@
   color: var(--text);
 }
 
+.timer__help {
+  min-height: 44px;
+  min-width: 44px;
+  margin-top: 1.25rem;
+  padding: 0.5rem 1rem;
+  border: 0;
+  background: none;
+  color: var(--button);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.timer__help:active,
+.timer__help:focus-visible {
+  color: var(--text);
+  outline: 2px solid var(--button);
+  outline-offset: 2px;
+}
+
 @media (max-width: 420px) {
   .timer__value { font-size: 3rem; }
 }

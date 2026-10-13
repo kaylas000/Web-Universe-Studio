@@ -1,0 +1,8 @@
+{# Кодер · приём «usability-heuristics» #}
+Собрать в {{ deliverable }} ({{ brief }}) проверяемое ядро эвристик NN/g:
+- системный статус: <p role="status" aria-live="polite"> рядом с живым состоянием;
+- свобода выхода: tg.BackButton.show(); tg.BackButton.onClick(() => tg.close());
+- распознавание: <label for> у полей, текстовые <button> вместо иконок без подписи;
+- отклик: tg.HapticFeedback.impactOccurred("light") на ключевом действии;
+- справка: кнопка → openDocs/openHelp/openLink (только SDK, без внешних ссылок).
+После правок прогнать V-22 и lint-slop (B-07/B-08); тексты — не штампы.

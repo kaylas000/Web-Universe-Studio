@@ -1,0 +1,8 @@
+{# Кодер · приём «usability-heuristics» #}
+Собрать в {{ deliverable }} ({{ brief }}) проверяемое ядро эвристик NN/g:
+- системный статус: NetInfo-слушатель сети и status-состояние загрузки;
+- свобода выхода: нативный стек (createNativeStackNavigator / go_router / NavigationStack);
+- предотвращение ошибок: retry (attempts) у API-вызовов;
+- распознавание: accessibilityLabel/semanticLabel на каждом интерактиве;
+- справка: кнопка с i18n.t("help") и ключ help в en.json/ru.json.
+Тексты — только через i18n (B-04); после правок прогнать V-23 и lint-slop.

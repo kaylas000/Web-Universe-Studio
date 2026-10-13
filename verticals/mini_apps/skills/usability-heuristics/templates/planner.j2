@@ -1,0 +1,14 @@
+{# Планировщик · приём «usability-heuristics» · карта эвристик NN/g #}
+Артефакт: {{ deliverable }}
+Задача: {{ brief }}
+Цели: {{ heuristics_targets }}
+
+План — пройти экран по 10 эвристикам (HEURISTICS.md):
+1. Системный статус: у живого статуса есть role="status"/aria-live (H1).
+2. Свобода выхода: BackButton.show()/onClick (H3).
+3. Распознавание: подписи <label> и текстовые кнопки (H6).
+4. Отклик на действие: HapticFeedback (H7).
+5. Помощь: вход в справку через SDK (H10).
+Проверить штатно: node scripts/validate.mjs (V-22) + node scripts/lint-slop.mjs.
+
+Законы: К-10, К-22.

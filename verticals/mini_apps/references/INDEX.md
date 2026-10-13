@@ -16,3 +16,4 @@
 | ref-10 | tma-ui-concept | references/sources.yaml#dribbble-tma | Концепт TMA-интерфейса — платформенная сетка плюс одна яркая деталь, а не перерисовка всего с нуля (dribbble: Telegram Mini App UI). |
 | ref-11 | tma-case | references/sources.yaml#behance-tma | Кейс мини-приложения убеждает метриками (установки, удержание), а не только скриншотами (behance: Mini app case study). |
 | ref-12 | contrast-ratio | references/sources.yaml#a11y-pass | Контраст текста к фону — не ниже 4.5:1 (WCAG 2.1 AA); пары темы выносятся в токены (app/theme.json) и проверяются расчётом, а не глазами. |
+| ref-13 | nng-heuristics | references/sources.yaml#nng-heuristics | Десять эвристик NN/g: видимость статуса, соответствие реальному миру, свобода и контроль, консистентность, предотвращение ошибок, распознавание вместо припоминания, гибкость, эстетика, восстановление после ошибки, справка; проверяемое ядро машинизируется прокси-сканом V-22. |

@@ -1,0 +1,13 @@
+{# Планировщик · приём «usability-heuristics» · карта эвристик NN/g #}
+Артефакт: {{ deliverable }}
+Задача: {{ brief }}
+
+План — пройти экран по 10 эвристикам (HEURISTICS.md, К-23):
+1. Системный статус: NetInfo/status — сеть и загрузка видны (H1).
+2. Свобода выхода: нативный стек навигации (H3).
+3. Предотвращение ошибок: retry у API-вызовов (H5).
+4. Распознавание: accessibilityLabel/semanticLabel (H6).
+5. Справка: кнопка с i18n.t("help") + ключ в locales (H10).
+Проверить штатно: node scripts/validate.mjs (V-23) + node scripts/lint-slop.mjs.
+
+Законы: К-10, К-23.

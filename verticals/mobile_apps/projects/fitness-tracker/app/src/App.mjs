@@ -112,6 +112,7 @@ export function render(state, colorScheme) {
     '<input class="compose__field" accessibilityLabel="' + i18n.t("add") + '" data-role="draft" minHeight={48} />',
     '<button accessibilityLabel="' + i18n.t("add") + '" data-action="add" minHeight={48}>' + i18n.t("add") + "</button>",
     "</form>",
+    '<button accessibilityLabel="' + i18n.t("help") + '" data-action="help" minHeight={48}>' + i18n.t("help") + "</button>",
     "</KeyboardAvoidingView>",
     "</SafeAreaView>",
   ].join("");

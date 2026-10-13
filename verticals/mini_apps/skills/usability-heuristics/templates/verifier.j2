@@ -1,0 +1,10 @@
+{# Верификатор · приём «usability-heuristics» #}
+Проверить: {{ artifact }}
+
+Чек-лист (HEURISTICS.md, прокси V-22):
+- [ ] role="status"/aria-live на живом статусе (H1);
+- [ ] BackButton.show()/onClick — из экрана можно выйти (H3);
+- [ ] подписи <label>/текстовые кнопки (H6);
+- [ ] HapticFeedback на ключевом действии (H7);
+- [ ] вход в справку через SDK (H10).
+Закрыть: node scripts/validate.mjs (V-22) + node scripts/lint-slop.mjs (B-07/B-08).

@@ -1,0 +1,27 @@
+name: usability-heuristics
+title: "Эвристики юзабилити NN/g (usability-heuristics)"
+description: >
+  Доводит экран до проверяемого ядра эвристик Нильсена: видимый системный
+  статус (NetInfo/status), свобода выхода (нативный стек), предотвращение
+  ошибок (retry у API), распознавание вместо припоминания (accessibilityLabel)
+  и вход в справку (i18n help). Артефакт правит точечно (К-10, К-23).
+source: "references/metadata/ref-14.yaml"
+takeaway: >
+  Десять эвристик NN/g сводятся к машине: статус, выход, ошибки, распознавание
+  и справка проверяются прокси-сканом (V-23); остальное — карта HEURISTICS.md
+  и артдиректор на G4.
+inputs: [app, heuristics_report]
+outputs: [heuristics_report]
+steps:
+  - "Сверить экран с картой 10 эвристик NN/g (HEURISTICS.md)"
+  - "Проверить системный статус: NetInfo/status — состояние сети и загрузки видны (H1)"
+  - "Проверить свободу выхода: нативный стек навигации (createNativeStackNavigator/go_router/NavigationStack) (H3)"
+  - "Проверить предотвращение ошибок: retry/attempts у API-вызовов (H5)"
+  - "Проверить распознавание: accessibilityLabel/semanticLabel на интерактиве (H6)"
+  - "Проверить справку: кнопка с i18n.t(\"help\") и ключ help в locales (H10)"
+  - "Прогнать lint-slop (B-04: тексты через i18n) и зафиксировать heuristics_report.md"
+checks:
+  - "V-23 (allOf: статус/стек/retry/подписи/справка) из validate.mjs"
+  - "HEURISTICS.md — карта эвристик и их прокси"
+  - "B-04 в lint-slop (хардкод строк в разметке) и B-09/B-10 (микрокопи ошибок)"
+applies_to: [mobile_apps]

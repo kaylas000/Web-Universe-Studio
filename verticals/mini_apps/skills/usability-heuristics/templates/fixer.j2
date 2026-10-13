@@ -1,0 +1,7 @@
+{# Фиксер · приём «usability-heuristics» #}
+Возврат с ворот (К-10): править только пункты V-22 из feedback, не перезапускать экран.
+{{ feedback }}
+
+На каждый пункт — одна точечная правка: атрибут статуса, вызов BackButton,
+подпись элемента, HapticFeedback, вход в справку. Затем:
+node scripts/validate.mjs projects/{{ project }} && node scripts/lint-slop.mjs projects/{{ project }}.

@@ -1,0 +1,7 @@
+{# Фиксер · приём «usability-heuristics» #}
+Возврат с ворот (К-10): править только пункты V-23 из feedback, не перезапускать экран.
+{{ feedback }}
+
+На каждый пункт — одна точечная правка: слушатель сети/статус, нативный стек,
+retry, accessibilityLabel, кнопка справки с i18n. Затем:
+node scripts/validate.mjs projects/{{ project }} && node scripts/lint-slop.mjs projects/{{ project }}.

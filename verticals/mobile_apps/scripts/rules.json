@@ -376,6 +376,45 @@
       "min": 4.5,
       "ok": "все пары текст/фон в светлой и тёмной темах проходят WCAG AA (≥ 4.5:1)",
       "fail": "есть пара текст/фон ниже 4.5:1 (К-22) · таблица токенов app/theme.json (пары contrast); расчёт по WCAG 2.1"
+    },
+    {
+      "code": "V-23",
+      "title": "Эвристики NN/g: статус, выход, ошибки, распознавание, справка",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "NetInfo|status:",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "createNativeStackNavigator|go_router|NavigationStack",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "attempts|retry",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "accessibilityLabel|semanticLabel|aria-label",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "i18n\\.t\\(\"help\"\\)",
+          "min": 1
+        }
+      ],
+      "ok": "эвристики NN/g закрыты: системный статус (NetInfo/status), нативный стек (выход), предотвращение ошибок (retry), распознавание (подписи), справка (i18n help)",
+      "fail": "провалена эвристика NN/g (К-23) · прокси: NetInfo/status, createNativeStackNavigator, attempts/retry, accessibilityLabel, i18n.t(\"help\") — карта в HEURISTICS.md"
     }
   ]
 }
