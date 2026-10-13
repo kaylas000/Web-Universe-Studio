@@ -6,14 +6,14 @@ kind: Vertical
 metadata:
   name: web_studio
   displayName: Веб-студия ЦЕХ (эталон)
-  description: Промышленная вёрстка сайтов: конституция К-01…К-25, 20 приёмов, motion-рецепты и анти-слоп.
-  version: "1.2.0"
+  description: Промышленная вёрстка сайтов: конституция К-01…К-26, 21 приём, motion-рецепты и анти-слоп.
+  version: "1.3.0"
   domain: web
-  tags: [web, landing, industrial, motion, usability-heuristics]
+  tags: [web, landing, industrial, motion, usability-heuristics, forms]
   deliverable: site
   checks: [validate, lint-slop, lint-copy, lint-marketing]
 spec:
-  skills: [scroll-story, case-storytelling, cinema-intro, comparison-matrix, content-fit, contrast-states, crop, frames-to-motion, industrial-copy, industrial-passport, interactive-data, micro-interactions, poster-type, proof-engine, ux-states, ux-writing, usability-heuristics, value-calculator, webgpu-codevideo, broken-grid]
+  skills: [scroll-story, case-storytelling, cinema-intro, comparison-matrix, content-fit, contrast-states, crop, forms, frames-to-motion, industrial-copy, industrial-passport, interactive-data, micro-interactions, poster-type, proof-engine, ux-states, ux-writing, usability-heuristics, value-calculator, webgpu-codevideo, broken-grid]
   validators: [constitution, anti_slop, schema, a11y_contrast, touch_target, llm_judge]
   gates: [G1, G2, G3, G4]
   tools: [validate_artifact, lint_slop, lint_copy, lint_marketing]

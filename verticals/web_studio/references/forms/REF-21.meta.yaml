@@ -1,0 +1,13 @@
+id: REF-21
+source: baymard.com/form-design
+style: [forms, conversion]
+techniques:
+  - точка JS-подключения — id/data-form у формы, обработчик на элементе
+  - отправляемость — name у каждого поля (input/select/textarea)
+  - конверсия — data-analytics-event на кнопке type="submit" (К-16)
+  - статус — role="status"/aria-live + data-state (Error → Loading → Success)
+  - отправка без перезагрузки — preventDefault + submit-обработчик в app.js
+motion: []
+palette: []
+takeaway: «Форма сдаётся чек-листом состояний: имя поля, аналитика события, скринридерный статус и живой отклик — иначе это не форма, а декоративный элемент.»
+screenshot: pending

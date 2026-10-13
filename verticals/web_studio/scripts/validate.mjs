@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* ЦЕХ validate.mjs — Node ≥18, ноль npm-зависимостей, exit 0/1.
    Запуск: node scripts/validate.mjs projects/<имя>
-   Отчёт детерминирован: коды V-01…V-21 + evidence. */
+   Отчёт детерминирован: коды V-01…V-22 + evidence. */
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 
@@ -234,6 +234,17 @@ const marketing = read(join(project, "MARKETING.md"));
     clean = false;
   }
   add("V-21", "Эвристики NN/g: lang, навигация, токены, alt, контакт (К-25)", clean, clean ? "эвристики в норме" : "нарушение эвристик NN/g (см. lint-heuristics.mjs)");
+}
+/* V-22 — lint-form (Формы и состояния динамики К-26) */
+{
+  const { execSync } = await import("node:child_process");
+  let clean = true;
+  try {
+    execSync(`node scripts/lint-form.mjs ${project}`, { cwd: root, stdio: "pipe" });
+  } catch (e) {
+    clean = false;
+  }
+  add("V-22", "Формы и состояния динамики: id/name, аналитика, статус, JS-обработка (К-26)", clean, clean ? "формы и состояния в норме" : "нарушение форм/состояний (см. lint-form.mjs)");
 }
 
 /* отчёт */

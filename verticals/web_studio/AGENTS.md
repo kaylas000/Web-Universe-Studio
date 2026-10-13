@@ -2,9 +2,9 @@
 
 ## Порядок чтения (обязателен)
 
-1. CONSTITUTION.md — закон цеха (К-01…К-25).
+1. CONSTITUTION.md — закон цеха (К-01…К-26).
 2. references/INDEX.md — что есть в архиве.
-3. skills/SKILL-INDEX.md — какими приёмами работаем (SK-01…SK-20).
+3. skills/SKILL-INDEX.md — какими приёмами работаем (SK-01…SK-21).
 4. motion/RECIPES.md + easing-curves.json — как двигается.
 5. anti-slop/BANNED.md + QUOTAS.md — чего нельзя и сколько можно.
 6. gates/G1–G4 — как принимается.
@@ -55,6 +55,6 @@ node core/loop-engine/cli.mjs projects/<имя> --validator ceh_project
 
 ## Definition of Done
 
-1. Цикл сошёлся: `node core/loop-engine/cli.mjs projects/<имя> --validator ceh_project` → exit 0 (validate.mjs V-01…V-21 зелёный, линтеры чисты), evidence сохранён в `workspace/loop-result.json`.
+1. Цикл сошёлся: `node core/loop-engine/cli.mjs projects/<имя> --validator ceh_project` → exit 0 (validate.mjs V-01…V-22 зелёный, линтеры чисты), evidence сохранён в `workspace/loop-result.json`.
 2. REVIEW.md: вердикт со ссылками на пункты CONSTITUTION.
 3. Удачное изъято в архив: приём → references/, скил → skills/, рецепт → motion/ (К-11).
