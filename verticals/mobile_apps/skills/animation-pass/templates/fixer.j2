@@ -1,0 +1,9 @@
+{# Фиксер · приём «animation-pass» #}
+Возврат с ворот (К-10): править только пункты V-25 из feedback.
+{{ feedback }}
+
+Типичные правки:
+- анимация без нативного драйвера — добавить useNativeDriver: true;
+- нет кадровой модели — декларировать motion через rAF/Easing;
+- setTimeout ≥ 500 мс — заменить на таймлайн анимации.
+Затем: node scripts/validate.mjs projects/{{ project }} && node scripts/lint-slop.mjs projects/{{ project }}.

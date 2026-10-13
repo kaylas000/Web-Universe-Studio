@@ -1,0 +1,9 @@
+{# Верификатор · приём «animation-pass» #}
+Проверить: {{ artifact }}
+
+Чек-лист (К-25, прокси V-25):
+- [ ] декларация анимации: Animated.timing/spring в App.mjs;
+- [ ] нативный драйвер: useNativeDriver: true;
+- [ ] кадровая модель: requestAnimationFrame или Easing;
+- [ ] нет блокировок: setTimeout ≥ 500 мс отсутствует.
+Закрыть: node scripts/validate.mjs (V-25) + node scripts/lint-slop.mjs.

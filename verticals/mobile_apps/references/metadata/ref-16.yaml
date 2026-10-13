@@ -1,0 +1,4 @@
+id: ref-16
+style: animation-pass
+source: references/sources.yaml#rn-animations
+takeaway: Анимация на 60fps — это нативный драйвер и кадровая модель: Animated.timing/spring с useNativeDriver: true, requestAnimationFrame/Easing; длинные setTimeout на главном потоке оборачиваются тормозами (V-25).

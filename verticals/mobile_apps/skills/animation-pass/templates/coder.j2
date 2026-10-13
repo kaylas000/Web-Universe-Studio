@@ -1,0 +1,7 @@
+{# Кодер · приём «animation-pass» #}
+Собрать в {{ deliverable }} ({{ brief }}) анимации на нативном драйвере:
+- Animated.timing(new Animated.Value(0), { toValue: 1, duration: 240,
+  easing: Easing.out(Easing.quad), useNativeDriver: true });
+- кадровая модель: requestAnimationFrame/Easing;
+- никаких setTimeout ≥ 500 мс в путях анимации (regexAbsent).
+После правок прогнать V-25; блокирующие задержки — нарушение К-25.

@@ -5,14 +5,14 @@ kind: Vertical
 metadata:
   name: mobile_apps
   displayName: "Студия мобильных приложений"
-  description: "Собирает экран мобильного приложения: манифест, модуль экрана с состоянием и разметкой, доступные подписи, типографика и README."
-  version: "1.4.0"
+  description: "Собирает экран мобильного приложения: манифест, модуль экрана с состоянием и разметкой, доступные подписи, типографика, анимации 60fps и README."
+  version: "1.5.0"
   domain: mobile_apps
-  tags: [screen-composer, a11y-pass, offline-queue, store-release, i18n-pass, nav-deeplinks, usability-heuristics, typography-pass]
+  tags: [screen-composer, a11y-pass, offline-queue, store-release, i18n-pass, nav-deeplinks, usability-heuristics, typography-pass, animation-pass]
   deliverable: app
   checks: [validate, lint-slop]
 spec:
-  skills: [screen-composer, a11y-pass, offline-queue, store-release, i18n-pass, nav-deeplinks, usability-heuristics, typography-pass]
+  skills: [screen-composer, a11y-pass, offline-queue, store-release, i18n-pass, nav-deeplinks, usability-heuristics, typography-pass, animation-pass]
   validators: [constitution, anti_slop, schema]
   gates: [G1-direction, G2-structure, G3-artifact, G4-final]
   tools: [validate_artifact, lint_slop]

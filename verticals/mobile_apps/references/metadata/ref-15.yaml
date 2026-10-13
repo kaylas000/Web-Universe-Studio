@@ -1,0 +1,4 @@
+id: ref-15
+style: typography-pass
+source: references/sources.yaml#material-typography
+takeaway: Типографика задаётся явными атрибутами разметки: базовый кегль ≥ 16, контент ≥ 14, интерлиньяж ≥ 20; мелкие кегли и удушающее межстрочное — нарушение норм (V-24).

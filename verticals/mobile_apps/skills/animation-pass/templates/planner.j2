@@ -1,0 +1,12 @@
+{# Планировщик · приём «animation-pass» #}
+Артефакт: {{ deliverable }}
+Задача: {{ brief }}
+
+План — собрать экран с анимациями 60fps (К-25):
+1. Декларация анимации: Animated.timing/spring в App.mjs.
+2. Нативный драйвер: useNativeDriver: true (60fps без JS-кадра).
+3. Кадровая модель: requestAnimationFrame или Easing.
+4. Запрет блокировок: нет setTimeout ≥ 500 мс на главном потоке.
+Проверить штатно: node scripts/validate.mjs (V-25) + node scripts/lint-slop.mjs.
+
+Закон: К-25.

@@ -1,5 +1,5 @@
 /* Экран заметок: 4 состояния, safe area, тёмная тема, i18n, offline, биометрия. */
-import { KeyboardAvoidingView } from "react-native";
+import { Animated, Easing, KeyboardAvoidingView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import NetInfo from "@react-native-community/netinfo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -74,6 +74,18 @@ export async function unlockOnDemand() {
 export const linking = {
   prefixes: ["notes://", "https://notes.example.com"],
   config: { screens: {} },
+};
+
+/* Анимации 60fps (К-25): нативный драйвер и событийная модель кадров —
+   без блокирующих задержек главного потока (нет длинных setTimeout). */
+const motion = {
+  appear: Animated.timing(new Animated.Value(0), {
+    toValue: 1,
+    duration: 240,
+    easing: Easing.out(Easing.quad),
+    useNativeDriver: true,
+  }),
+  schedule: (fn) => requestAnimationFrame(fn),
 };
 
 export function createState() {

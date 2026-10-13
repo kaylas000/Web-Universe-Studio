@@ -72,7 +72,7 @@
 | SEO (мета, заголовки, indexnow) | ✅ V-18 | — | — | скрипт |
 | Тёмная тема (themeParams / dark mode) | — | ✅ V-03 | ✅ V-05 | validate |
 | Offline/очередь запросов | ◐ | ✅ V-12 | ✅ V-07 | skill |
-| Анимации 60fps / по скроллу | ✅ (motion) | ✖ **P2** | ✖ **P1** | skill + lint |
+| Анимации 60fps / по скроллу | ✅ (motion) | ✖ **P2** | ✅ V-25 | skill + lint |
 | Пустые состояния с подсказкой | ◐ | ✅ V-19 (+B-09) | ✅ V-04 | skill + validate |
 
 ## 5. Что добавить каждой студии
@@ -127,6 +127,10 @@
   контент `{≥14}` минимум на двух элементах, интерлиньяж `lineHeight={≥20}`; `regexAbsent`
   рубит мелкие кегли (`{<14}`) и удушающее межстрочное (`{<20}`). Демо задают явную
   типографику в рендер-разметке (скилл `typography-pass`, ref-15).
+- ✅ **P1. Анимации 60fps** — выполнен: V-25 (kind `allOf`): декларация `Animated.timing`
+  + `useNativeDriver: true` (60fps нативным драйвером) + кадровая модель
+  `requestAnimationFrame`/`Easing`; `regexAbsent` рубит блокирующие `setTimeout ≥ 500 мс`.
+  Демо задают декларацию движения `motion` (скилл `animation-pass`, ref-16).
 
 ## 8. Итог реализации по факту (обновление 2026-10)
 
@@ -171,7 +175,7 @@
 | mobile_apps | статья К-23, скилл, карта HEURISTICS.md, ref-14, кнопка помощи в демо | CONSTITUTION.md, skills/, references/ |
 
 Демо-проекты всех трёх студий приведены к зелёной приёмке (`validate` 22/22 web, 23/23 mini,
-24/24 mobile); самотесты студий зелёные (web 18, mini 10, mobile 3). Правило `themeContrast`
+25/25 mobile); самотесты студий зелёные (web 18, mini 10, mobile 3). Правило `themeContrast`
 покрыто негативным самотестом (серая пара #777/#fff ≈ 4.48:1 рушит приёмку) в обеих студиях.
 
 **Четвёртый проход (P0 web: формы и состояния динамики)** — закрыт остаток P0 web.
@@ -196,7 +200,14 @@
 | mini_apps | конверсия: одна цель (MainButton единожды), конкретика цифрами | V-23 · rules.json (allOf: regexAtLeast + regexAbsent) |
 | mini_apps | статья К-23 + ТЗ §9.6 (К-01…К-23), скилл conversion, ref-14 (baymard CTA) | CONSTITUTION.md, skills/, references/ |
 
-Остаток «✖/◐» в §4-§5 — следующая очередь: анимации mini/mobile, i18n web,
+**Седьмой проход (P1 mobile: анимации 60fps)** — закрыт остаток анимаций mobile.
+
+| Студия | Что добавлено | Код/файл |
+|---|---|---|
+| mobile_apps | анимации 60fps: нативный драйвер (Animated + useNativeDriver), rAF/Easing, запрет setTimeout ≥500 мс | V-25 · rules.json (allOf: regexAtLeast + regexAbsent) |
+| mobile_apps | статья К-25 + ТЗ §9.7 (К-01…К-25), скилл animation-pass, ref-16 (rn-animations), декларация motion в демо | CONSTITUTION.md, skills/, references/, projects/ |
+
+Остаток «✖/◐» в §4-§5 — следующая очередь (P2): анимации mini, i18n web,
 safe-area детально (mobile), конверсия mobile.
 
 ## 6. Как это даёт «минимум коррекций»

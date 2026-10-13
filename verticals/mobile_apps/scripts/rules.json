@@ -452,6 +452,38 @@
       ],
       "ok": "типографика в нормах: базовый кегль ≥16, контент ≥14, нет мелких кеглей и удушающего межстрочного (V-24)",
       "fail": "типографика вне норм (К-24) · прокси: fontSize={≥16} базовый, {≥14} контент (regexAbsent рубит {<14}), lineHeight={≥20}; реальные pt/dp меряет Flipper/Flutter DevTools на тире"
+    },
+    {
+      "code": "V-25",
+      "title": "Анимации 60fps: нативный драйвер, кадровая модель, без блокировок (К-25)",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "Animated\\.(timing|spring|parallel|sequence|event)\\(",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "useNativeDriver:\\s*true",
+          "min": 1
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/src/App.mjs",
+          "pattern": "requestAnimationFrame|Easing\\.",
+          "min": 1
+        },
+        {
+          "kind": "regexAbsent",
+          "path": "app/src/App.mjs",
+          "pattern": "setTimeout\\([\\s\\S]{0,120}?[5-9]\\d\\d\\)|setTimeout\\([\\s\\S]{0,120}?\\d{4,}\\)"
+        }
+      ],
+      "ok": "анимации в 60fps: нативный драйвер (useNativeDriver), кадровая модель rAF/Easing, без блокирующих задержек главного потока (V-25)",
+      "fail": "анимации вне норм (К-25) · прокси: Animated.timing + useNativeDriver: true + requestAnimationFrame/Easing (regexAbsent рубит setTimeout ≥500мс); 60fps на тире меряет Profiler"
     }
   ]
 }

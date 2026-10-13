@@ -60,3 +60,7 @@ sources:
     title: "mobile-typography"
     source: "references/sources.yaml#material-typography"
     takeaway: "Типографика задаётся явными атрибутами: базовый кегль ≥ 16, контент ≥ 14, интерлиньяж ≥ 20; мелкие кегли и удушающее межстрочное — нарушение норм (V-24)."
+  - id: ref-16
+    title: "rn-animations"
+    source: "references/sources.yaml#rn-animations"
+    takeaway: "Анимация на 60fps — нативный драйвер и кадровая модель: Animated.timing/spring с useNativeDriver: true, requestAnimationFrame/Easing; длинные setTimeout на главном потоке — тормоза (V-25)."

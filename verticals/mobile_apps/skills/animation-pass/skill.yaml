@@ -1,0 +1,23 @@
+name: animation-pass
+title: "Анимации 60fps (animation-pass)"
+description: >
+  Аудит анимаций экрана: нативный драйвер (Animated.timing + useNativeDriver: true),
+  кадровая модель requestAnimationFrame/Easing и отсутствие блокирующих setTimeout ≥ 500 мс
+  на главном потоке (V-25, К-25). Артефакт не меняет — только верифицирует и возвращает
+  точечные правки деклараций движения.
+source: "references/metadata/ref-16.yaml"
+takeaway: >
+  Анимация на 60fps — это нативный драйвер и кадровая модель: Animated.timing с
+  useNativeDriver: true, rAF/Easing; длинные setTimeout на главном потоке — тормоза.
+inputs: [app, animation_report]
+outputs: [animation_report]
+steps:
+  - "Найти декларации анимаций в App.mjs (Animated.timing/spring)"
+  - "Проверить нативный драйвер: useNativeDriver: true"
+  - "Проверить кадровую модель: requestAnimationFrame или Easing"
+  - "Прогнать regexAbsent: нет setTimeout ≥ 500 мс"
+  - "Зафиксировать animation_report.md"
+checks:
+  - "V-25 (allOf: нативный драйвер + кадровая модель) из validate.mjs"
+  - "60fps на тире: Profiler (JS-кадр ≤ 8 мс)"
+applies_to: [mobile_apps]

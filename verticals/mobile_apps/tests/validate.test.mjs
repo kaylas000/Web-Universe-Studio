@@ -15,7 +15,7 @@ const DEMO = "projects/notes-app";
 const run = (script) => execFileSync(process.execPath, [script, DEMO], { cwd: VERTICAL, encoding: "utf8" });
 
 test("validate: демо-проект проходит приёмку", () => {
-  assert.match(run("scripts/validate.mjs"), /ИТОГ: 24\/24 · exit 0/);
+  assert.match(run("scripts/validate.mjs"), /ИТОГ: 25\/25 · exit 0/);
 });
 
 test("lint-slop: демо-проект чист", () => {
