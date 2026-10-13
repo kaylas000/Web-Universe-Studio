@@ -7,7 +7,7 @@ metadata:
   name: web_studio
   displayName: Веб-студия ЦЕХ (эталон)
   description: Промышленная вёрстка сайтов: конституция К-01…К-21, 16 приёмов, motion-рецепты и анти-слоп.
-  version: "1.0.0"
+  version: "1.1.0"
   domain: web
   tags: [web, landing, industrial, motion]
   deliverable: site

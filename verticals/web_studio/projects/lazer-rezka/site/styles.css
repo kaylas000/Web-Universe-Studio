@@ -421,7 +421,7 @@
   .field { display: flex; flex-direction: column; gap: 6px; }
   .field--wide { grid-column: 1 / -1; }
   .field > label {
-    font-size: 11px;
+    font-size: 14px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: var(--ink-soft);
@@ -605,13 +605,13 @@
     align-items: center;
     gap: var(--s3);
     min-height: 34px;
-    font-size: 12px;
+    font-size: 14px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--paper-mid);
     transition: color 0.3s var(--curve-brake), transform 0.3s var(--curve-brake);
   }
-  .rail__idx a b { font-family: var(--font-display); font-weight: 700; font-size: 12px; }
+  .rail__idx a b { font-family: var(--font-display); font-weight: 700; font-size: 14px; }
   .rail__idx a::after { content: ""; flex: 1; height: 1px; background: var(--line-dark); }
   .rail__idx a:hover,
   .rail__idx a[aria-current="true"] { color: var(--cut); transform: translateX(3px); }

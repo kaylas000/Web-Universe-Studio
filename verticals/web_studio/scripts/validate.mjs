@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /* ЦЕХ validate.mjs — Node ≥18, ноль npm-зависимостей, exit 0/1.
    Запуск: node scripts/validate.mjs projects/<имя>
-   Отчёт детерминирован: коды V-01…V-17 + evidence. */
+   Отчёт детерминирован: коды V-01…V-20 + evidence. */
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 
@@ -190,6 +190,39 @@ const marketing = read(join(project, "MARKETING.md"));
     clean = false;
   }
   add("V-17", "Style Variance Engine: фиксация Архетипа на G1", clean, clean ? "стилистический архетип зафиксирован на G1" : "отсутствует выбор Архетипа в DIRECTION.md");
+}
+/* V-18 — seo-audit (SEO: мета, canonical, OG, JSON-LD, контент К-22) */
+{
+  const { execSync } = await import("node:child_process");
+  let clean = true;
+  try {
+    execSync(`node scripts/seo-audit.mjs ${project}`, { cwd: root, stdio: "pipe" });
+  } catch (e) {
+    clean = false;
+  }
+  add("V-18", "SEO: title/description, canonical, OG, JSON-LD, ≥300 слов (К-22)", clean, clean ? "SEO-аудит зелёный" : "замечания seo-audit.mjs (см. вывод)");
+}
+/* V-19 — lint-typography (Типографические минимумы К-23) */
+{
+  const { execSync } = await import("node:child_process");
+  let clean = true;
+  try {
+    execSync(`node scripts/lint-typography.mjs ${project}`, { cwd: root, stdio: "pipe" });
+  } catch (e) {
+    clean = false;
+  }
+  add("V-19", "Типографика: базовый кегль ≥16px, интерлиньяж ≥1.4 (К-23)", clean, clean ? "типографические минимумы соблюдены" : "контентный текст мельче минимумов");
+}
+/* V-20 — lint-performance (Перфоманс-бюджеты К-24) */
+{
+  const { execSync } = await import("node:child_process");
+  let clean = true;
+  try {
+    execSync(`node scripts/lint-performance.mjs ${project}`, { cwd: root, stdio: "pipe" });
+  } catch (e) {
+    clean = false;
+  }
+  add("V-20", "Перфоманс: размеры img, lazy, font-display: swap (К-24)", clean, clean ? "бюджеты в норме" : "нарушение перфоманс-бюджетов");
 }
 
 /* отчёт */

@@ -1,43 +1,18 @@
 <!DOCTYPE html>
-<!-- ============================================================
-  ШАБЛОН ПОСАДОЧНОЙ СТРАНИЦЫ ПО ЛОКАЦИИ (первый экземпляр — Химки).
-  Для нового города скопируйте файл в evakuator-<город>.html и замените:
-
-  1. <head>:
-     — <title>, <meta name="description">, <meta name="robots">
-     — <link rel="canonical">, og:title / og:description / og:url
-     — JSON-LD LocalBusiness: url, description, areaServed (город), priceRange
-     — JSON-LD FAQPage: ответы, где упоминается город
-  2. Копирайт по странице:
-     — <p class="kicker"> (hero, строка «Химки · Москва · область»)
-     — <h1 class="hero__title"> (H1 — запрос города)
-     — <p class="hero__lede"> (что и как приезжаем)
-     — <div class="plate"> → <dl class="plate__fields"> поле «Зона»
-     — секция «Зона выезда» → <ul class="zone__list"> (города выезда)
-     — <details> в FAQ, если нужен ответ про районы города
-     — <ul class="contact">: адрес базы
-     — <footer> → «Эвакуация по городам»
-  3. Служебное:
-     — site/sitemap.xml: <loc> нового URL
-     — SEO.md: строка в page_seo_manifest
-     — SOURCES.md: решение → источник (К-02)
-     — версия ассетов styles.css/app.js: бамп ?v=
-  События аналитики data-analytics-event сквозные для всех посадочных.
-============================================================ -->
 <html lang="ru">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>document.documentElement.className += " js";</script>
-<title>Эвакуатор Химки — вызов от 5 000 ₽, круглосуточно</title>
+<title>Эвакуатор Химки — вызов от 5 000 ₽, работаем круглосуточно</title>
 <meta name="description" content="Срочная эвакуация в Химках круглосуточно: сдвижная платформа с лебёдкой, выезд до 10 т. Подача от 31 минуты, цена до выезда. Диспетчер: +7 977 174-20-50">
 <meta name="robots" content="index,follow">
 <meta name="theme-color" content="#1E1E1E">
-<link rel="canonical" href="https://evakuator-khimki.ru/evakuator-himki.html">
+<link rel="canonical" href="https://evakuator-khimki.ru/evakuator-himki/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Эвакуатор Химки — вызов от 5 000 ₽, круглосуточно">
 <meta property="og:description" content="Поломка, ДТП, перегон. Сдвижная платформа с лебёдкой, до 10 т. Подача от 31 минуты по Химкам и Ховрино.">
-<meta property="og:url" content="https://evakuator-khimki.ru/evakuator-himki.html">
+<meta property="og:url" content="https://evakuator-khimki.ru/evakuator-himki/">
 <meta property="og:locale" content="ru_RU">
 <meta property="og:image" content="https://evakuator-khimki.ru/photo-og.svg">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/golos-text-var-cyrillic.woff2" integrity="sha384-6+dONtMW+kUYM5VhOzhSXKHEYdFvc10LJIrwg11w7gD/+2cENzugPPu8rkonD4Et">

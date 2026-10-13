@@ -318,14 +318,14 @@
     align-items: center;
     gap: 10px;
     min-height: 30px;
-    font-size: 13.5px;
+    font-size: 14px;
     color: var(--muted-dark);
     border-left: 3px solid transparent;
     padding-left: 8px;
   }
   .plate__idx a b {
     font-family: var(--display);
-    font-size: 12px;
+    font-size: 14px;
     letter-spacing: 0.08em;
     color: var(--muted-dark);
   }
@@ -985,7 +985,7 @@
     min-height: 44px;
     display: inline-flex;
     align-items: center;
-    font-size: 13px;
+    font-size: 14px;
     border-bottom: 1px solid transparent;
     transition: border-color 200ms var(--curve-drive), color 200ms var(--curve-drive);
   }

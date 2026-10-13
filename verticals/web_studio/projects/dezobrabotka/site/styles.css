@@ -470,7 +470,7 @@ html.js [data-reveal].is-live .mega-in { transform: translateY(0); filter: blur(
 }
 .calc-label {
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.2em;
   color: var(--ink-64);
   font-weight: 700;
