@@ -44,3 +44,7 @@ sources:
     title: "tma-case"
     source: "references/sources.yaml#behance-tma"
     takeaway: "Кейс мини-приложения убеждает метриками (установки, удержание), а не только скриншотами (behance: Mini app case study)."
+  - id: ref-12
+    title: "contrast-ratio"
+    source: "references/sources.yaml#a11y-pass"
+    takeaway: "Контраст текста к фону — не ниже 4.5:1 (WCAG 2.1 AA); пары темы выносятся в токены (app/theme.json) и проверяются расчётом, а не глазами."

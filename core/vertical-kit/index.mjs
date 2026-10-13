@@ -350,6 +350,27 @@ export function evalRule(projectDir, rule) {
       if (nums.length < Number(rule.min ?? 1)) return false;
       return new Set(nums).size === nums.length;
     }
+    case "themeContrast": {
+      // WCAG AA (C-COMMON-03): все пары текст/фон в каждой теме обязаны проходить порог
+      // контраста. Таблица токенов — app/theme.json: { themes: { light: {...}, dark: {...} },
+      // contrast: [ { fg, bg, min? } ] }. Цвета — #rgb/#rrggbb в полях темы.
+      const data = readJson(read(rule.path));
+      if (data === null || typeof data !== "object") return false;
+      const themes = data.themes && typeof data.themes === "object" ? Object.values(data.themes) : [];
+      const pairs = Array.isArray(data.contrast) ? data.contrast : Array.isArray(data.pairs) ? data.pairs : [];
+      if (themes.length === 0 || pairs.length === 0) return false;
+      const fallbackMin = Number(rule.min ?? 4.5);
+      for (const theme of themes) {
+        if (theme === null || typeof theme !== "object") return false;
+        for (const pair of pairs) {
+          const fg = hexToRgb(theme[String(pair.fg)]);
+          const bg = hexToRgb(theme[String(pair.bg)]);
+          if (fg === null || bg === null) return false;
+          if (contrastRatio(fg, bg) < Number(pair.min ?? fallbackMin)) return false;
+        }
+      }
+      return true;
+    }
     default:
       return false;
   }
@@ -405,6 +426,34 @@ function countRuSyllables(word) {
     .toLowerCase()
     .match(/[аеёиоуыэюя]/g);
   return Math.max(1, vowels ? vowels.length : Math.ceil(String(word).length / 3));
+}
+
+/** #rgb/#rrggbb → [r,g,b]; null — если значение не hex-цвет. */
+function hexToRgb(value) {
+  if (typeof value !== "string") return null;
+  let c = value.trim().replace(/^#/, "");
+  if (/^[0-9a-fA-F]{3}$/.test(c)) c = c.split("").map((x) => x + x).join("");
+  if (!/^[0-9a-fA-F]{6}$/.test(c)) return null;
+  const num = parseInt(c, 16);
+  return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+}
+
+/** Относительная яркость sRGB (WCAG 2.1, 1.4.3). */
+export function relativeLuminance([r, g, b]) {
+  const [rl, gl, bl] = [r, g, b].map((v) => {
+    const s = v / 255;
+    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * rl + 0.7152 * gl + 0.0722 * bl;
+}
+
+/** Коэффициент контраста двух цветов по WCAG 2.1: (Lmax+0.05)/(Lmin+0.05). */
+export function contrastRatio(rgb1, rgb2) {
+  const l1 = relativeLuminance(rgb1);
+  const l2 = relativeLuminance(rgb2);
+  const max = Math.max(l1, l2);
+  const min = Math.min(l1, l2);
+  return (max + 0.05) / (min + 0.05);
 }
 
 /** Проверка вложенного ключа «a.b.c» (массивы считаются присутствующими, если непусты). */

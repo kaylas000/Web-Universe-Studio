@@ -6,7 +6,7 @@ metadata:
   name: mini_apps
   displayName: "Студия мини-приложений"
   description: "Собирает Telegram/VK Mini Apps: магазины внутри Telegram, сервисы записи, мини-игры, дашборды. Стек React/Vue + Telegram WebApp SDK / VK Bridge; артефакт — лёгкий бандл app/ (< 300KB gzip), нативные элементы SDK, темы theme_params, safe area, Telegram Payments."
-  version: "2.2.0"
+  version: "2.3.0"
   domain: mini_apps
   tags: [single-page-app, a11y-pass, telegram-sdk, payments, viewport-adaptive, offline-worker]
   deliverable: app

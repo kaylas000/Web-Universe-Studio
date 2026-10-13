@@ -1,2 +1,8 @@
 {# Верификатор: сверяет артефакт с законами студии #}
 Проверить: {{ artifact }}
+
+Чек-лист a11y:
+- [ ] тач-таргеты ≥ 44/48 (V-03);
+- [ ] подписи accessibilityLabel/semanticLabel (V-11);
+- [ ] контраст пар текст/фон ≥ 4.5:1 (WCAG AA) в светлой/тёмной темах — app/theme.json (V-22).
+Закрыть штатными скриптами: node scripts/validate.mjs && node scripts/lint-slop.mjs.

@@ -14,11 +14,12 @@ outputs:
 steps:
   - "Прогнать скан: интерактивные элементы, role, aria-live, lang, порядок tab"
   - "Проверить тач-таргеты ≥ 44×44px и отсутствие :hover в одиночку (B-01)"
-  - "Проверить контраст на светлой/тёмной темах Telegram (var(--tg-theme-*))"
+  - "Проверить контраст пар текст/фон ≥ 4.5:1 (WCAG AA) на светлой/тёмной темах Telegram — таблица app/theme.json (К-21)"
   - "Проверить: фокус-стиль :focus-visible есть у каждого интерактивного элемента"
   - "Зафиксировать вывод в a11y-report.md"
 checks:
   - "V-11 (тач-таргеты) и V-14 (popup вместо alert) из validate.mjs"
+  - "V-21 (контраст ≥ 4.5:1 по app/theme.json) из validate.mjs"
   - "B-01 отсутствие :hover без :active из slop.json"
 applies_to:
   - mini_apps

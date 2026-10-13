@@ -16,3 +16,4 @@
 | ref-10 | store-preview | references/sources.yaml#scrnshts | Превью в сторе — маркетинговые скриншоты 6.5″ и 5.5″ как продающая история, а не снимок экрана (scrnshts.club). |
 | ref-11 | nav-patterns | references/sources.yaml#uigarage | Навигацию выбирай из проверенных паттернов (Tab Bar, Navigation, Cards), а не изобретай с нуля (uigarage.net). |
 | ref-12 | mobile-components | references/sources.yaml#collectui-mobile | Компонент мобильного экрана берётся из реальных паттернов (фильтр Mobile), а не рисуется с нуля (collectui.com). |
+| ref-13 | contrast-ratio | references/sources.yaml#a11y-pass | Контраст текста к фону — не ниже 4.5:1 (WCAG 2.1 AA); пары темы выносятся в токены (app/theme.json) и проверяются расчётом, а не глазами. |

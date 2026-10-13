@@ -1,10 +1,10 @@
 {# Верификатор · приём «single-page-app» · сверяет с законом студии #}
 Проверить: {{ artifact }}
 
-1. node scripts/validate.mjs → ИТОГ: 18/18 · exit 0 (V-01…V-18).
+1. node scripts/validate.mjs → ИТОГ: 21/21 · exit 0 (V-01…V-21).
 2. node scripts/lint-slop.mjs → чисто: (B-01…B-05).
 3. node scripts/lint-quotas.mjs → ИТОГ: 5/5 · exit 0 (Q-01…Q-05).
 4. Вручную по коду: тач-таргеты ≥ 44px, темы через var(--tg-theme-*), safe area, viewportChanged,
-   открытая оплата, HMAC server.mjs.
+   открытая оплата, HMAC server.mjs, контраст пар в app/theme.json ≥ 4.5:1 (К-21).
 
 Коды возврата валидатору: только конкретные V-xx/B-xx/Q-xx — точечные правки, не перезапуск (К-10).

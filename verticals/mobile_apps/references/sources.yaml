@@ -48,3 +48,7 @@ sources:
     title: "mobile-components"
     source: "references/sources.yaml#collectui-mobile"
     takeaway: "Компонент мобильного экрана берётся из реальных паттернов (фильтр Mobile), а не рисуется с нуля (collectui.com)."
+  - id: ref-13
+    title: "contrast-ratio"
+    source: "references/sources.yaml#a11y-pass"
+    takeaway: "Контраст текста к фону — не ниже 4.5:1 (WCAG 2.1 AA); пары темы выносятся в токены (app/theme.json) и проверяются расчётом, а не глазами."

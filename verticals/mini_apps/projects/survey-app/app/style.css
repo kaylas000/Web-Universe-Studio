@@ -2,7 +2,7 @@
   --bg: var(--tg-theme-bg-color, #ffffff);
   --text: var(--tg-theme-text-color, #111111);
   --hint: var(--tg-theme-hint-color, #777777);
-  --button: var(--tg-theme-button-color, #2b6cff);
+  --button: var(--tg-theme-button-color, #1D4ED8);
   --vh: 100vh;
 }
 

@@ -1,0 +1,27 @@
+{
+  "designSystem": "telegram-theme-params",
+  "themes": {
+    "light": {
+      "background": "#FFFFFF",
+      "surface": "#F2F3F5",
+      "text": "#111111",
+      "textMuted": "#5B616E",
+      "accent": "#1D4ED8",
+      "onAccent": "#FFFFFF"
+    },
+    "dark": {
+      "background": "#17212B",
+      "surface": "#232E3C",
+      "text": "#F5F5F5",
+      "textMuted": "#AAB6C4",
+      "accent": "#8FB4FF",
+      "onAccent": "#0B1220"
+    }
+  },
+  "contrast": [
+    { "fg": "text", "bg": "background" },
+    { "fg": "textMuted", "bg": "background" },
+    { "fg": "text", "bg": "surface" },
+    { "fg": "onAccent", "bg": "accent" }
+  ]
+}

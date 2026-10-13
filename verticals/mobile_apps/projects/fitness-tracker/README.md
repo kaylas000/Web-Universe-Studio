@@ -19,4 +19,4 @@ Android: Material Design 3.
 ## Запуск
 
 Модуль `app/src/App.mjs` отрисует экран в контейнер с идентификатором `app`.
-Приёмка: `node scripts/validate.mjs projects/fitness-tracker` → `ИТОГ: 20/20 · exit 0`.
+Приёмка: `node scripts/validate.mjs projects/fitness-tracker` → `ИТОГ: 22/22 · exit 0`.

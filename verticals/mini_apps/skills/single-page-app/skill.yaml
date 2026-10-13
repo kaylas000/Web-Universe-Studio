@@ -10,6 +10,7 @@ outputs:
   - app/index.html
   - app/app.js
   - app/style.css
+  - app/theme.json
   - app/sw.js
   - app/server.mjs
   - app/bundle-size.json
@@ -20,10 +21,11 @@ steps:
   - "Собрать разметку app/index.html: один экран, кнопки-действия нативно (MainButton)"
   - "Навесить обработчики через addEventListener (не inline), подписаться на viewportChanged"
   - "Оформить стиль: var(--tg-theme-*), env(safe-area-inset-bottom), media под 320/375/420, тач-таргеты ≥ 44px"
+  - "Заполнить app/theme.json: токены светлой/тёмной темы и пары contrast с контрастом ≥ 4.5:1 (WCAG AA, К-21)"
   - "Добавить sw.js (offline-кэш), server.mjs (HMAC-проверка initData), отчёты bundle-size/lighthouse/devices-report"
   - "Проверить анти-слоп и квоты"
 checks:
-  - "V-01..V-18 из scripts/rules.json (validate.mjs)"
+  - "V-01..V-21 из scripts/rules.json (validate.mjs)"
   - "B-01..B-05 из scripts/slop.json (lint-slop.mjs)"
   - "Q-01..Q-05 из scripts/quotas.json (lint-quotas.mjs)"
 applies_to:

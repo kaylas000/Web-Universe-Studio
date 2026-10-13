@@ -8,6 +8,8 @@
   clearInterval/clearTimeout/removeEventListener при завершении;
 - style.css — var(--tg-theme-*), env(safe-area-inset-bottom), media 320/375/420, min-height ≥ 44px,
   без :hover-в-одиночку (B-01) и без height: 100vh (B-02);
+- theme.json — токены светлой/тёмной темы (background/surface/text/textMuted/accent/onAccent)
+  и пары contrast с контрастом ≥ 4.5:1 (WCAG AA, К-21);
 - sw.js — кэш оболочки;
 - server.mjs — проверка initData: createHmac("sha256", secret) (К-15);
 - bundle-size.json (gzip_kb < 300, localstorage_kb ≤ 2048), lighthouse.json (tti_ms < 2000), devices-report.json (≥ 4 устройства).
