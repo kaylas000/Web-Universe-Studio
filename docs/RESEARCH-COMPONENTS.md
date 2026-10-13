@@ -63,7 +63,7 @@
 | Бандл/перфоманс (LCP, <300KB gzip) | ✅ V-20 | ✅ V-08 | ✅ V-06 | lint |
 | Формы: валидация, ошибки, успех | ✅ V-22 | ◐ | ◐ | skill + validate |
 | Эвристики NN/g (статус, выход, ошибки) | ✅ V-21 | ✅ V-22 | ✅ V-23 | чек-лист validate |
-| Конверсия: одна цель, CTA-глагол, цифры | ◐ (lint-marketing) | ✖ **P1** | ✖ **P2** | lint + skill |
+| Конверсия: одна цель, CTA-глагол, цифры | ◐ (lint-marketing) | ✅ V-23 | ✖ **P2** | lint + skill |
 | Платформенность (HIG/Material/themeParams) | ✅ | ◐ (telegram-sdk) | ◐ (screen-composer) | skill + validate |
 | Безопасность (initData HMAC, запрет ухода наружу) | — | ✅ V-15 | — | tool |
 | Нативные элементы (MainButton/BackButton/haptics) | — | ✅ V-02 | — | skill |
@@ -107,6 +107,9 @@
   (светлая/тёмная темы Telegram); демо и шаблон генератора зелёные.
 - ✅ **P1. Эвристики NN/g** — выполнен: V-22 (kind `allOf`: статус/выход/распознавание/отклик/справка);
   карта 10 эвристик — `HEURISTICS.md` (скилл `usability-heuristics`, ref-13).
+- ✅ **P1. Конверсия** — выполнен: V-23 (kind `allOf`): одна первичная цель — `MainButton.setText`
+  ровно один раз (`regexAbsent` рубит дубль в окне 300 символов), CTA-глагол (V-20), конкретика —
+  число `\d{1,4}` в разметке экрана (скилл `conversion`, ref-14).
 
 ### 5.3 mobile_apps
 
@@ -167,7 +170,7 @@
 | mobile_apps | эвристики NN/g: статус/стек/retry/подписи/справка | V-23 · rules.json (allOf) |
 | mobile_apps | статья К-23, скилл, карта HEURISTICS.md, ref-14, кнопка помощи в демо | CONSTITUTION.md, skills/, references/ |
 
-Демо-проекты всех трёх студий приведены к зелёной приёмке (`validate` 22/22 web, 22/22 mini,
+Демо-проекты всех трёх студий приведены к зелёной приёмке (`validate` 22/22 web, 23/23 mini,
 24/24 mobile); самотесты студий зелёные (web 18, mini 10, mobile 3). Правило `themeContrast`
 покрыто негативным самотестом (серая пара #777/#fff ≈ 4.48:1 рушит приёмку) в обеих студиях.
 
@@ -186,8 +189,15 @@
 | mobile_apps | типографика: базовый кегль ≥16, контент ≥14, интерлиньяж ≥20 | V-24 · rules.json (allOf: regexAtLeast + regexAbsent) |
 | mobile_apps | статья К-24 + ТЗ §9.7, скилл typography-pass, ref-15, явные fontSize/lineHeight в демо | CONSTITUTION.md, skills/, references/, projects/ |
 
-Остаток «✖/◐» в §4-§5 — следующая очередь: safe-area детально (mobile), анимации mini/mobile,
-i18n web, конверсия mini/mobile.
+**Шестой проход (P1 mini: конверсия)** — закрыт остаток конверсии mini.
+
+| Студия | Что добавлено | Код/файл |
+|---|---|---|
+| mini_apps | конверсия: одна цель (MainButton единожды), конкретика цифрами | V-23 · rules.json (allOf: regexAtLeast + regexAbsent) |
+| mini_apps | статья К-23 + ТЗ §9.6 (К-01…К-23), скилл conversion, ref-14 (baymard CTA) | CONSTITUTION.md, skills/, references/ |
+
+Остаток «✖/◐» в §4-§5 — следующая очередь: анимации mini/mobile, i18n web,
+safe-area детально (mobile), конверсия mobile.
 
 ## 6. Как это даёт «минимум коррекций»
 

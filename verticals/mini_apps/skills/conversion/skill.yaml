@@ -1,0 +1,23 @@
+name: conversion
+title: "Одна цель и конкретика (conversion)"
+description: >
+  Конверсия в форме: одна первичная цель на экран — главная кнопка Telegram
+  (MainButton), CTA-глагол (К-20) и конкретные цифры в разметке вместо «много/быстро»
+  (V-23, К-23). Артефакт не меняет — только верифицирует и возвращает точечные правки.
+source: REF-14
+takeaway: >
+  Конверсия — это одна цель и конкретика: единственный primary CTA (MainButton),
+  CTA-глагол и число на экране; два MainButton.setText ближе 300 символов — дубль цели.
+inputs: [app, conversion_report]
+outputs: [conversion_report]
+steps:
+  - "Найти главную цель: MainButton.setText в app.js (одна первичная кнопка)"
+  - "Проверить отсутствие дубля: regexAbsent MainButton.setText в окне 300 символов"
+  - "Проверить конкретику: число \\d{1,4} в разметке экрана (index.html)"
+  - "CTA-глагол уже проверен V-20 (микрокопи)"
+  - "Зафиксировать conversion_report.md"
+checks:
+  - "V-23 (allOf: одна цель + конкретика) из validate.mjs"
+  - "CTA-глагол и цифры-оффер на тире: A/B и аналитика"
+applies_to:
+  - mini_apps

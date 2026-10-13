@@ -16,7 +16,7 @@ const run = (script, project) => execFileSync(process.execPath, [script, project
 
 for (const demo of DEMOS) {
   test(`validate: ${demo} проходит приёмку`, () => {
-    assert.match(run("scripts/validate.mjs", demo), /ИТОГ: 22\/22 · exit 0/);
+    assert.match(run("scripts/validate.mjs", demo), /ИТОГ: 23\/23 · exit 0/);
   });
 
   test(`lint-slop: ${demo} чист`, () => {

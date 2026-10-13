@@ -326,6 +326,32 @@
       ],
       "ok": "эвристики NN/g закрыты: системный статус, выход (BackButton), распознавание (подписи), отклик (haptic), вход в справку",
       "fail": "провалена эвристика NN/g (К-22) · прокси: role/aria-live, BackButton, подписи <label>/<button>, HapticFeedback, вход в справку (openDocs/openHelp/openLink) — карта в HEURISTICS.md"
+    },
+    {
+      "code": "V-23",
+      "title": "Конверсия: одна цель (MainButton), конкретика (цифры) (К-23)",
+      "kind": "allOf",
+      "rules": [
+        {
+          "kind": "regexAtLeast",
+          "path": "app/app.js",
+          "pattern": "MainButton\\.setText\\(",
+          "min": 1
+        },
+        {
+          "kind": "regexAbsent",
+          "path": "app/app.js",
+          "pattern": "MainButton\\.setText\\([^)]*\\)[\\s\\S]{0,300}MainButton\\.setText"
+        },
+        {
+          "kind": "regexAtLeast",
+          "path": "app/index.html",
+          "pattern": "\\b\\d{1,4}\\b",
+          "min": 1
+        }
+      ],
+      "ok": "конверсия в форме: одна первичная цель в MainButton, CTA-глагол (V-20), на экране есть конкретные цифры (К-23)",
+      "fail": "конверсия вне норм (К-23) · прокси: одна MainButton.setText (regexAbsent рубит дубль цели), конкретное число на экране (вместо «много/быстро»); цифры-оффер и A/B считаются на тире"
     }
   ]
 }

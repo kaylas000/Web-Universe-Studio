@@ -1,0 +1,9 @@
+{# Фиксер · приём «conversion» #}
+Возврат с ворот (К-10): править только пункты V-23 из feedback.
+{{ feedback }}
+
+Типичные правки:
+- два MainButton.setText — оставить один главный, второй сделать кнопкой экрана;
+- нет числа в разметке — добавить конкретное значение к офферу;
+- CTA без глагола — переписать текст (К-20).
+Затем: node scripts/validate.mjs projects/{{ project }} && node scripts/lint-slop.mjs projects/{{ project }}.
