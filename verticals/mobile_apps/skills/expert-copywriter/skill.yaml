@@ -25,8 +25,16 @@ checks:
 applies_to: [mobile_apps]
 codes:
   - "A-01"
+  - "B-07"
+  - "B-08"
+  - "B-12"
   - "C-01"
   - "C-02"
+  - "C-03"
+  - "C-05"
+  - "C-07"
+  - "C-09"
+  - "C-13"
 evidence:
   require:
     - "—"

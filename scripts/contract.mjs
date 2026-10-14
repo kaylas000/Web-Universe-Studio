@@ -62,12 +62,13 @@ export function audit(root = ROOT, only = null) {
     const contract = loadContract(dir);
     const drift = auditContractDrift(dir, contract);
     const covered = contract.codes.filter((c) => c.skill).length;
-    const pct = contract.stats.codes === 0 ? 0 : Math.round((covered / contract.stats.codes) * 100);
+    const pct = contract.stats.codes === 0 ? 0 : Math.round((contract.stats.covered / contract.stats.codes) * 100);
     if (!drift.ok) ok = false; // «призрак» — код линтера, невидимый модели: реальная ошибка контракта
     lines.push(
       `[${name}] статей ${contract.stats.laws} (машинно ${contract.stats.laws - contract.stats.uncovered - contract.stats.humanLaws}, ` +
         `человеку ${contract.stats.humanLaws}) · кодов ${contract.stats.codes} (машинных ${contract.stats.machine}) · ` +
-        `приёмов ${contract.stats.skills} · коды с приёмом ${covered}/${contract.stats.codes} (${pct}%)`,
+        `приёмов ${contract.stats.skills} · покрытие правил ${contract.stats.covered}/${contract.stats.codes} (${pct}%): ` +
+        `приёмом ${covered}, стадией ${contract.stats.withStage}, скриптом ${contract.stats.withScript}`,
     );
     if (drift.phantom.length > 0) {
       lines.push(`   КОДЫ-ПРИЗРАКИ (печатает линтер, нет в законе): ${drift.phantom.map((p) => `${p.code}@${p.source}`).join(", ")}`);
@@ -75,8 +76,12 @@ export function audit(root = ROOT, only = null) {
     if (drift.unmapped.length > 0) {
       lines.push(`   СТАТЬИ БЕЗ МАШИННОГО КОДА (проверяет человек): ${drift.unmapped.map((u) => u.id).join(", ")}`);
     }
+    if (contract.bare.length > 0) {
+      ok = false; // за кодом не стоит ни приём, ни стадия, ни скрипт — это дыра, а не «опишем потом»
+      lines.push(`   КОДЫ-СИРОТЫ (нет ни приёма, ни стадии, ни скрипта): ${contract.bare.join(", ")}`);
+    }
     if (contract.orphans.length > 0) {
-      lines.push(`   КОДЫ БЕЗ ПРИЁМА (правку модель выводит из текста ошибки): ${contract.orphans.slice(0, 12).join(", ")}${contract.orphans.length > 12 ? ` … +${contract.orphans.length - 12}` : ""}`);
+      lines.push(`   БЕЗ ПРИЁМА, НО ПОД НАДЗОРОМ (стадия или скрипт): ${contract.orphans.slice(0, 12).join(", ")}${contract.orphans.length > 12 ? ` … +${contract.orphans.length - 12}` : ""}`);
     }
     if (drift.phantom.length === 0 && drift.unmapped.length === 0) lines.push("   дрейф: нет — каждый код линтера объявлен в законе");
   }

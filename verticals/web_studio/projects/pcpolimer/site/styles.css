@@ -98,6 +98,12 @@ body {
 
 .cta:hover { transform: translateY(-2px); }
 
+/* Фокус виден всем (B-19, SK-17): клавиатурная навигация — часть приёмки, а не «на потом» */
+.cta:focus-visible, .top-link:focus-visible, a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 3px;
+}
+
 .facts {
   list-style: none;
   display: grid;

@@ -14,13 +14,18 @@
      auditContractDrift(studioRoot, contract)  → коды, которые печатают линтеры, но нет в законе
      evaluateCode(code, projectDir, contract)  → {status: "pass"|"fail"|"skip", detail}
 
+   Стадии цикла (G1…G4) читаются тем же контрактом (`gates.mjs`): код, закрытый пунктом
+   стадии, помечается её именем — поэтому модель видит не только «что нарушено», но и на какой
+   стадии это проверяется, а аудит не считает такой код «висящим без проверки».
+
    Импортов из вертикалей нет: контракт читается как данные (как и требует §8 ТЗ).
 */
 
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
-import { basename, join, resolve } from "node:path";
+import { basename, join, relative, resolve } from "node:path";
 
 import { parseSimpleYaml } from "./config.mjs";
+import { loadGates } from "./gates.mjs";
 import { collectArtifacts } from "./skill-evidence.mjs";
 
 export const CONTRACT_ERROR = "E-CONTRACT";
@@ -103,7 +108,9 @@ export function parseConstitution(markdown) {
   // формат 1: заголовок «## К-xx»
   const blocks = String(markdown).split(/\n(?=##\s+К-\d+)/);
   for (const block of blocks) {
-    const head = /^##\s+(К-\d+)\.?\s*(.*)$/m.exec(block);
+    // Только горизонтальные пробелы: `\s` в заголовке съедает перевод строки, и текст статьи
+    // (первая строка после «## К-xx») пропадает из промпта — модель видит код без правила.
+    const head = /^##[ \t]+(К-\d+)\.?[ \t]*(.*)$/m.exec(block);
     if (!head) continue;
     const id = head[1];
     const verifyLine = /Проверка:\s*([^\n]+)/i.exec(block)?.[1] ?? "";
@@ -163,6 +170,13 @@ export function parseCodeTable(markdown) {
 export function parseQuotaList(markdown) {
   if (!markdown) return [];
   const rows = [];
+  // формат 1: таблица «| Q-01 | 1–3 | motion-рецептов на страницу |» (веб-студия)
+  for (const match of String(markdown).matchAll(/^\|\s*(Q-\d+)\s*\|([^|]*)\|([^|]*)\|/gm)) {
+    const limit = match[2].replace(/\s+/g, " ").trim();
+    const what = match[3].replace(/\s+/g, " ").trim();
+    rows.push({ code: match[1], title: `${limit}${what ? ` — ${what}` : ""}`.slice(0, 200), limit });
+  }
+  // формат 2: список «- **Q-01.** ≤300KB — размер бандла» (приложения)
   for (const match of String(markdown).matchAll(/^[-*]\s+\*\*(Q-\d+)\.\*\*\s*(.+)$/gm)) {
     rows.push({ code: match[1], title: match[2].replace(/\s+/g, " ").slice(0, 200) });
   }
@@ -444,6 +458,29 @@ export function loadContract(studioRoot, opts = {}) {
     }
   }
 
+  // Исполнимый слой студии: скрипты (`scripts/**`) и реестр ворот. Код, который печатает скрипт,
+  // закрыт хотя бы честно — по тексту ошибки, — и это видно в аудите отдельной колонкой.
+  const scriptFiles = new Map();
+  {
+    const collect = (dir) => {
+      if (!existsSync(dir)) return;
+      for (const entry of readdirSync(dir, { withFileTypes: true })) {
+        const abs = join(dir, entry.name);
+        if (entry.isDirectory()) {
+          if (SKIP_DIRS.has(entry.name)) continue;
+          collect(abs);
+          continue;
+        }
+        if (!/\.(mjs|js|cjs|json)$/.test(entry.name)) continue;
+        const text = readTextIfExists(abs);
+        if (text) scriptFiles.set(abs, text);
+      }
+    };
+    collect(join(root, "scripts"));
+    const registry = readTextIfExists(join(root, "registry.mjs"));
+    if (registry) scriptFiles.set(join(root, "registry.mjs"), registry);
+  }
+
   const skills = loadSkills(root);
   // приём, который закрывает код: сначала явная ссылка в тексте приёма, затем статья закона
   const lawByCode = new Map();
@@ -459,6 +496,30 @@ export function loadContract(studioRoot, opts = {}) {
       (law ? bestSkillFor(`${law.text} ${code.title}`, skills) : bestSkillFor(String(code.title), skills));
   }
 
+  // Стадии цикла: документы gates/G*.md читаются здесь же, чтобы покрытие правил считалось
+  // вместе со стадиями («код закрыт приёмом или пунктом стадии»), а не только приёмами.
+  let gates = { gates: [], missing: [], declared: [], codeMap: new Map() };
+  try {
+    gates = loadGates(root);
+  } catch {
+    gates = { gates: [], missing: [], declared: [], codeMap: new Map() };
+  }
+  for (const code of codes.values()) {
+    // Границы выражаем lookaround'ами: \b не знает кириллицы, а коды студии — «К-05», «B-17».
+    const pattern = new RegExp(`(?<![0-9A-Za-zА-Яа-я])${code.code.replace("-", "\\-")}(?![0-9A-Za-zА-Яа-я])`);
+    for (const [file, text] of scriptFiles) {
+      if (!pattern.test(text)) continue;
+      code.script = relative(root, file);
+      break;
+    }
+    const stage = gates.codeMap.get(code.code) ?? null;
+    if (stage) {
+      code.stage = stage;
+      code.method = code.method || `стадия ${stage}`;
+    }
+    if (!code.method) code.method = code.script ? `скрипт ${code.script}` : "текст ошибки";
+  }
+
   return {
     vertical: String(opts.vertical ?? basename(root)),
     root,
@@ -466,6 +527,14 @@ export function loadContract(studioRoot, opts = {}) {
     banned,
     quotas,
     skills,
+    gates,
+    stageList: gates.gates.map((gate) => ({
+      id: gate.id,
+      title: gate.title,
+      machine: gate.checks.filter((check) => !check.human).length,
+      total: gate.checks.length,
+    })),
+    stageOf: (code) => gates.codeMap.get(String(code)) ?? null,
     codes: [...codes.values()].sort((a, b) => a.code.localeCompare(b.code, "ru")),
     stats: {
       laws: laws.length,
@@ -474,9 +543,18 @@ export function loadContract(studioRoot, opts = {}) {
       skills: skills.length,
       uncovered: laws.filter((law) => law.codes.length === 0 && law.humanOnly !== true).length,
       humanLaws: laws.filter((law) => law.codes.length === 0 && law.humanOnly === true).length,
+      // Три ступени покрытия, от сильной к слабой: приём (есть рецепт правки), стадия цикла
+      // (код проверяется воротами), скрипт (код печатает линтер — правка идёт по тексту ошибки).
+      withSkill: [...codes.values()].filter((c) => Boolean(c.skill)).length,
+      withStage: [...codes.values()].filter((c) => Boolean(c.stage) && !c.skill).length,
+      withScript: [...codes.values()].filter((c) => Boolean(c.script) && !c.skill && !c.stage).length,
+      covered: [...codes.values()].filter((c) => Boolean(c.skill || c.stage || c.script)).length,
+      stages: gates.gates.length,
     },
-    /** Коды без приёма: их починку модель выводит из текста ошибки. */
+    /** Коды без приёма: их починку модель выводит из текста ошибки, стадии или скрипта. */
     orphans: [...codes.values()].filter((c) => !c.skill).map((c) => c.code),
+    /** Сироты в строгом смысле: нет ни приёма, ни стадии, ни скрипта — за кодом ничего не стоит. */
+    bare: [...codes.values()].filter((c) => !c.skill && !c.stage && !c.script).map((c) => c.code),
   };
 }
 
@@ -722,6 +800,14 @@ export function renderContract(contract, opts = {}) {
     "",
   ];
 
+  if ((contract.stageList ?? []).length > 0) {
+    lines.push("### Стадии цикла: где что проверяется", "");
+    for (const stage of contract.stageList) {
+      lines.push(`- ${stage.id} ${stage.title.replace(/^.*—\s*/, "")}: машиной ${stage.machine}/${stage.total} пунктов чек-листа`);
+    }
+    lines.push("");
+  }
+
   if (includeLaws && contract.laws.length > 0) {
     lines.push("### Статьи", "");
     for (const law of contract.laws) {
@@ -737,6 +823,7 @@ export function renderContract(contract, opts = {}) {
     if (code.method) bits.push(`(${code.method})`);
     if (code.fix && code.fix !== code.title) bits.push(`→ правка: ${code.fix.slice(0, 140)}`);
     if (code.skill) bits.push(`· приём: ${code.skill}`);
+    if (code.stage) bits.push(`· стадия: ${code.stage}`);
     lines.push(`- ${bits.join(" ")}`);
   }
   if (contract.codes.length > codes.length) {
@@ -794,6 +881,7 @@ export function buildRepairPlan(feedback, contract, opts = {}) {
       target: entry?.path ?? entry?.declaredIn ?? (entry?.rule?.pattern ? `скан артефакта по /${String(entry.rule.pattern).slice(0, 90)}/` : "—"),
       instruction: entry?.fix || entry?.title || "исправь по тексту ошибки",
       skill: skill?.id ?? null,
+      stage: entry?.stage ?? contract.stageOf?.(code) ?? null,
       skillTitle: skill?.title ?? null,
       skillSteps: (skill?.steps ?? []).slice(0, 3),
       skillEvidence: skill?.evidence ?? null,
@@ -819,6 +907,7 @@ export function buildRepairPlan(feedback, contract, opts = {}) {
     lines.push(`   - где: ${step.target}`);
     lines.push(`   - что сделать: ${step.instruction}`);
     if (step.skill) lines.push(`   - приём студии: ${step.skill}${step.skillTitle ? ` (${step.skillTitle.slice(0, 90)})` : ""}`);
+    if (step.stage) lines.push(`   - стадия цикла: ${step.stage} — правь по её чек-листу (gates/${step.stage}-*.md)`);
     for (const [i, skillStep] of (step.skillSteps ?? []).entries()) lines.push(`     ${i + 1}) ${skillStep.slice(0, 170)}`);
     const ev = step.skillEvidence;
     if (ev && (ev.require?.length || ev.forbid?.length)) {

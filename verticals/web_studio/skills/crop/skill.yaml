@@ -20,6 +20,7 @@ steps:
 codes:
   - "B-10"
   - "Q-05"
+  - "Q-10"
 evidence:
   require:
     - "object-fit:\s*cover|object-position"
@@ -28,7 +29,7 @@ evidence:
   files:
     - "site/**/*.{html,css,js,mjs,json,txt,md}"
 checks:
-  - "машинные коды: B-10, Q-05"
+  - "машинные коды: B-10, Q-05, Q-10"
   - "evidence: post_execute.mjs"
   - "ворота G3: валидатор студии"
 applies_to:

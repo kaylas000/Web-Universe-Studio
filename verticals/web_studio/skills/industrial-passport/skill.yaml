@@ -20,7 +20,10 @@ steps:
 codes:
   - "B-03"
   - "B-05"
+  - "B-07"
+  - "B-13"
   - "V-05"
+  - "V-16"
 evidence:
   require:
     - "font-variant-numeric|monospace|tabular-nums"
@@ -31,7 +34,7 @@ evidence:
   files:
     - "site/**/*.{html,css,js,mjs,json,txt,md}"
 checks:
-  - "машинные коды: B-03, B-05, V-05"
+  - "машинные коды: B-03, B-05, B-07, B-13, V-05, V-16"
   - "evidence: post_execute.mjs"
   - "ворота G3: валидатор студии"
 applies_to:

@@ -14,6 +14,7 @@ outputs:
 steps:
   - "Применить приём «proof-engine» по правилам студии"
 codes:
+  - "B-14"
   - "B-15"
   - "V-02"
 evidence:
@@ -26,7 +27,7 @@ evidence:
   files:
     - "site/**/*.{html,css,js,mjs,json,txt,md}"
 checks:
-  - "машинные коды: B-15, V-02"
+  - "машинные коды: B-14, B-15, V-02"
   - "evidence: post_execute.mjs"
   - "ворота G3: валидатор студии"
 applies_to:

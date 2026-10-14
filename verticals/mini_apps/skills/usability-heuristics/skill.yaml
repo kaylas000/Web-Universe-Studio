@@ -29,6 +29,10 @@ applies_to:
   - vk-mini-app
   - usability
 codes:
+  - "B-05"
+  - "B-08"
+  - "B-09"
+  - "V-19"
   - "V-22"
 evidence:
   require:

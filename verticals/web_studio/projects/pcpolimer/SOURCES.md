@@ -20,6 +20,7 @@
 | counter-tick | motion/recipes/counter-tick/recipe.yaml | механический пересчёт калькулятора и счётчиков |
 
 Кривые — motion/easing-curves.json (ceh-brake, ceh-snap, ceh-drag). Браузерные дефолты запрещены (К-05).
+`prefers-reduced-motion` гасит проходы: анимации и переходы сводятся к 0.01ms, scroll-behavior — auto (К-19).
 
 ## Стили
 

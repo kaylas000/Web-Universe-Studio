@@ -15,6 +15,7 @@ steps:
   - "Применить приём «ux-writing» по правилам студии"
 codes:
   - "B-08"
+  - "B-12"
   - "B-18"
   - "C-04"
 evidence:
@@ -27,7 +28,7 @@ evidence:
   files:
     - "site/**/*.{html,css,js,mjs,json,txt,md}"
 checks:
-  - "машинные коды: B-08, B-18, C-04"
+  - "машинные коды: B-08, B-12, B-18, C-04"
   - "evidence: post_execute.mjs"
   - "ворота G3: валидатор студии"
 applies_to:

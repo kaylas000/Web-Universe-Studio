@@ -28,6 +28,12 @@ checks:
   - "V-16"
 applies_to: [mobile_apps]
 codes:
+  - "B-01"
+  - "B-02"
+  - "B-03"
+  - "B-06"
+  - "Q-03"
+  - "Q-04"
   - "V-01"
   - "V-04"
   - "V-29"

@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "reason": "успех на итерации 1",
-  "iterations": 1,
-  "successIteration": 1,
-  "elapsedMs": 140,
-  "finishedAt": "2026-10-14T11:05:21.698Z",
+  "reason": "успех на итерации 2",
+  "iterations": 2,
+  "successIteration": 2,
+  "elapsedMs": 204,
+  "finishedAt": "2026-10-14T12:47:23.777Z",
   "feedback": {
     "ok": true,
     "codes": [
@@ -12,48 +12,54 @@
     ],
     "errors": [],
     "metrics": {
-      "iteration": 0,
+      "iteration": 1,
       "workspace": "/home/user/Web-Universe-Studio/projects/_LOOP_TEMPLATE/workspace",
       "files": [
         "main.mjs"
       ],
-      "chars": 143,
+      "chars": 156,
       "syntaxChecked": 1,
       "tests": {
         "pass": 3,
         "fail": 0,
         "tests": 3,
         "skipped": 0,
-        "durationMs": 55.1304
+        "durationMs": 78.602805
       },
-      "testsTarget": "tests/artifact.test.mjs",
-      "contract": {
-        "vertical": "web_studio",
-        "codes": 67
-      }
+      "testsTarget": "tests/artifact.test.mjs"
     }
   },
   "artifact": {
     "metadata": {
       "provider": "mock",
       "model": "mock-1",
-      "iteration": 0,
-      "temperature": 0.3,
+      "iteration": 1,
+      "temperature": 0.1,
       "latencyMs": 0,
-      "promptChars": 58049,
-      "calls": 1,
+      "promptChars": 7150,
+      "calls": 2,
       "responseFormat": "text",
       "kind": "text",
-      "contextChars": 58049
+      "contextChars": 7150
     },
-    "chars": 143
+    "chars": 156
   },
   "history": [
     {
       "iteration": 0,
       "temperature": 0.3,
-      "elapsedMs": 140,
-      "contextChars": 58049,
+      "elapsedMs": 49,
+      "contextChars": 6604,
+      "ok": false,
+      "codes": [
+        "E-SYN"
+      ]
+    },
+    {
+      "iteration": 1,
+      "temperature": 0.1,
+      "elapsedMs": 153,
+      "contextChars": 7150,
       "ok": true,
       "codes": [
         "OK"

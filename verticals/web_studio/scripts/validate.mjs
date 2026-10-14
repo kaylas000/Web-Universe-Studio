@@ -3,7 +3,8 @@
    Запуск: node scripts/validate.mjs projects/<имя>
    Отчёт детерминирован: коды V-01…V-22 + evidence. */
 import { readFileSync, existsSync, readdirSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = resolve(process.cwd());
 const project = process.argv[2] ?? "projects/pcpolimer";
@@ -245,6 +246,81 @@ const marketing = read(join(project, "MARKETING.md"));
     clean = false;
   }
   add("V-22", "Формы и состояния динамики: id/name, аналитика, статус, JS-обработка (К-26)", clean, clean ? "формы и состояния в норме" : "нарушение форм/состояний (см. lint-form.mjs)");
+}
+
+/* V-23 — геном направления (К-14): палитра из каталога архива, вне AI-диапазона, отпечаток уникален */
+{
+  const siteText = existsSync(join(dir, "site")) ? readdirSync(join(dir, "site")).map((f) => read(join(project, "site", f)) ?? "").join("\n") : "";
+  const projectName = project.split("/").filter(Boolean).pop();
+  const hexes = [...new Set((direction?.match(/#[0-9a-fA-F]{6}\b/g) ?? []).map((s) => s.toUpperCase()))];
+  const palettes = new Set();
+  for (const file of listLib("references")) {
+    const rel = String(file);
+    if (!rel.endsWith(".meta.yaml")) continue;
+    for (const hex of readLib(join("references", rel))?.match(/#[0-9a-fA-F]{6}/g) ?? []) palettes.add(hex.toUpperCase());
+  }
+  const fromArchive = hexes.filter((hex) => palettes.has(hex));
+  const hue = (hex) => {
+    const n = parseInt(hex.slice(1), 16);
+    const r = ((n >> 16) & 255) / 255, g = ((n >> 8) & 255) / 255, b = (n & 255) / 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
+    let h = 0;
+    if (d !== 0) h = max === r ? 60 * (((g - b) / d) % 6) : max === g ? 60 * ((b - r) / d + 2) : 60 * ((r - g) / d + 4);
+    if (h < 0) h += 360;
+    const l = (max + min) / 2;
+    return { h, s: d === 0 ? 0 : (d / (1 - Math.abs(2 * l - 1))) * 100 };
+  };
+  const ai = hexes.filter((hex) => { const { h, s } = hue(hex); return h >= 220 && h <= 260 && s > 25; });
+  const families = (cssText) => [...new Set((cssText.match(/font-family:\s*([^;{}]+)/g) ?? [])
+    .flatMap((line) => line.replace(/font-family:\s*/, "").split(","))
+    .map((f) => f.trim().replace(/^["']|["']$/g, ""))
+    .filter((f) => f && !f.startsWith("var(") && !/^(serif|sans-serif|monospace|system-ui|inherit|initial|unset)$/.test(f)))];
+  const fingerprint = [...hexes].sort().join(",") + "|" + families(siteText).sort().join(",");
+  const twins = [];
+  for (const name of (existsSync(join(root, "projects")) ? readdirSync(join(root, "projects")) : [])) {
+    if (name.startsWith("_") || name === projectName) continue;
+    const other = read(join("projects", name, "DIRECTION.md")) ?? "";
+    const otherHexes = [...new Set((other.match(/#[0-9a-fA-F]{6}\b/g) ?? []).map((s) => s.toUpperCase()))];
+    if (otherHexes.length === 0) continue;
+    const otherCss = (existsSync(join(root, "projects", name, "site")) ? readdirSync(join(root, "projects", name, "site")) : [])
+      .map((f) => read(join("projects", name, "site", f)) ?? "").join("\n");
+    if ([...otherHexes].sort().join(",") + "|" + families(otherCss).sort().join(",") === fingerprint) twins.push(name);
+  }
+  add("V-23", "Геном: палитра из архива, вне AI-диапазона (К-14)",
+    hexes.length >= 3 && fromArchive.length >= 3 && ai.length === 0 && twins.length === 0,
+    `цветов ${hexes.length}, из палитр архива ${fromArchive.length}, в AI-диапазоне ${ai.length}${twins.length ? `, отпечаток совпал с ${twins.join(", ")}` : ", отпечаток уникален"}`);
+}
+/* V-24 — цикл сошёлся (К-21): evidence в workspace/loop-result.json. Нет прогона — правило вакантно */
+{
+  const evidence = read(join(project, "workspace", "loop-result.json"));
+  if (evidence === null) {
+    add("V-24", "Цикл сошёлся: evidence прогона (К-21)", true, "цикл не прогонялся — правило вакантно до первого прогона ворот");
+  } else {
+    let data = null;
+    try { data = JSON.parse(evidence); } catch { data = null; }
+    const codes = (data?.feedback?.codes ?? []).filter((c) => c && c !== "OK");
+    add("V-24", "Цикл сошёлся: evidence прогона (К-21)",
+      data?.ok === true && codes.length === 0,
+      data === null ? "workspace/loop-result.json не читается" : `цикл ${data.ok ? "сошёлся" : "не сошёлся"} · итераций ${data.iterations ?? "?"}${codes.length ? ` · коды ${codes.join(", ")}` : ""}`);
+  }
+}
+/* V-25 — ошибки ловятся дешёвым слоем (К-15): CI-гейт, секреты, битые внутренние ссылки */
+{
+  // путь к гигиене метаплатформы считаем от самого скрипта, а не от cwd: отчёт не должен
+  // зависеть от того, из какого каталога запущен валидатор
+  const studioDir = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+  const gatePath = join(studioDir, "..", "..", "scripts", "ci-gate.mjs");
+  if (!existsSync(gatePath)) {
+    add("V-25", "Репозиторная гигиена: CI, секреты, ссылки (К-15)", true, "scripts/ci-gate.mjs не подключён — проверка вакантна");
+  } else {
+    const { checkRepoHygiene } = await import(pathToFileURL(gatePath).href);
+    const res = checkRepoHygiene(resolve(studioDir, "..", ".."));
+    const warnings = (res.warnings ?? []).join("; ");
+    add("V-25", "Репозиторная гигиена: CI, секреты, ссылки (К-15)", res.ok,
+      res.ok
+        ? `CI зовёт гейт, секретов нет, ${res.checked} файлов проверено${warnings ? ` · замечание: ${warnings}` : ""}`
+        : [...res.noted, warnings].filter(Boolean).join("; "));
+  }
 }
 
 /* отчёт */

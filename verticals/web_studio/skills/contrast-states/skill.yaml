@@ -15,6 +15,7 @@ steps:
   - "Применить приём «contrast-states» по правилам студии"
 codes:
   - "B-19"
+  - "Q-07"
   - "V-17"
 evidence:
   require:
@@ -24,7 +25,7 @@ evidence:
   files:
     - "site/**/*.{html,css,js,mjs,json,txt,md}"
 checks:
-  - "машинные коды: B-19, V-17"
+  - "машинные коды: B-19, Q-07, V-17"
   - "evidence: post_execute.mjs"
   - "ворота G3: валидатор студии"
 applies_to:

@@ -15,6 +15,8 @@ steps:
   - "Применить приём «usability-heuristics» по правилам студии"
 codes:
   - "B-23"
+  - "Q-08"
+  - "Q-09"
   - "V-21"
 evidence:
   require:
@@ -25,7 +27,7 @@ evidence:
   files:
     - "site/**/*.{html,css,js,mjs,json,txt,md}"
 checks:
-  - "машинные коды: B-23, V-21"
+  - "машинные коды: B-23, Q-08, Q-09, V-21"
   - "evidence: post_execute.mjs"
   - "ворота G3: валидатор студии"
 applies_to:

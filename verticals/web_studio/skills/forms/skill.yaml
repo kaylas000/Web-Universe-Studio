@@ -16,7 +16,6 @@ steps:
 codes:
   - "B-25"
   - "V-22"
-  - "V-25"
 evidence:
   require:
     - "<form"
@@ -27,7 +26,7 @@ evidence:
   files:
     - "site/**/*.{html,css,js,mjs,json,txt,md}"
 checks:
-  - "машинные коды: B-25, V-22, V-25"
+  - "машинные коды: B-25, V-22"
   - "evidence: post_execute.mjs"
   - "ворота G3: валидатор студии"
 applies_to:

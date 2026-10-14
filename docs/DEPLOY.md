@@ -26,13 +26,17 @@ node core/api/server.mjs        # API на 127.0.0.1:8787
 
 ## CI: гейт К-21
 
-`.github/workflows/loop-gate.yml` на `push`/`pull_request` в `main`, Node 20, **без `npm ci`**
-(движок zero-dep):
+`.github/workflows/ci.yml` на `push` (любая ветка), `pull_request` и вручную, Node 22,
+**без `npm ci`** (движок zero-dep), без сети и ключей:
 
-1. `node --test core/loop-engine/tests/*.test.mjs` — тесты движка;
-2. `node core/loop-engine/cli.mjs --selftest` — офлайн-цикл;
-3. `node core/gate.mjs` — по одной итерации цикла на каждый проект, `exit 0` — закон исполнен;
-4. `node scripts/run-tests.mjs tests verticals` — тесты платформы и вертикалей.
+1. `node scripts/ci-gate.mjs` — самый дешёвый слой (К-15): CI зовёт гейт, в репозитории нет
+   секретов, внутренние ссылки в документах ведут на существующие файлы;
+2. `npm test` — тесты движка (включая стадии цикла `core/loop-engine/gates.mjs`), платформы
+   и вертикалей;
+3. `bash scripts/acceptance_test.sh` — полная приёмка DoD (§15 ТЗ): гейт К-21 по всем
+   проектам (`9/9`), снимки архива, RAG-индекс, контракты студий.
+
+PR не мержится без зелёного CI; локально те же шаги занимают меньше минуты.
 
 ## Публикация веб-витрины
 

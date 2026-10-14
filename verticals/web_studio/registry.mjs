@@ -157,13 +157,78 @@ export const vertical = {
         verify: async (artifact, context) => {
           const dir = projectDirOf(artifact, context);
           const css = readText(join(dir, "site", "styles.css")) ?? "";
+          const html = (readText(join(dir, "site", "index.html")) ?? "") + (readText(join(dir, "site", "app.js")) ?? "");
           const errors = [];
-          const small = [...css.matchAll(/min-height:\s*(\d+)px/g)].map((m) => Number(m[1])).filter((n) => n < 44);
-          if (css.length > 0 && !/min-height:\s*(4[4-9]|[5-9]\d|\d{3,})px/.test(css)) {
-            errors.push({ code: "V-11", severity: "major", description: "нет тач-таргета ≥ 44px для интерактивных элементов" });
+          // Тач-зона (Q-08, К-12) считается ПО ЭЛЕМЕНТАМ артефакта, а не по строкам CSS:
+          // состояния (:hover, :focus-visible) и псевдоэлементы размер не задают, а декоративная
+          // плашка со `min-height: 20px` — не мелкий тач-таргет. Правило вакантно, если таких
+          // элементов на странице нет (как «сайт без форм» в К-26).
+          // <label> не считаем отдельной целью: он кликается вместе со своим полем (иначе
+          // подпись 23px рядом с полем 54px выглядела бы нарушением, которым не является).
+          const TAGS = ["button", "input", "select", "textarea", "a", "summary"];
+          const used = new Map(); // тег → классы, которыми он размечен в артефакте
+          for (const tag of TAGS) {
+            const classes = new Set();
+            for (const match of html.matchAll(new RegExp(`<${tag}\\b[^>]*class="([^"]*)"`, "gi"))) {
+              for (const name of match[1].split(/\s+/).filter(Boolean)) classes.add(name);
+            }
+            const present = new RegExp(`<${tag}\\b`, "i").test(html);
+            if (present) used.set(tag, classes);
           }
-          for (const value of small) errors.push({ code: "V-11", severity: "minor", description: `min-height: ${value}px меньше 44px — мелкий тач-таргет` });
-          return { passed: errors.length === 0, errors, metrics: { smallTargets: small.length } };
+          if (used.size === 0) return { passed: true, errors: [], metrics: { checked: 0, note: "интерактивных элементов нет — правило вакантно" } };
+
+          const stateful = /:(hover|active|focus|focus-visible|focus-within|visited|disabled|checked|open|target|first-|last-|nth-|not\()|::/;
+          const px = (value, unit) => Number(value) * (unit === "px" ? 1 : unit === "rem" || unit === "em" ? 16 : 1);
+          const rules = [];
+          for (const match of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+            const selector = match[1].trim();
+            if (selector.startsWith("@") || stateful.test(selector)) continue;
+            for (const part of selector.split(",")) {
+              const subject = part.trim().split(/\s+|>/).pop() ?? "";
+              if (!subject) continue;
+              const tag = TAGS.find((name) => new RegExp(`^${name}(?![a-z-])`, "i").test(subject) || new RegExp(`\\[role=["']?${name}`).test(subject));
+              const classes = [...subject.matchAll(/\.([A-Za-z0-9_-]+)/g)].map((m) => m[1]);
+              rules.push({ subject, tag: tag ?? null, classes, isPseudoFree: true, body: match[2] });
+            }
+          }
+
+          const proxyOf = (body) => {
+            const minHeight = /min-height:\s*([\d.]+)(px|rem|em)/.exec(body);
+            const declared = minHeight ? px(minHeight[1], minHeight[2]) : 0;
+            let padding = 0;
+            const shorthand = /padding:\s*([\d.]+)(px|rem|em)/.exec(body);
+            if (shorthand) padding += px(shorthand[1], shorthand[2]) * 2;
+            const block = /padding-block:\s*([\d.]+)(px|rem|em)/.exec(body);
+            if (block) padding += px(block[1], block[2]) * 2;
+            for (const side of ["top", "bottom"]) {
+              const one = new RegExp(`padding-${side}:\\s*([\\d.]+)(px|rem|em)`).exec(body);
+              if (one) padding += px(one[1], one[2]);
+            }
+            const lineHeight = Number(/line-height:\s*([\d.]+)\b/.exec(body)?.[1] ?? 0);
+            const fontSize = /font-size:\s*([\d.]+)rem/.exec(body)?.[1];
+            const textBlock = (lineHeight > 0 ? lineHeight : 1.45) * (fontSize ? Number(fontSize) * 16 : 16);
+            return Math.max(declared, padding + textBlock);
+          };
+
+          for (const [tag, classes] of used) {
+            let best = 0;
+            for (const rule of rules) {
+              const matchesTag = rule.tag === tag;
+              const matchesClass = rule.classes.some((name) => classes.has(name));
+              if (!matchesTag && !matchesClass) continue;
+              best = Math.max(best, proxyOf(rule.body));
+            }
+            if (best === 0) {
+              errors.push({ code: "V-11", severity: "minor", description: `<${tag}>: ни min-height, ни вертикальный padding не заданы (Q-08)` });
+            } else if (best < 44) {
+              errors.push({ code: "V-11", severity: "minor", description: `<${tag}>: тач-зона ≈${Math.round(best)}px < 44px (Q-08)` });
+            }
+          }
+          return {
+            passed: errors.length === 0,
+            errors,
+            metrics: { elements: used.size, smallTargets: errors.length },
+          };
         },
       },
       llm_judge: {

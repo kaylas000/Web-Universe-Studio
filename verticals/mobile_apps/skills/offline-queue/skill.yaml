@@ -25,6 +25,7 @@ checks:
   - "Q-06 Размер кэша на диске ≤100MB"
 applies_to: [mobile_apps]
 codes:
+  - "Q-06"
   - "V-07"
   - "V-17"
 evidence:

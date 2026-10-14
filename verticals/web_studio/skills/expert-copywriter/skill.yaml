@@ -29,6 +29,7 @@ codes:
   - "C-02"
   - "C-03"
   - "N-01"
+  - "Q-14"
 evidence:
   require:
     - "—"
@@ -41,7 +42,7 @@ evidence:
   files:
     - "site/**/*.{html,css,js,mjs,json,txt,md}"
 checks:
-  - "машинные коды: A-01, A-02, A-03, A-05, C-01, C-02, C-03, N-01"
+  - "машинные коды: A-01, A-02, A-03, A-05, C-01, C-02, C-03, N-01, Q-14"
   - "evidence: post_execute.mjs"
   - "ворота G3: валидатор студии"
 applies_to:

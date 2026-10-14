@@ -22,6 +22,7 @@ checks:
   - "60fps на тире: Profiler (JS-кадр ≤ 8 мс)"
 applies_to: [mobile_apps]
 codes:
+  - "Q-07"
   - "V-25"
 evidence:
   require:

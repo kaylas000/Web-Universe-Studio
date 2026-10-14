@@ -1,26 +1,19 @@
 {
   "iteration": 0,
   "temperature": 0.3,
-  "elapsedMs": 140,
+  "elapsedMs": 49,
   "feedback": {
-    "ok": true,
-    "errors": [],
+    "ok": false,
+    "errors": [
+      "Синтаксические ошибки:\nmain.mjs: SyntaxError: Unexpected token ';'"
+    ],
     "codes": [
-      "OK"
+      "E-SYN"
     ],
     "raw": {
-      "tests": {
-        "argv": [
-          "/usr/local/bin/node",
-          "--test",
-          "--test-reporter=tap",
-          "tests/artifact.test.mjs"
-        ],
-        "exitCode": 0,
-        "timedOut": false,
-        "stdout": "TAP version 13\n# Subtest: артефакт записан в workspace\nok 1 - артефакт записан в workspace\n  ---\n  duration_ms: 0.77151\n  type: 'test'\n  ...\n# Subtest: артефакт — валидный ES-модуль с экспортами\nok 2 - артефакт — валидный ES-модуль с экспортами\n  ---\n  duration_ms: 0.625489\n  type: 'test'\n  ...\n# Subtest: ЗАМЕНИ НА РЕАЛЬНЫЕ ПРОВЕРКИ: поведение артефакта\nok 3 - ЗАМЕНИ НА РЕАЛЬНЫЕ ПРОВЕРКИ: поведение артефакта\n  ---\n  duration_ms: 1.186939\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 55.1304\n",
-        "stderr": ""
-      }
+      "syntax": [
+        "main.mjs: SyntaxError: Unexpected token ';'"
+      ]
     },
     "metrics": {
       "iteration": 0,
@@ -28,20 +21,7 @@
       "files": [
         "main.mjs"
       ],
-      "chars": 143,
-      "syntaxChecked": 1,
-      "tests": {
-        "pass": 3,
-        "fail": 0,
-        "tests": 3,
-        "skipped": 0,
-        "durationMs": 55.1304
-      },
-      "testsTarget": "tests/artifact.test.mjs",
-      "contract": {
-        "vertical": "web_studio",
-        "codes": 67
-      }
+      "chars": 67
     }
   }
 }
