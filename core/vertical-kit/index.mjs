@@ -255,6 +255,17 @@ export function evalRule(projectDir, rule) {
         .filter((line) => new RegExp(`^#{${level}}\\s+\\S`).test(line)).length;
       return n >= Number(rule.min ?? 0) && n <= Number(rule.max ?? Infinity);
     }
+    case "jsonKeysParity": {
+      // Локали описывают один и тот же набор строк: наборы ключей обязаны совпадать.
+      // Разошедшиеся ключи — это непереведённый экран, который видно только в одном языке.
+      const sets = (rule.paths ?? []).map((rel) => {
+        const data = readJson(read(rel));
+        return data && typeof data === "object" && !Array.isArray(data) ? new Set(Object.keys(data)) : null;
+      });
+      if (sets.some((set) => set === null)) return false;
+      const [base, ...rest] = sets;
+      return rest.every((set) => set.size === base.size && [...set].every((key) => base.has(key)));
+    }
     case "jsonArrayMinItems": {
       const data = readJson(read(rule.path));
       const arr = data === null ? null : getPath(data, rule.key);

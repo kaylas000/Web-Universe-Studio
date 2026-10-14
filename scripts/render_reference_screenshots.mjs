@@ -26,6 +26,7 @@ import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { parseSimpleYaml } from "../core/loop-engine/config.mjs";
+import { indexVertical } from "./index_references.mjs";
 import { openBrowser, shootHtml } from "./shots/capture.mjs";
 import { renderCard } from "./shots/card.mjs";
 import { PLATFORM_PALETTE, STUDIO_SHOTS } from "./shots/refspecs.mjs";
@@ -135,6 +136,20 @@ function updateMetaFile(ref, { specimenName, pngName }) {
 }
 
 /* ————————————————————— индекс и витрина ————————————————————— */
+
+/**
+ * Пересобирает RAG-индекс студии тем же прогоном, что правит meta.yaml.
+ * Индекс — производный артефакт: если его обновлять руками, он «протухает» и тесты платформы
+ * падают на устаревшем архиве. Поэтому обновление встроено в единственную точку записи.
+ */
+function refreshIndex(vertical) {
+  try {
+    const indexed = indexVertical(join(ROOT, "verticals", vertical));
+    process.stdout.write(`[${vertical}] RAG-индекс: документов ${indexed.documents} · терминов ${indexed.terms}\n`);
+  } catch (error) {
+    process.stderr.write(`[${vertical}] индекс не пересобран: ${String(error?.message ?? error)}\n`);
+  }
+}
 
 /** Обновляет таблицу INDEX.md студии (добавляет колонку со снимком). */
 function updateIndex(vertical, refs) {
@@ -382,6 +397,7 @@ async function runCapture({ verticals, engine, capture }) {
         `[${vertical}] референсов ${refs.length} · снимков ${capture ? refs.length : 0} (${activeEngine}) · ` +
           `витрина ${relative(ROOT, gallery.gallery)}${index.updated ? " · INDEX.md обновлён" : ""}\n`,
       );
+      refreshIndex(vertical);
     }
   } finally {
     if (handle) await handle.close();

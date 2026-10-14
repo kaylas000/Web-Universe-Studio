@@ -24,8 +24,9 @@ codes:
 evidence:
   require:
     - "font-size:\s*clamp\(|font-size:\s*(8|9|1[0-2])vw"
+    - "overflow:\s*(hidden|clip|auto)"
   forbid:
-    - "white-space:\s*nowrap"
+    - "—"
   files:
     - "site/**/*.{html,css,js,mjs,json,txt,md}"
 checks:

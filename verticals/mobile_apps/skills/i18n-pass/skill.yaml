@@ -23,6 +23,7 @@ checks:
 applies_to: [mobile_apps]
 codes:
   - "V-14"
+  - "V-27"
 evidence:
   require:
     - "\.json"

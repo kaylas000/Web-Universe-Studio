@@ -54,9 +54,9 @@ const DEFAULT_SCOPE = Object.freeze({
 
 const EVIDENCE = Object.freeze({
   web_studio: {
-    "poster-type": { codes: ["Q-04", "B-23"], require: ["font-size:\\s*clamp\\(|font-size:\\s*(8|9|1[0-2])vw"], forbid: ["white-space:\\s*nowrap"] },
+    "poster-type": { codes: ["Q-04", "B-23"], require: ["font-size:\\s*clamp\\(|font-size:\\s*(8|9|1[0-2])vw", "overflow:\\s*(hidden|clip|auto)"], forbid: [] },
     "broken-grid": { codes: ["Q-03"], require: ["grid-template-columns|grid-template-areas"], forbid: ["transition:\\s*all"] },
-    "scroll-story": { codes: ["V-05", "V-06", "Q-01"], require: ["position:\\s*sticky"], forbid: ["scroll-behavior:\\s*smooth"] },
+    "scroll-story": { codes: ["V-05", "V-06", "Q-01"], require: ["position:\\s*sticky", "prefers-reduced-motion"], forbid: [] },
     "cinema-intro": { codes: ["V-06", "Q-01"], require: ["@keyframes"], forbid: ["transition:\\s*all"] },
     crop: { codes: ["Q-05"], require: ["object-fit:\\s*cover|object-position"], forbid: [] },
     "industrial-passport": { codes: ["V-05", "B-03", "B-05"], require: ["font-variant-numeric|monospace|tabular-nums"], forbid: ["backdrop-filter", "#6366f1", "#8b5cf6"] },
@@ -65,11 +65,11 @@ const EVIDENCE = Object.freeze({
     "comparison-matrix": { codes: ["V-19", "B-04"], require: ["<table|<thead|role=\"table\""], forbid: ["grid-cols-3"] },
     "proof-engine": { codes: ["B-15", "V-02"], require: ["alt=\"[^\"]+\""], forbid: ["нам доверяют", "trusted by", "\\d{3,}\\+\\s*клиент"] },
     "value-calculator": { codes: ["V-22", "B-25"], require: ["<input", "data-analytics-event"], forbid: [] },
-    "interactive-data": { codes: ["V-19", "B-24"], require: ["<table"], forbid: ["white-space:\\s*nowrap"] },
+    "interactive-data": { codes: ["V-19", "B-24"], require: ["<table", "overflow(-x)?:\\s*(auto|scroll)"], forbid: [] },
     "micro-interactions": { codes: ["B-18", "Q-02"], require: [":focus-visible"], forbid: ["transition:\\s*all"] },
     "ux-states": { codes: ["V-20", "B-20"], require: ["loading|skeleton|aria-busy"], forbid: [] },
     "contrast-states": { codes: ["B-19", "V-17"], require: ["color:\\s*var\\(|--[a-z-]+:"], forbid: [] },
-    "content-fit": { codes: ["V-18"], require: ["min-width:\\s*0|overflow-wrap|hyphens"], forbid: ["white-space:\\s*nowrap"] },
+    "content-fit": { codes: ["V-18"], require: ["min-width:\\s*0|overflow-wrap|hyphens", "overflow(-x)?:\\s*(clip|hidden|auto)"], forbid: [] },
     "frames-to-motion": { codes: ["Q-01", "V-06"], require: ["@keyframes"], forbid: [] },
     "usability-heuristics": { codes: ["V-21", "B-23"], require: ["<html\\s+lang=", "<a[^>]+href=\"#"], forbid: [] },
     forms: { codes: ["V-22", "V-25", "B-25"], require: ["<form", "name=\"[a-z-]+\"", "role=\"status\"|aria-live"], forbid: ["<form[^>]*onsubmit="] },
@@ -361,7 +361,10 @@ function upgradeSkill(vertical, skillDir, { force = false, dryRun = false } = {}
     write("skill.yaml", buildSkillYaml(name, doc, evidence, vertical));
   } else {
     const current = readFileSync(absYaml, "utf8");
-    const enriched = enrichSkillYaml(current, doc, evidence, scopeOf(vertical, name));
+    // Сгенерированный skill.yaml ведётся картой EVIDENCE: иначе исправленный признак
+    // остался бы в файле старым и приём продолжал бы «находить» нарушение в корректном артефакте.
+    const authoritative = current.includes("scripts/upgrade_skills.mjs");
+    const enriched = enrichSkillYaml(current, doc, evidence, scopeOf(vertical, name), { authoritative });
     if (enriched !== current) write("skill.yaml", enriched, { keepExisting: false });
   }
 
@@ -376,7 +379,7 @@ function upgradeSkill(vertical, skillDir, { force = false, dryRun = false } = {}
 }
 
 /** Дополняет существующий skill.yaml: коды, evidence, область скана, промахи (чего нет). */
-export function enrichSkillYaml(yamlText, doc, evidence, scope = []) {
+export function enrichSkillYaml(yamlText, doc, evidence, scope = [], { authoritative = false } = {}) {
   let text = String(yamlText);
   const has = (key) => new RegExp(`^${key}:`, "m").test(text);
   const filesBlock = `  files:\n${yamlList(scope, "    ")}\n`;
@@ -385,10 +388,20 @@ export function enrichSkillYaml(yamlText, doc, evidence, scope = []) {
     const codes = [...new Set([...(doc.codes ?? []), ...(evidence.codes ?? [])])].sort();
     text = `${text.replace(/\n*$/, "\n")}codes:\n${yamlList(codes)}\n`;
   }
-  if (!has("evidence")) {
+  if (!has("evidence") || authoritative) {
     const require = evidence.require?.length ? yamlList(evidence.require, "    ") : '    - "—"';
     const forbid = evidence.forbid?.length ? yamlList(evidence.forbid, "    ") : '    - "—"';
-    text = `${text.replace(/\n*$/, "\n")}evidence:\n  require:\n${require}\n  forbid:\n${forbid}\n${filesBlock}`;
+    const block = `evidence:\n  require:\n${require}\n  forbid:\n${forbid}\n${filesBlock}`;
+    if (has("evidence")) {
+      // вырезаем прежний блок целиком: от `evidence:` до следующего ключа верхнего уровня
+      const lines = text.split("\n");
+      const start = lines.findIndex((line) => /^evidence:\s*$/.test(line));
+      let end = start + 1;
+      while (end < lines.length && !/^\S/.test(lines[end])) end += 1;
+      text = [...lines.slice(0, start), ...block.trimEnd().split("\n"), ...lines.slice(end)].join("\n");
+    } else {
+      text = `${text.replace(/\n*$/, "\n")}${block}`;
+    }
   } else if (scope.length > 0 && /^\s*files:\s*\[\]\s*$/m.test(text)) {
     // область скана — данные: пустой список означает «весь проект», приём называет свою часть
     text = text.replace(/^\s*files:\s*\[\]\s*$/m, filesBlock.trimEnd());

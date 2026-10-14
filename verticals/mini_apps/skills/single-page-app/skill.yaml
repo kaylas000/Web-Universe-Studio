@@ -36,6 +36,9 @@ applies_to:
 codes:
   - "V-01"
   - "V-02"
+  - "Q-06"
+  - "Q-07"
+  - "Q-08"
 evidence:
   require:
     - "<html|<body"

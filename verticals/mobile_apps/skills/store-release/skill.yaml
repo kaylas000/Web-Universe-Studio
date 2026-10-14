@@ -26,6 +26,7 @@ checks:
 applies_to: [mobile_apps]
 codes:
   - "V-20"
+  - "V-28"
 evidence:
   require:
     - "1024|icon"

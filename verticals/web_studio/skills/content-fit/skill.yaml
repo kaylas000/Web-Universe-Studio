@@ -19,8 +19,9 @@ codes:
 evidence:
   require:
     - "min-width:\s*0|overflow-wrap|hyphens"
+    - "overflow(-x)?:\s*(clip|hidden|auto)"
   forbid:
-    - "white-space:\s*nowrap"
+    - "—"
   files:
     - "site/**/*.{html,css,js,mjs,json,txt,md}"
 checks:

@@ -33,8 +33,10 @@ const SKIP_DIRS = new Set(["node_modules", ".git", "workspace", "dist", "build",
  * @returns {{require: string[], forbid: string[], files: string[], codes: string[], notes: string[], title: string, id: string}}
  */
 export function loadEvidence(skillDir) {
-  const dir = resolve(String(skillDir));
-  const text = readIfExists(join(dir, "skill.yaml"));
+  // Каталог приёма может быть не определён (хук вызван напрямую, вне движка): тогда признаков нет,
+  // и это надо сказать прямо — иначе скан по cwd выдаст «приём применён» по чужим файлам.
+  const dir = skillDir ? resolve(String(skillDir)) : null;
+  const text = dir ? readIfExists(join(dir, "skill.yaml")) : null;
   const meta = text ? parseSimpleYaml(text) ?? {} : {};
   const list = (value) => {
     const raw = Array.isArray(value) ? value.map(String) : value === undefined || value === null || value === "" ? [] : [String(value)];
@@ -43,7 +45,8 @@ export function loadEvidence(skillDir) {
       .filter((item) => item.length > 0 && item !== "—" && item !== "-");
   };
   return {
-    id: String(meta.name ?? dir.split("/").pop()),
+    declared: Boolean(text),
+    id: String(meta.name ?? (dir ? dir.split("/").pop() : "")),
     title: String(meta.title ?? meta.name ?? ""),
     require: list(meta.evidence?.require ?? meta.require),
     forbid: list(meta.evidence?.forbid ?? meta.forbid),
@@ -157,7 +160,7 @@ export function collectArtifacts(projectDir, { files = [], dirs = ["./"], extens
  */
 export function checkEvidence(opts) {
   const projectDir = resolve(String(opts.projectDir));
-  const evidence = opts.evidence ?? (opts.skillDir ? loadEvidence(opts.skillDir) : { id: "", require: [], forbid: [], files: [] });
+  const evidence = opts.evidence ?? loadEvidence(opts.skillDir ?? null);
   const files = collectArtifacts(projectDir, {
     files: opts.files ?? evidence.files ?? [],
     dirs: opts.dirs ?? ["./"],
@@ -165,6 +168,10 @@ export function checkEvidence(opts) {
     limit: opts.limit ?? 400,
   });
   const id = evidence.id || "skill";
+  if (evidence.declared === false) {
+    // Приём без skill.yaml не судит: у него нет объявленных признаков.
+    return { ok: true, declared: false, scanned: 0, findings: [], skill: "", covered: [], missing: [], note: "evidence не объявлен" };
+  }
   /** @type {any[]} */
   const findings = [];
   /** @type {string[]} */
@@ -245,9 +252,11 @@ export function checkEvidence(opts) {
 }
 
 /** Печатает находки evidence в консоль (формат студий: «файл:строка код сообщение»). */
-export function reportEvidence(result, { stream = process.stdout, prefix = "[skill]" } = {}) {
+export function reportEvidence(result, { stream = process.stdout, prefix = "[skill]", verbose = false } = {}) {
+  if (result.declared === false) return result;
   if (result.findings.length === 0) {
-    stream.write(`${prefix} ${result.skill}: чисто — ${result.scanned} файл(ов)\n`);
+    // молчание — норма: линтер студии печатает построчно, а приём отчитывается только о находках.
+    if (verbose) stream.write(`${prefix} ${result.skill}: чисто — ${result.scanned} файл(ов)\n`);
     return result;
   }
   for (const finding of result.findings) {
@@ -265,10 +274,11 @@ export async function postExecute(ctx = {}) {
   try {
     const skillDir = skillDirFromHook(ctx);
     const projectDir = ctx.projectDir ?? ctx.deliverableDir ?? ctx.project_dir ?? null;
-    if (!projectDir) return { ...ctx, evidence: { ok: true, scanned: 0, findings: [], skill: null, note: "projectDir не передан — скан пропущен" } };
+    if (!projectDir) return { ...ctx, evidence: { ok: true, declared: false, scanned: 0, findings: [], skill: null, note: "projectDir не передан — скан пропущен" } };
+    if (!skillDir) return { ...ctx, evidence: { ok: true, declared: false, scanned: 0, findings: [], skill: null, note: "каталог приёма не определён — скан пропущен" } };
     const evidence = loadEvidence(skillDir);
     const result = checkEvidence({ skillDir, projectDir, evidence, dirs: ctx.dirs ?? ["./"], files: ctx.files ?? evidence.files });
-    reportEvidence({ ...result, skill: evidence.id });
+    reportEvidence({ ...result, skill: evidence.id }, { verbose: Boolean(ctx.verbose) });
     return { ...ctx, evidence: result };
   } catch (error) {
     return { ...ctx, evidence: { ok: true, scanned: 0, findings: [], error: String(error?.message ?? error) } };
@@ -295,7 +305,8 @@ function skillDirFromHook(ctx = {}) {
   const stack = new Error().stack ?? "";
   const match = /file:\/\/(\/[^\s)]+)\/hooks\/[^/]+\.mjs/.exec(stack);
   if (match) return match[1];
-  return process.cwd();
+  // Каталог неизвестен: сканировать cwd нельзя — это выдало бы «приём применён» по чужим файлам.
+  return null;
 }
 
 export default { loadEvidence, checkEvidence, reportEvidence, collectArtifacts, postExecute, preExecute, REPO_ROOT };

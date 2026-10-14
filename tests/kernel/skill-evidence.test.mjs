@@ -144,3 +144,23 @@ test("collectSkillEvidence: без артефакта приём не выдум
   const ctx = await collectSkillEvidence(skills[0], {});
   assert.equal(ctx.evidence, undefined, "нет projectDir — скана нет");
 });
+
+test("приём без skill.yaml не судит: каталог неизвестен — это отказ, а не «применено»", () => {
+  const project = makeProject({});
+  // каталог приёма не передан: раньше скан шёл по cwd и выдавал «приём применён» по чужим файлам
+  const result = checkEvidence({ skillDir: null, projectDir: project });
+  assert.equal(result.declared, false);
+  assert.equal(result.scanned, 0);
+  assert.deepEqual(result.findings, []);
+});
+
+test("reportEvidence молчит, когда чисто, и говорит только при находках", () => {
+  const chunks = [];
+  const stream = { write: (chunk) => chunks.push(String(chunk)) };
+  const clean = checkEvidence({ skillDir: makeSkill({ require: ["<main"] }), projectDir: makeProject({}) });
+  reportEvidence(clean, { stream });
+  assert.equal(chunks.length, 0, "чистый скан не должен шуметь в цикле");
+  const dirty = checkEvidence({ skillDir: makeSkill({ forbid: ["transition:\\s*all"] }), projectDir: makeProject({ css: ".a{transition: all}" }) });
+  reportEvidence(dirty, { stream });
+  assert.equal(chunks.length, 2, "находка + сводка");
+});

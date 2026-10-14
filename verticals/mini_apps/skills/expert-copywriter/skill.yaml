@@ -29,6 +29,8 @@ codes:
   - "A-03"
   - "C-01"
   - "C-02"
+  - "B-10"
+  - "B-11"
 evidence:
   require:
     - "—"

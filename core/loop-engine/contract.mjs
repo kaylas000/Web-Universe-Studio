@@ -664,6 +664,27 @@ function evalKind(rule, dir, depth) {
       }
       return unknown ? null : true;
     }
+    case "jsonStringLength": {
+      const data = readJson(dir, rule.path);
+      if (data === null || typeof data !== "object") return false;
+      return (rule.fields ?? []).every((field) => {
+        let cur = data;
+        for (const part of String(field.key ?? "").split(".")) {
+          if (cur === null || typeof cur !== "object" || !(part in cur)) return false;
+          cur = cur[part];
+        }
+        return typeof cur === "string" && cur.length >= Number(field.min ?? 0) && cur.length <= Number(field.max ?? Infinity);
+      });
+    }
+    case "jsonKeysParity": {
+      const sets = (rule.paths ?? []).map((rel) => {
+        const data = readJson(dir, rel);
+        return data && typeof data === "object" && !Array.isArray(data) ? new Set(Object.keys(data)) : null;
+      });
+      if (sets.some((set) => set === null)) return false;
+      const [base, ...rest] = sets;
+      return rest.every((set) => set.size === base.size && [...set].every((key) => base.has(key)));
+    }
     case "jsonHas": {
       const data = readJson(dir, rule.path);
       if (data === null || typeof data !== "object") return false;

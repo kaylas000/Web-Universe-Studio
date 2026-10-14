@@ -24,8 +24,9 @@ codes:
 evidence:
   require:
     - "position:\s*sticky"
+    - "prefers-reduced-motion"
   forbid:
-    - "scroll-behavior:\s*smooth"
+    - "—"
   files:
     - "site/**/*.{html,css,js,mjs,json,txt,md}"
 checks:

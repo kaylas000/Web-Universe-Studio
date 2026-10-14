@@ -7,3 +7,6 @@
 - **Q-03.** ≤100KB — размер изображения
 - **Q-04.** ≤3 параллельных API-запросов при старте
 - **Q-05.** ≤2MB — размер localStorage
+- **Q-06.** ≥0.9 — Lighthouse performance (app/lighthouse.json, jsonNumberMin)
+- **Q-07.** ≤2000ms — TTI (app/lighthouse.json, jsonNumberMax)
+- **Q-08.** ≤1200ms — FCP (app/lighthouse.json, jsonNumberMax)
