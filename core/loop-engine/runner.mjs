@@ -117,6 +117,9 @@ export class UniversalLoopRunner {
     let bestFeedback = null;
     /** @type {import("./base.mjs").Feedback|null} */
     let lastFeedback = null;
+    /** Наименее сломанная попытка: даже провальный прогон отдаёт лучший артефакт, а не последний. */
+    /** @type {{artifact: any, feedback: any, iteration: number, score: number}|null} */
+    let leastBroken = null;
     /** @type {number|null} */
     let successIteration = null;
     /** @type {string} */
@@ -235,6 +238,15 @@ export class UniversalLoopRunner {
         this.logger.info(`${label} успех (stop_on_first_success=false — продолжаем по конфигу)`);
       }
 
+      // 4b. НАИМЕНЕЕ СЛОМАННАЯ ПОПЫТКА (для провального исхода)
+      if (!lastFeedback.ok) {
+        // Меньше кодов — ближе к приёмке; при равенстве выигрывает более короткий разбор ошибок.
+        const score = (lastFeedback.codes ?? []).length * 1000 + String((lastFeedback.errors ?? []).join(" ")).length / 1000;
+        if (leastBroken === null || score < leastBroken.score) {
+          leastBroken = { artifact, feedback: lastFeedback, iteration: i + 1, score };
+        }
+      }
+
       // 5. БЮДЖЕТ
       if (this.config.maxTotalSeconds > 0 && (Date.now() - started) / 1000 > this.config.maxTotalSeconds) {
         reason = `исчерпан бюджет времени ${this.config.maxTotalSeconds}s`;
@@ -247,15 +259,19 @@ export class UniversalLoopRunner {
     if (ok && successIteration !== null && !this.config.stopOnFirstSuccess) {
       reason = `успех на итерации ${successIteration} (прогон продолжен по stop_on_first_success=false)`;
     }
-    const finalFeedback = ok ? bestFeedback : lastFeedback;
+    const finalFeedback = ok ? bestFeedback : leastBroken?.feedback ?? lastFeedback;
+    if (!ok && leastBroken && leastBroken.iteration !== state.history.length) {
+      this.logger.warn("приёмка не пройдена — возвращаю наименее сломанную попытку", { iteration: leastBroken.iteration, codes: leastBroken.feedback?.codes ?? [] });
+    }
 
     const result = {
       ok,
-      artifact: bestArtifact,
+      artifact: ok ? bestArtifact : leastBroken?.artifact ?? null,
       feedback: finalFeedback,
       state,
       iterations: state.history.length,
       successIteration,
+      bestIteration: ok ? successIteration : leastBroken?.iteration ?? null,
       elapsedMs: Date.now() - started,
       reason: ok ? reason : reason === "итерации исчерпаны" ? `провал после ${state.history.length} итераций` : reason,
     };

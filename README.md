@@ -93,7 +93,7 @@ docs/              ARCHITECTURE.md, API.md, DEPLOY.md, USER_GUIDE.md
 ## Тесты
 
 ```bash
-npm run test:engine      # 153 теста ядра
+npm run test:engine      # 154 теста ядра
 npm run test:platform    # подсистемы и сквозные сценарии
 npm run test:verticals   # по каждой студии
 ```

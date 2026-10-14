@@ -1,7 +1,7 @@
 {
   "iteration": 1,
   "temperature": 0.1,
-  "elapsedMs": 106,
+  "elapsedMs": 130,
   "feedback": {
     "ok": true,
     "errors": [],
@@ -18,7 +18,7 @@
         ],
         "exitCode": 0,
         "timedOut": false,
-        "stdout": "TAP version 13\n# Subtest: артефакт записан в workspace\nok 1 - артефакт записан в workspace\n  ---\n  duration_ms: 0.738396\n  type: 'test'\n  ...\n# Subtest: артефакт — валидный ES-модуль с экспортами\nok 2 - артефакт — валидный ES-модуль с экспортами\n  ---\n  duration_ms: 0.650205\n  type: 'test'\n  ...\n# Subtest: ЗАМЕНИ НА РЕАЛЬНЫЕ ПРОВЕРКИ: поведение артефакта\nok 3 - ЗАМЕНИ НА РЕАЛЬНЫЕ ПРОВЕРКИ: поведение артефакта\n  ---\n  duration_ms: 0.316687\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 52.563883\n",
+        "stdout": "TAP version 13\n# Subtest: артефакт записан в workspace\nok 1 - артефакт записан в workspace\n  ---\n  duration_ms: 0.817049\n  type: 'test'\n  ...\n# Subtest: артефакт — валидный ES-модуль с экспортами\nok 2 - артефакт — валидный ES-модуль с экспортами\n  ---\n  duration_ms: 0.717548\n  type: 'test'\n  ...\n# Subtest: ЗАМЕНИ НА РЕАЛЬНЫЕ ПРОВЕРКИ: поведение артефакта\nok 3 - ЗАМЕНИ НА РЕАЛЬНЫЕ ПРОВЕРКИ: поведение артефакта\n  ---\n  duration_ms: 0.303013\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 66.308535\n",
         "stderr": ""
       }
     },
@@ -35,7 +35,7 @@
         "fail": 0,
         "tests": 3,
         "skipped": 0,
-        "durationMs": 52.563883
+        "durationMs": 66.308535
       },
       "testsTarget": "tests/artifact.test.mjs",
       "contract": {

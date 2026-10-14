@@ -3,8 +3,8 @@
   "reason": "успех на итерации 1",
   "iterations": 1,
   "successIteration": 1,
-  "elapsedMs": 141,
-  "finishedAt": "2026-10-14T10:35:57.548Z",
+  "elapsedMs": 140,
+  "finishedAt": "2026-10-14T11:05:21.698Z",
   "feedback": {
     "ok": true,
     "codes": [
@@ -24,7 +24,7 @@
         "fail": 0,
         "tests": 3,
         "skipped": 0,
-        "durationMs": 54.869898
+        "durationMs": 55.1304
       },
       "testsTarget": "tests/artifact.test.mjs",
       "contract": {
@@ -39,7 +39,7 @@
       "model": "mock-1",
       "iteration": 0,
       "temperature": 0.3,
-      "latencyMs": 1,
+      "latencyMs": 0,
       "promptChars": 58049,
       "calls": 1,
       "responseFormat": "text",

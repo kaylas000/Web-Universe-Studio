@@ -117,6 +117,36 @@ test("цикл замечает плато: те же коды дважды → 
   assert.equal(result.feedback.codes.sort().join(","), "V-11,V-23", "цикл вернул те же коды — плато зафиксировано в фидбеке");
 });
 
+test("провальный прогон возвращает наименее сломанную попытку, а не последнюю", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "ceh-best-"));
+  let call = 0;
+  const validator = {
+    describe: () => ({ type: "stub" }),
+    validate: async () => {
+      call += 1;
+      // 1-я попытка: три кода; 2-я: два; 3-я: три — лучше всех вторая
+      const codes = call === 2 ? ["V-11", "V-23"] : ["V-11", "V-20", "V-23"];
+      return createFeedback({ ok: false, codes, errors: [`попытка ${call}`] });
+    },
+  };
+  const contextBuilder = { describe: () => ({ type: "spy" }), build: () => "CTX" };
+  const runner = new UniversalLoopRunner({
+    config: { maxIterations: 3, temperatureSchedule: [0.2], contextCharLimit: 2000, persistIterations: false, plateauEscalation: false },
+    generator: new MockGenerator({}),
+    validator,
+    contextBuilder,
+    logger: silentLogger,
+    workspaceDir: dir,
+    studioRoot: MINI,
+  });
+
+  const result = await runner.run("лучшая попытка", MINI, "best");
+  assert.equal(result.ok, false);
+  assert.equal(result.bestIteration, 2, "вернулась вторая попытка — у неё меньше кодов");
+  assert.deepEqual(result.feedback.codes.sort(), ["V-11", "V-23"]);
+  assert.ok(result.artifact, "артефакт лучшей попытки отдан наружу");
+});
+
 test("контракт студии отдаёт приёмы с шагами и признаками (модель видит «как», а не только «что»)", () => {
   const contract = loadContract(MINI);
   const conversion = contract.skills.find((s) => s.id === "conversion");
