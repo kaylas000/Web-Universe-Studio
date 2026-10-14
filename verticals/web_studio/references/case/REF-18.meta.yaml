@@ -8,4 +8,5 @@ techniques:
 motion: [timeline-scrub, counter-tick]
 palette: ['#FAFAFA', '#18181B', '#0EA5E9']
 takeaway: «Кейс убеждает историей: задача, решение, метрика до/после — а не галереей красивых картинок.»
-screenshot: pending
+specimen: REF-18.specimen.html
+screenshot: REF-18.png

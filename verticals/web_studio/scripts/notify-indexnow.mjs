@@ -14,8 +14,13 @@ if (!existsSync(publicDir)) {
   mkdirSync(publicDir, { recursive: true });
 }
 
-// 1. Создаем уникальный ключ протокола IndexNow
-const apiKey = "ceh2026indexnowkey88888888";
+// 1. Ключ протокола IndexNow приходит из окружения: литерал в репозитории — это секрет в git
+//    (К-15). Файл верификации пишется тем же ключом.
+const apiKey = (process.env.INDEXNOW_KEY ?? "").trim();
+if (!apiKey) {
+  console.error("[IndexNow] не задан INDEXNOW_KEY — ключ не хранится в репозитории (К-15). Пример: INDEXNOW_KEY=... node scripts/notify-indexnow.mjs");
+  process.exit(2);
+}
 const keyFileName = `${apiKey}.txt`;
 const keyFilePath = join(publicDir, keyFileName);
 

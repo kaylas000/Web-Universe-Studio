@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ref-16 · human-voice</title>
+<style>
+:root{--bg:#ffffff;--ink:#111111;--accent:#3390ec;--deep:#111111;--light:#ffffff;--mid:#707579;--faint:#e6e7e9;
+    --ink-87:rgba(17, 17, 17, 0.87);--ink-60:rgba(17, 17, 17, 0.6);--ink-38:rgba(17, 17, 17, 0.38);--ink-12:rgba(17, 17, 17, 0.12);--ink-06:rgba(17, 17, 17, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.shot-stage{min-height:calc(100vh - 44px);display:flex;align-items:center;justify-content:center;gap:44px;
+  padding:30px 40px;background:var(--stage,#e9eaec)}
+.phone{width:390px;height:664px;background:var(--phone-bg);color:var(--phone-ink);border-radius:38px;overflow:hidden;
+  position:relative;box-shadow:0 26px 60px rgba(0, 0, 0, 0.24);display:flex;flex-direction:column;
+  font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif}
+.phone *{box-sizing:border-box}
+.p-cap{display:flex;flex-direction:column;gap:8px;align-items:center}
+.p-cap .cap-title{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#3b3f45}
+.p-cap .cap-note{font-size:13px;color:#5c6168;max-width:390px;text-align:center;line-height:1.5}
+.col{display:flex;flex-direction:column;gap:18px;align-items:center}
+.status{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;font-size:12px;
+  color:var(--phone-mid);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;flex:none}
+.nav{height:52px;display:flex;align-items:center;gap:14px;padding:0 16px;border-bottom:1px solid var(--phone-line);flex:none}
+.nav b{font-size:16px}
+.nav .back{width:22px;height:22px;border-left:2px solid var(--phone-accent);border-bottom:2px solid var(--phone-accent);
+  transform:rotate(45deg);border-radius:1px}
+.nav .menu{margin-left:auto;display:flex;flex-direction:column;gap:4px}
+.nav .menu i{width:18px;height:2px;background:var(--phone-mid)}
+.body{flex:1;overflow:hidden;padding:16px;display:flex;flex-direction:column;gap:12px;
+  justify-content:safe center} /* safe center: короткий экран центрируется, длинный прижимается к верху */
+.card{background:var(--phone-surface);border-radius:16px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.card.plain{background:transparent;border:1px solid var(--phone-line)}
+.row{display:flex;align-items:center;gap:12px}
+.row.between{justify-content:space-between}
+.h1{font-size:26px;line-height:1.15;font-weight:700;letter-spacing:-.02em;margin:0}
+.h2{font-size:17px;font-weight:600;margin:0}
+.muted{color:var(--phone-mid);font-size:13px;line-height:1.5}
+.tiny{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--phone-mid)}
+.chip{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:11px;padding:4px 9px;border-radius:999px;background:var(--phone-surface);
+  border:1px solid var(--phone-line);color:var(--phone-mid)}
+.chip.on{background:var(--phone-accent);border-color:var(--phone-accent);color:#fff}
+.btn{border-radius:12px;padding:14px 16px;text-align:center;font-weight:600;font-size:15px}
+.btn.primary{background:var(--phone-accent);color:#fff}
+.btn.ghost{border:1px solid var(--phone-line);color:var(--phone-ink)}
+.main-btn{margin:0 16px 18px;background:var(--phone-accent);color:#fff;border-radius:14px;padding:16px;
+  text-align:center;font-weight:600;flex:none}
+.tabbar{display:flex;justify-content:space-around;padding:12px 0 18px;border-top:1px solid var(--phone-line);flex:none}
+.tabbar span{font-size:11px;color:var(--phone-mid);display:flex;flex-direction:column;gap:6px;align-items:center}
+.tabbar span::before{content:"";width:20px;height:20px;border-radius:6px;background:var(--phone-surface);border:1px solid var(--phone-line)}
+.tabbar span.on{color:var(--phone-accent)}
+.tabbar span.on::before{background:var(--phone-accent);border-color:var(--phone-accent)}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--phone-surface);border:1px solid var(--phone-line);flex:none}
+.bar{height:8px;border-radius:999px;background:var(--phone-surface);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--phone-accent);width:var(--w,60%)}
+.list{display:flex;flex-direction:column;gap:1px;background:var(--phone-line);border-radius:14px;overflow:hidden}
+.list .item{background:var(--phone-bg);padding:14px 16px;display:flex;align-items:center;gap:12px;justify-content:space-between}
+.thumb{width:56px;height:56px;border-radius:12px;background:var(--phone-surface);border:1px solid var(--phone-line);flex:none}
+.kv{display:flex;flex-direction:column;gap:2px}
+.kv b{font-size:15px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--phone-bg);border-top-left-radius:22px;border-top-right-radius:22px;
+  padding:10px 16px 22px;box-shadow:0 -14px 34px rgba(0, 0, 0, 0.18)}
+.sheet .grab{width:44px;height:5px;border-radius:999px;background:var(--phone-line);margin:2px auto 14px}
+.safe{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:130px;height:5px;border-radius:999px;background:rgba(0, 0, 0, 0.35)}
+.safe-fill{position:absolute;left:0;right:0;bottom:0;height:34px;background:repeating-linear-gradient(45deg,rgba(0, 0, 0, 0.07) 0 6px,transparent 6px 12px);
+  pointer-events:none}
+.focus-ring{outline:3px solid var(--phone-accent);outline-offset:2px}
+.ripple{position:relative;overflow:hidden}
+.ripple::after{content:"";position:absolute;left:50%;top:50%;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;
+  background:rgba(255, 255, 255, 0.35)}
+.badge{position:absolute;top:14px;right:14px;background:#e8a33d;color:#1b1400;font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:11px;
+  padding:5px 9px;border-radius:999px}
+.tlag{position:absolute;top:14px;left:14px;background:var(--phone-accent);color:#fff;font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:11px;padding:5px 9px;border-radius:999px}
+.skeleton{height:12px;border-radius:6px;background:var(--phone-surface);border:1px solid var(--phone-line)}
+.toast{position:absolute;left:16px;right:16px;top:64px;background:var(--phone-ink);color:var(--phone-bg);border-radius:12px;
+  padding:12px 14px;font-size:13px;display:flex;align-items:center;gap:10px}
+
+</style>
+
+</head>
+<body>
+<div class="shot-stage"><div class="col"><div class="phone " style="--phone-bg:#ffffff;--phone-surface:#f4f4f5;--phone-ink:#0f0f0f;--phone-mid:#707579;--phone-accent:#3390ec;--phone-line:#e6e7e9">
+    <div class="status"><span>9:41</span><span>◍ ᯤ ▮</span></div>
+    
+    <div class="nav"><b>О продукте</b><span class="menu"><i></i><i></i><i></i></span></div>
+        <div class="body">
+          <div class="card" style="border-left:3px solid #2f9e44">
+            <span class="tiny" style="color:#2f9e44">так пишем</span>
+            <span class="muted">«Закрываем смену за 5 минут: пекарь вносит факт выпечки, система списывает остатки и готовит отчёт для бухгалтерии.»</span></div>
+          <div class="card" style="border-left:3px solid #d9534f">
+            <span class="tiny" style="color:#d9534f">так не пишем</span>
+            <span class="muted">«Наше решение представляет собой инновационный инструмент, обеспечивающий оптимизацию процессов.»</span></div>
+          <span class="tiny">Балл стиля · 94/100 · A-xx: 0</span>
+        </div>
+        <div class="main-btn">Открыть демо</div>
+    <div class="safe"></div>
+  </div><div class="p-cap"><span class="cap-title">Экспертный текст, не следы ИИ</span><span class="cap-note">Факты и числа вместо клише; глагол вместо «представляет собой». Проверяет детерминированный lint-copy.</span></div></div></div>
+<footer class="shot-stamp" style="--stamp-bg:#f2f2f2;--stamp-ink:#111111;--stamp-accent:#8fd14f">
+  <span class="shot-stamp__id">ref-16</span>
+  <span class="shot-stamp__text">Сухой экспертный текст без следов ИИ: факты и числа вместо клише, глагол вместо «представляет собой», ноль…</span>
+</footer>
+</body>
+</html>

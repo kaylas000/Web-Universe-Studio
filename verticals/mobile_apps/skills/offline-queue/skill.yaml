@@ -24,3 +24,15 @@ checks:
   - "К-17 Retry и ошибки: try-catch с UI-фидбеком"
   - "Q-06 Размер кэша на диске ≤100MB"
 applies_to: [mobile_apps]
+codes:
+  - "Q-06"
+  - "V-07"
+  - "V-17"
+evidence:
+  require:
+    - "NetInfo|connectivity|online"
+    - "queue|cache"
+  forbid:
+    - "—"
+  files:
+    - "app/**/*.{json,js,mjs,ts,tsx,jsx,dart,swift,kt,md}"

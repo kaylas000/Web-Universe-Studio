@@ -1,0 +1,40 @@
+# сгенерировано scripts/upgrade_skills.mjs из SKILL.md — правь SKILL.md или skill.yaml
+name: crop
+id: SK-04
+title: "Crop"
+description: "# Редакционная обрезка фото (SK-04)"
+when: "Фото без арт-дирекшна: сток, скриншоты, фото клиента."
+vertical: web_studio
+takeaway: "Рука оператора на пульте, обрезана по локоть; подпись mono в поле слева."
+inputs:
+  - brief
+  - deliverable
+outputs:
+  - deliverable
+steps:
+  - "Кадрировать по действию, не по композиции исходника"
+  - "Обрезать смело: до 60% кадра могут уйти"
+  - "Чёрно-белый дубль, если цвет спорит с палитрой"
+  - "Подпись — mono, в поле, с координатами или источником"
+  - "Никаких рамок-скруглений (B-10)"
+codes:
+  - "B-10"
+  - "Q-05"
+  - "Q-10"
+evidence:
+  require:
+    - "object-fit:\s*cover|object-position"
+  forbid:
+    - "—"
+  files:
+    - "site/**/*.{html,css,js,mjs,json,txt,md}"
+checks:
+  - "машинные коды: B-10, Q-05, Q-10"
+  - "evidence: post_execute.mjs"
+  - "ворота G3: валидатор студии"
+applies_to:
+  - web_studio
+mistakes:
+  - "Кадрирование «с запасом воздуха»"
+  - "Скругления углов (B-10)"
+  - "Рамки с тенью"

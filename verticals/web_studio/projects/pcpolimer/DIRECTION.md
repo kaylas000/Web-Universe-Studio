@@ -37,4 +37,4 @@ Display: Tektur 700/900 — капс-штампы, индексы, цифры (�
 
 ## Утвержденный Вариант Стиля (К-20)
 — **Архетип**: Swiss Minimal (ARCH-01)
-— **Шрифты**: Tektur + IBM Plex Sans
+— **Шрифты**: Tektur 700/900 (display) + Golos Text 400/600 (body); моно-метки RAL — JetBrains Mono (роль mono вне пар)

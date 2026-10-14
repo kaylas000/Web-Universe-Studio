@@ -8,4 +8,5 @@ techniques:
 motion: [cart-assembly, conveyor-marquee]
 palette: ['#FFFFFF', '#1A1A1A', '#D94F2B']
 takeaway: «Каталог живёт плотностью карточек: фото, название, цена — и корзина всегда на виду.»
-screenshot: pending
+specimen: REF-11.specimen.html
+screenshot: REF-11.png

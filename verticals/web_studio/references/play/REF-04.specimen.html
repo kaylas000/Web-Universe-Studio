@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-04 · play, canvas</title>
+<style>
+:root{--bg:#14120E;--ink:#E8E4DA;--accent:#F2B705;--deep:#14120E;--light:#E8E4DA;--mid:#73716a;--faint:#36342f;
+    --ink-87:rgba(232, 228, 218, 0.87);--ink-60:rgba(232, 228, 218, 0.6);--ink-38:rgba(232, 228, 218, 0.38);--ink-12:rgba(232, 228, 218, 0.12);--ink-06:rgba(232, 228, 218, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+.cp{height:calc(100vh - 44px);display:grid;grid-template-columns:1.2fr .8fr;background:var(--deep);color:var(--light)}
+.cp-stage{position:relative;overflow:hidden;border-right:1px solid rgba(255, 255, 255, 0.12)}
+.cp-floor{position:absolute;left:0;right:0;bottom:0;height:26%;background:linear-gradient(180deg,transparent,rgba(0, 0, 0, 0.35))}
+.cp-hint{position:absolute;left:0;right:0;bottom:12%;text-align:center;font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:11px;letter-spacing:.12em;color:rgba(255, 255, 255, 0.6);text-transform:uppercase}
+.cp-orb{position:absolute;left:34%;top:36%;width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%, var(--accent), rgba(0, 0, 0, 0.6) 74%);
+  box-shadow:0 60px 120px rgba(0, 0, 0, 0.5)}
+.cp-rings i{position:absolute;left:34%;top:36%;width:calc(240px + var(--i) * 150px);height:calc(240px + var(--i) * 150px);
+  margin:calc(-120px - var(--i) * 75px) 0 0 calc(-120px - var(--i) * 75px);border:1px dashed rgba(255, 255, 255, 0.16);border-radius:50%}
+.cp-cursor{position:absolute;right:24%;bottom:22%;display:flex;align-items:center;gap:10px}
+.cp-cursor::before{content:"";width:14px;height:14px;background:var(--accent);border-radius:50%}
+.cp-hud{padding:64px 52px;display:flex;flex-direction:column;justify-content:center;gap:22px}
+.cp-hud h1{margin:0;font-size:52px;line-height:1.05;letter-spacing:-.03em;font-weight:600}
+.cp-legend{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;border-top:1px solid rgba(255, 255, 255, 0.14);padding-top:22px}
+.cp-legend div{display:flex;flex-direction:column;gap:4px}
+.cp-legend b{font-size:22px}
+.cp-legend .meta{color:rgba(255, 255, 255, 0.6)}
+
+</style>
+
+</head>
+<body>
+
+<div class="cp">
+  <div class="cp-stage">
+    <div class="cp-orb"></div>
+    <div class="cp-rings"><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i></div>
+    <div class="cp-floor"></div>
+    <div class="cp-hint">масса 1,8 кг · инерция 0,42 · трение 0,86</div>
+    <div class="cp-cursor"><span class="meta">перетащи</span></div>
+  </div>
+  <div class="cp-hud">
+    <div class="kicker">Игровая навигация вместо меню</div>
+    <h1>Управляй сценой,<br>а не списком пунктов</h1>
+    <div class="cp-legend">
+      <div><span class="meta">Масса</span><b>1,8 кг</b></div><div><span class="meta">Инерция</span><b>0,42</b></div><div><span class="meta">Трение</span><b>0,86</b></div><div><span class="meta">Звук</span><b>по действию</b></div>
+    </div>
+  </div>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#E8E4DA;--stamp-ink:#14120E;--stamp-accent:#F2B705">
+  <span class="shot-stamp__id">REF-04</span>
+  <span class="shot-stamp__text">«Интерактив оправдан, когда у курсора есть масса и инерция, а не когда всё прыгает.»</span>
+</footer>
+</body>
+</html>

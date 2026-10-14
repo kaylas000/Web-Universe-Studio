@@ -1,0 +1,32 @@
+# сгенерировано scripts/upgrade_skills.mjs из SKILL.md — правь SKILL.md или skill.yaml
+name: ux-states
+id: SK-07
+title: "Пять обязательных UX-состояний"
+description: "Кастомная проектировка 5 UX-состояний (Ideal, Empty, Loading, Partial, Error) для любого интерактивного виджета или формы."
+when: "Кастомная проектировка 5 UX-состояний (Ideal, Empty, Loading, Partial, Error) для любого интерактивного виджета или формы."
+vertical: web_studio
+takeaway: "Кастомная проектировка 5 UX-состояний (Ideal, Empty, Loading, Partial, Error) для любого интерактивного виджета или формы."
+inputs:
+  - brief
+  - deliverable
+outputs:
+  - deliverable
+steps:
+  - "Применить приём «ux-states» по правилам студии"
+codes:
+  - "B-20"
+  - "Q-13"
+  - "V-20"
+evidence:
+  require:
+    - "loading|skeleton|aria-busy"
+  forbid:
+    - "—"
+  files:
+    - "site/**/*.{html,css,js,mjs,json,txt,md}"
+checks:
+  - "машинные коды: B-20, Q-13, V-20"
+  - "evidence: post_execute.mjs"
+  - "ворота G3: валидатор студии"
+applies_to:
+  - web_studio

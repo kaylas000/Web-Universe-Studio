@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Архив референсов · Студия мини-приложений</title>
+<style>
+:root{--bg:#f6f5f2;--ink:#141414;--line:#dcd9d2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+header{padding:44px 6vw 18px;border-bottom:1px solid var(--line)}
+h1{margin:0 0 8px;font-size:34px;letter-spacing:-.02em}
+header p{margin:0;color:#5c5c5c;max-width:70ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:26px;padding:30px 6vw 60px}
+figure{margin:0;background:#fff;border:1px solid var(--line);display:flex;flex-direction:column}
+figure img{width:100%;height:auto;display:block;border-bottom:1px solid var(--line)}
+figcaption{padding:14px 16px;font-size:13px;display:flex;flex-direction:column;gap:6px}
+figcaption b{font-size:14px}
+figcaption span{color:#5c5c5c;line-height:1.45}
+.spec{align-self:flex-start;color:#141414;text-decoration:none;border-bottom:1px solid #141414}
+.count{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:#6b6b6b;padding-top:6px}
+</style></head>
+<body>
+<header><h1>Архив референсов · Студия мини-приложений</h1>
+<p>Каждый снимок собран из meta.yaml референса: палитра, приёмы и takeaway превращаются в образец дизайна,
+который студия открывает рядом с исходником.</p>
+<p class="count">референсов: 16 · генератор: scripts/render_reference_screenshots.mjs</p></header>
+<main class="grid">
+  <figure>
+    <a href="metadata/ref-01.png"><img src="metadata/ref-01.png" alt="ref-01: Экран решает одну задачу; вторичные действия уходят в меню, а не теснятся рядом." loading="lazy"></a>
+    <figcaption><b>ref-01</b> · one-screen<span>Экран решает одну задачу; вторичные действия уходят в меню, а не теснятся рядом.</span>
+      <a class="spec" href="metadata/ref-01.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-02.png"><img src="metadata/ref-02.png" alt="ref-02: Каждое нажатие отвечает в пределах 100 мс — сменой состояния, а не спиннером." loading="lazy"></a>
+    <figcaption><b>ref-02</b> · instant-feedback<span>Каждое нажатие отвечает в пределах 100 мс — сменой состояния, а не спиннером.</span>
+      <a class="spec" href="metadata/ref-02.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-03.png"><img src="metadata/ref-03.png" alt="ref-03: Фокус виден на каждом интерактивном элементе; порядок обхода совпадает с визуальным." loading="lazy"></a>
+    <figcaption><b>ref-03</b> · focus-visible<span>Фокус виден на каждом интерактивном элементе; порядок обхода совпадает с визуальным.</span>
+      <a class="spec" href="metadata/ref-03.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-04.png"><img src="metadata/ref-04.png" alt="ref-04: Оплата — только Telegram Payments: openInvoice/sendData вместо внешних ссылок; перед обработкой платежа бэкенд проверяет подпись initData через HMAC-SHA256." loading="lazy"></a>
+    <figcaption><b>ref-04</b> · invoice-initdata<span>Оплата — только Telegram Payments: openInvoice/sendData вместо внешних ссылок; перед обработкой платежа бэкенд проверяет подпись initData через HMAC-SHA256.</span>
+      <a class="spec" href="metadata/ref-04.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-05.png"><img src="metadata/ref-05.png" alt="ref-05: Адаптация 320/375/420 — media-запросы и ограниченная ширина; низ экрана — через env(safe-area-inset-bottom), высота — через viewportChanged, а не жёсткий 100vh." loading="lazy"></a>
+    <figcaption><b>ref-05</b> · viewport-safearea<span>Адаптация 320/375/420 — media-запросы и ограниченная ширина; низ экрана — через env(safe-area-inset-bottom), высота — через viewportChanged, а не жёсткий 100vh.</span>
+      <a class="spec" href="metadata/ref-05.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-06.png"><img src="metadata/ref-06.png" alt="ref-06: Базовый offline — кэш оболочки в Service Worker (install → addAll, fetch → cache-first) и его регистрация; состояние переживает закрытие через CloudStorage/sendData." loading="lazy"></a>
+    <figcaption><b>ref-06</b> · offline-sw<span>Базовый offline — кэш оболочки в Service Worker (install → addAll, fetch → cache-first) и его регистрация; состояние переживает закрытие через CloudStorage/sendData.</span>
+      <a class="spec" href="metadata/ref-06.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-07.png"><img src="metadata/ref-07.png" alt="ref-07: Витрина TMA — категория (Shop/Game/Utility/Finance), описание и сразу живая кнопка: понятно за секунду, зачем открывать." loading="lazy"></a>
+    <figcaption><b>ref-07</b> · tma-entry<span>Витрина TMA — категория (Shop/Game/Utility/Finance), описание и сразу живая кнопка: понятно за секунду, зачем открывать.</span>
+      <a class="spec" href="metadata/ref-07.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-08.png"><img src="metadata/ref-08.png" alt="ref-08: Обзор мини-приложения начинается с назначения и аудитории, а не с перечисления фич." loading="lazy"></a>
+    <figcaption><b>ref-08</b> · tma-review<span>Обзор мини-приложения начинается с назначения и аудитории, а не с перечисления фич.</span>
+      <a class="spec" href="metadata/ref-08.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-09.png"><img src="metadata/ref-09.png" alt="ref-09: Нишу проверяй статистикой RU-сегмента: топ-чарты и онбординги, которые реально привели пользователей." loading="lazy"></a>
+    <figcaption><b>ref-09</b> · tma-niche-charts<span>Нишу проверяй статистикой RU-сегмента: топ-чарты и онбординги, которые реально привели пользователей.</span>
+      <a class="spec" href="metadata/ref-09.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-10.png"><img src="metadata/ref-10.png" alt="ref-10: Концепт TMA-интерфейса — платформенная сетка плюс одна яркая деталь, а не перерисовка всего с нуля." loading="lazy"></a>
+    <figcaption><b>ref-10</b> · tma-ui-concept<span>Концепт TMA-интерфейса — платформенная сетка плюс одна яркая деталь, а не перерисовка всего с нуля.</span>
+      <a class="spec" href="metadata/ref-10.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-11.png"><img src="metadata/ref-11.png" alt="ref-11: Кейс мини-приложения убеждает метриками (установки, удержание), а не только скриншотами." loading="lazy"></a>
+    <figcaption><b>ref-11</b> · tma-case<span>Кейс мини-приложения убеждает метриками (установки, удержание), а не только скриншотами.</span>
+      <a class="spec" href="metadata/ref-11.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-12.png"><img src="metadata/ref-12.png" alt="ref-12: Контраст текста к фону — не ниже 4.5:1 (WCAG 2.1 AA); пары темы выносятся в токены (app/theme.json) и проверяются расчётом, а не глазами." loading="lazy"></a>
+    <figcaption><b>ref-12</b> · contrast-ratio<span>Контраст текста к фону — не ниже 4.5:1 (WCAG 2.1 AA); пары темы выносятся в токены (app/theme.json) и проверяются расчётом, а не глазами.</span>
+      <a class="spec" href="metadata/ref-12.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-13.png"><img src="metadata/ref-13.png" alt="ref-13: Десять эвристик NN/g — видимость статуса, соответствие реальному миру, свобода и контроль, консистентность, предотвращение ошибок, распознавание вместо припоминания, гибкость, эстетика, восстановление после ошибки, справка; проверяемое ядро (статус/выход/подписи/отклик/справка) машинизируется прокси-сканом V-22." loading="lazy"></a>
+    <figcaption><b>ref-13</b> · usability-heuristics<span>Десять эвристик NN/g — видимость статуса, соответствие реальному миру, свобода и контроль, консистентность, предотвращение ошибок, распознавание вместо припоминания, гибкость, эстетика, восстановление после ошибки, справка; проверяемое ядро (статус/выход/подписи/отклик/справка) машинизируется прокси-сканом V-22.</span>
+      <a class="spec" href="metadata/ref-13.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-14.png"><img src="metadata/ref-14.png" alt="ref-14: Конверсия — одна цель и конкретика: единственный primary CTA (MainButton), CTA-глагол, число вместо абстракций (исследования CTA-форм, baymard.com); проверяемое ядро машинизируется прокси-сканом V-23." loading="lazy"></a>
+    <figcaption><b>ref-14</b> · usability-cra<span>Конверсия — одна цель и конкретика: единственный primary CTA (MainButton), CTA-глагол, число вместо абстракций (исследования CTA-форм, baymard.com); проверяемое ядро машинизируется прокси-сканом V-23.</span>
+      <a class="spec" href="metadata/ref-14.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-15.png"><img src="metadata/ref-15.png" alt="ref-15: Движение уважает систему: лёгкий CSS-отклик, отключаемый через prefers-reduced-motion, и никаких блокирующих задержек в JS (V-24)." loading="lazy"></a>
+    <figcaption><b>ref-15</b> · motion-pass<span>Движение уважает систему: лёгкий CSS-отклик, отключаемый через prefers-reduced-motion, и никаких блокирующих задержек в JS (V-24).</span>
+      <a class="spec" href="metadata/ref-15.specimen.html">образец ↗</a></figcaption>
+  </figure>
+  <figure>
+    <a href="metadata/ref-16.png"><img src="metadata/ref-16.png" alt="ref-16: Сухой экспертный текст без следов ИИ: факты и числа вместо клише, глагол вместо «представляет собой», ноль артефактов копипаста (oaicite, utm_source=chatgpt.com, 【…†…】); ядро машинизируется детерминированным сканом scripts/lint-copy.mjs (коды A-xx/C-xx/N-xx/R-xx, балл 0-100; источники: smixs/humanizer-ru, ilyautov/humanizer-ru, stop-slop — MIT)." loading="lazy"></a>
+    <figcaption><b>ref-16</b> · human-voice<span>Сухой экспертный текст без следов ИИ: факты и числа вместо клише, глагол вместо «представляет собой», ноль артефактов копипаста (oaicite, utm_source=chatgpt.com, 【…†…】); ядро машинизируется детерминированным сканом scripts/lint-copy.mjs (коды A-xx/C-xx/N-xx/R-xx, балл 0-100; источники: smixs/humanizer-ru, ilyautov/humanizer-ru, stop-slop — MIT).</span>
+      <a class="spec" href="metadata/ref-16.specimen.html">образец ↗</a></figcaption>
+  </figure>
+</main>
+</body></html>

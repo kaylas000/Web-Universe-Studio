@@ -23,3 +23,24 @@ checks:
   - "A-01…A-09 — артефакты копипаста (жёсткий гейт, scripts/copy.json)"
   - "C-xx/N-xx/R-xx — стиль и ритм (балл 0-100, сводка lint-copy)"
 applies_to: [mobile_apps]
+codes:
+  - "A-01"
+  - "B-07"
+  - "B-08"
+  - "B-12"
+  - "C-01"
+  - "C-02"
+  - "C-03"
+  - "C-05"
+  - "C-07"
+  - "C-09"
+  - "C-13"
+evidence:
+  require:
+    - "—"
+  forbid:
+    - "oaicite"
+    - "представляет собой"
+    - "высокое качество"
+  files:
+    - "app/**/*.{json,js,mjs,ts,tsx,jsx,dart,swift,kt,md}"

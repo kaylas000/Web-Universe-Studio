@@ -2,3 +2,5 @@ id: ref-04
 style: offline-cache
 source: references/sources.yaml#offline-queue
 takeaway: Offline-режим — это кэш последних данных плюс очередь мутирующих запросов: сеть пропала — экран живёт кэшем, запросы встают в очередь и уходят при восстановлении (К-07, К-17).
+specimen: ref-04.specimen.html
+screenshot: ref-04.png

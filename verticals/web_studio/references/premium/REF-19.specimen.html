@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-19 · premium, refined</title>
+<style>
+:root{--bg:#B08D57;--ink:#F1EEE9;--accent:#0C0C0C;--deep:#B08D57;--light:#F1EEE9;--mid:#cdb999;--faint:#ba9d6e;
+    --ink-87:rgba(241, 238, 233, 0.87);--ink-60:rgba(241, 238, 233, 0.6);--ink-38:rgba(241, 238, 233, 0.38);--ink-12:rgba(241, 238, 233, 0.12);--ink-06:rgba(241, 238, 233, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+.pr{height:calc(100vh - 44px);display:flex;flex-direction:column}
+.pr-nav{display:flex;justify-content:space-between;align-items:center;padding:20px 46px;border-bottom:1px solid var(--ink-12)}
+.pr-brand{letter-spacing:.24em;font-size:12px;font-weight:600}
+.pr-links{font-family:Georgia, "Times New Roman", "PT Serif", serif;font-size:15px;color:var(--ink-60);letter-spacing:.02em}
+.pr-hero{flex:1;display:grid;grid-template-columns:1.12fr .88fr}
+.pr-shot{background:var(--deep);position:relative;overflow:hidden;padding:44px}
+.pr-shot b{position:absolute;left:56px;bottom:52px;font-family:Georgia, "Times New Roman", "PT Serif", serif;font-size:30px;color:rgba(255, 255, 255, 0.92);font-weight:400}
+.pr-shot i{position:absolute;right:56px;top:56px;width:34%;height:52%;border:1px solid rgba(255, 255, 255, 0.22);background:rgba(255, 255, 255, 0.05)
+.pr-shot::before{content:"";position:absolute;inset:8% 12%;border:1px solid rgba(255, 255, 255, 0.16)}
+.pr-shot::after{content:"";position:absolute;left:12%;right:12%;bottom:8%;height:34%;
+  background:linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.08))}
+.pr-copy{padding:56px 56px 40px;display:flex;flex-direction:column;justify-content:center;gap:18px}
+.pr-copy h1{margin:0;font-family:Georgia, "Times New Roman", "PT Serif", serif;font-weight:400;font-size:60px;line-height:1.04;letter-spacing:-.02em}
+.pr-copy p{margin:0;font-size:16px;line-height:1.7;color:var(--ink-60);max-width:42ch}
+.pr-spec{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;border-top:1px solid var(--ink-12);padding-top:22px;margin-top:10px}
+.pr-spec div{display:flex;flex-direction:column;gap:4px}
+.pr-spec b{font-size:17px;font-weight:500}
+
+</style>
+
+</head>
+<body>
+
+<div class="pr">
+  <header class="pr-nav">
+    <span class="pr-brand">СЕВЕРНЫЙ ДОМ</span>
+    <span class="pr-links">Архитектура · Интерьеры · Ландшафт</span>
+    <span class="meta">Портфолио 2026</span>
+  </header>
+  <section class="pr-hero">
+    <div class="pr-shot"><i></i><b>Проект 41 · скальный берег</b><div class="grain"></div></div>
+    <div class="pr-copy">
+      <span class="kicker">Проект 41</span>
+      <h1>Дом, который<br>держит тишину</h1>
+      <p>1 240 м² на скальном берегу. Пауза между комнатами — часть плана: 4,2 метра тишины перед каждой спальней.</p>
+      <div class="pr-spec">
+        <div><span class="meta">Площадь</span><b>1 240 м²</b></div><div><span class="meta">Срок</span><b>22 месяца</b></div><div><span class="meta">Материал</span><b>Клинкер · дуб</b></div><div><span class="meta">Команд</span><b>1 подрядчик</b></div>
+      </div>
+    </div>
+  </section>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#F1EEE9;--stamp-ink:#B08D57;--stamp-accent:#0C0C0C">
+  <span class="shot-stamp__id">REF-19</span>
+  <span class="shot-stamp__text">«Премиум — это целостность: типографика, ритм и паузы, и ни одной случайной детали.»</span>
+</footer>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-14 · animation, scroll</title>
+<style>
+:root{--bg:#EDEAE4;--ink:#1C1C1C;--accent:#C9F24B;--deep:#1C1C1C;--light:#EDEAE4;--mid:#8f8d8a;--faint:#ccc9c4;
+    --ink-87:rgba(28, 28, 28, 0.87);--ink-60:rgba(28, 28, 28, 0.6);--ink-38:rgba(28, 28, 28, 0.38);--ink-12:rgba(28, 28, 28, 0.12);--ink-06:rgba(28, 28, 28, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+body{background:var(--bg)}
+.sc{height:calc(100vh - 44px);padding:40px 56px;display:flex;flex-direction:column;gap:26px}
+.sc-head h1{margin:12px 0 0;font-size:38px;line-height:1.06;letter-spacing:-.03em;font-weight:600}
+.sc-track{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.sc-shot{margin:0;display:flex;flex-direction:column;gap:12px}
+.sc-img{flex:1;background:var(--tone);position:relative;overflow:hidden;border:1px solid var(--ink-12)}
+.sc-img::after{content:"";position:absolute;inset:auto 12% 12% auto;width:38%;height:38%;background:var(--ink);opacity:.14}
+.sc-shot:first-child .sc-img{transform:translateY(0)}
+.sc-shot:nth-child(2) .sc-img{margin-top:16px}
+.sc-shot:nth-child(3) .sc-img{margin-top:32px}
+.sc-shot figcaption{display:flex;align-items:baseline;gap:10px}
+.sc-shot b{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;color:var(--accent)}
+.sc-foot{display:flex;justify-content:space-between;align-items:center;gap:30px}
+.sc-tl{display:flex;gap:6px;flex:1;max-width:520px}
+.sc-tl i{flex:1;height:4px;background:var(--ink-12)}
+.sc-tl i.is-on{background:var(--accent)}
+
+</style>
+
+</head>
+<body>
+
+<div class="sc">
+  <header class="sc-head">
+    <span class="kicker">Кинозаставка</span>
+    <h1>Тайтл, который<br>раскрывается по скроллу</h1>
+  </header>
+  <div class="sc-track">
+    <figure class="sc-shot" style="--i:0">
+      <div class="sc-img" style="--tone:#1C1C1C"><div class="grain"></div></div>
+      <figcaption><b>01</b><span class="meta">Появление · одно движение за шаг</span></figcaption>
+    </figure><figure class="sc-shot" style="--i:1">
+      <div class="sc-img" style="--tone:#C9F24B"><div class="grain"></div></div>
+      <figcaption><b>02</b><span class="meta">Сборка · одно движение за шаг</span></figcaption>
+    </figure><figure class="sc-shot" style="--i:2">
+      <div class="sc-img" style="--tone:#EDEAE4"><div class="grain"></div></div>
+      <figcaption><b>03</b><span class="meta">Финал · одно движение за шаг</span></figcaption>
+    </figure>
+  </div>
+  <footer class="sc-foot">
+    <div class="meta">Таймлайн: 8 шагов · scrub по скроллу</div>
+    <div class="sc-tl"><i class="is-on"></i><i class="is-on"></i><i class="is-on"></i><i></i><i></i><i></i><i></i><i></i></div>
+  </footer>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#1C1C1C;--stamp-ink:#EDEAE4;--stamp-accent:#C9F24B">
+  <span class="shot-stamp__id">REF-14</span>
+  <span class="shot-stamp__text">«Анимация усиливает рассказ, если на шаг текста — одно движение; хаос из движений убивает доверие.»</span>
+</footer>
+</body>
+</html>

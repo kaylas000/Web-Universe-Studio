@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-15 · ui-patterns, components</title>
+<style>
+:root{--bg:#F7F7F5;--ink:#2F6FED;--accent:#222222;--deep:#2F6FED;--light:#F7F7F5;--mid:#9dbaf1;--faint:#d7e1f4;
+    --ink-87:rgba(47, 111, 237, 0.87);--ink-60:rgba(47, 111, 237, 0.6);--ink-38:rgba(47, 111, 237, 0.38);--ink-12:rgba(47, 111, 237, 0.12);--ink-06:rgba(47, 111, 237, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+.cs{padding:38px 48px;display:flex;flex-direction:column;gap:24px;height:calc(100vh - 44px)}
+.cs-head{display:flex;justify-content:space-between;align-items:flex-end}
+.cs-head h1{margin:10px 0 0;font-size:36px;letter-spacing:-.02em}
+.cs-grid{flex:1;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:1px;background:var(--ink-12);border:1px solid var(--ink-12)}
+.cs-cell{background:var(--bg);padding:22px 24px;display:flex;flex-direction:column;gap:14px}
+.cs-label{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-38)}
+.cs-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.cs-col{flex-direction:column;align-items:stretch}
+.b{padding:9px 15px;font-size:14px;font-weight:600;border:1px solid transparent}
+.b--primary{background:var(--deep);color:var(--light)}
+.b--ghost{border-color:var(--ink-12);color:var(--ink-87)}
+.b--danger{background:var(--accent);color:var(--bg)}
+.b--disabled{background:var(--ink-06);color:var(--ink-38)}
+.b--primary.is-focus{outline:3px solid var(--accent);outline-offset:2px}
+.b--primary.is-loading{opacity:.72}
+.b--ghost.is-hover{background:var(--ink-06)}
+.f{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--ink-60)}
+.f__box{border:1px solid var(--ink-12);padding:10px 13px;font-style:normal;color:var(--ink);background:var(--bg)}
+.f--error .f__box{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.f--error em{color:var(--accent);font-style:normal}
+.cs-states{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.st{border:1px dashed var(--ink-12);padding:16px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;font-size:13px;color:var(--ink-60)}
+.st b{color:var(--ink);font-size:15px}
+.st--loading i{width:100%;height:8px;background:var(--ink-06)}
+.st--loading i:nth-child(2){width:78%}
+.st--loading i:nth-child(3){width:52%}
+.cs-toggle{display:inline-flex;border:1px solid var(--ink-12);font-size:13px;align-self:flex-start}
+.cs-toggle span{padding:8px 14px;color:var(--ink-60)}
+.cs-toggle .is-on{background:var(--ink);color:var(--bg)}
+.cs-progress{height:10px;background:var(--ink-06);position:relative}
+.cs-progress i{position:absolute;inset:0 auto 0 0;width:var(--w);background:var(--accent)}
+
+</style>
+
+</head>
+<body>
+
+<div class="cs">
+  <header class="cs-head">
+    <div><div class="kicker">UI-кит</div><h1>Компоненты и состояния</h1></div>
+    <div class="meta">Токены · 12 цветов · 4 радиуса · 3 тени</div>
+  </header>
+  <div class="cs-grid">
+    <div class="cs-cell">
+      <span class="cs-label">Кнопки</span>
+      <div class="cs-row"><span class="b b--primary">Сохранить</span><span class="b b--ghost">Отмена</span><span class="b b--danger">Удалить</span><span class="b b--disabled">Недоступно</span></div>
+      <div class="cs-row"><span class="b b--primary is-focus">Фокус</span><span class="b b--primary is-loading">Загрузка…</span><span class="b b--ghost is-hover">Наведение</span></div>
+    </div>
+    <div class="cs-cell">
+      <span class="cs-label">Поля</span>
+      <div class="cs-row cs-col"><label class="f"><span>Почта</span><i class="f__box">ivan@zavod.ru</i></label>
+      <label class="f f--error"><span>Телефон</span><i class="f__box">+7 ___ ___-__-__</i><em>Не хватает двух цифр</em></label></div>
+    </div>
+    <div class="cs-cell">
+      <span class="cs-label">Состояния экрана</span>
+      <div class="cs-states">
+        <div class="st st--empty"><b>Пусто</b><span>Заявок пока нет</span><span class="b b--ghost">Создать заявку</span></div>
+        <div class="st st--loading"><b>Загрузка</b><i></i><i></i><i></i></div>
+      </div>
+    </div>
+    <div class="cs-cell">
+      <span class="cs-label">Отклик</span>
+      <div class="cs-toggle"><span class="is-on">Смена</span><span>Неделя</span><span>Месяц</span></div>
+      <div class="cs-progress"><i style="--w:68%"></i></div>
+      <span class="meta">68% плана · обновлено 2 с назад</span>
+    </div>
+  </div>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#2F6FED;--stamp-ink:#F7F7F5;--stamp-accent:#222222">
+  <span class="shot-stamp__id">REF-15</span>
+  <span class="shot-stamp__text">«Компонент ясен без подписи: одно действие, видные состояния, пустое состояние с подсказкой.»</span>
+</footer>
+</body>
+</html>

@@ -1,0 +1,43 @@
+# сгенерировано scripts/upgrade_skills.mjs из SKILL.md — правь SKILL.md или skill.yaml
+name: poster-type
+id: SK-01
+title: "Poster Type"
+description: "# Плакатная типографика (SK-01)"
+when: "Заголовок должен работать как изображение: афиши, манифесты, первые экраны."
+vertical: web_studio
+takeaway: "«ЦЕХ / НЕ ПРОЩАЕТ / ОШИБОК» — три строки, перенос по смыслу, красная средняя строка."
+inputs:
+  - brief
+  - deliverable
+outputs:
+  - deliverable
+steps:
+  - "Один уровень иерархии на экран: гигант + техподпись"
+  - "Размер от 8vw (Q-04), строки ломаются по смыслу"
+  - "Кернинг плотный, интерлиньяж 0.9–0.95"
+  - "Не больше двух гарнитур: display + mono-подписи"
+  - "Акцент — одно слово цветом или обводкой, не градиентом"
+codes:
+  - "B-06"
+  - "B-11"
+  - "B-23"
+  - "Q-04"
+  - "Q-06"
+evidence:
+  require:
+    - "font-size:\s*clamp\(|font-size:\s*(8|9|1[0-2])vw"
+    - "overflow:\s*(hidden|clip|auto)"
+  forbid:
+    - "—"
+  files:
+    - "site/**/*.{html,css,js,mjs,json,txt,md}"
+checks:
+  - "машинные коды: B-06, B-11, B-23, Q-04, Q-06"
+  - "evidence: post_execute.mjs"
+  - "ворота G3: валидатор студии"
+applies_to:
+  - web_studio
+mistakes:
+  - "Перенос по ширине контейнера"
+  - "Три и более размера в одном экране"
+  - "Градиентная заливка (B-06)"

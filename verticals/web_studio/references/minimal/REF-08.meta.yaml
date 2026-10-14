@@ -8,4 +8,5 @@ techniques:
 motion: [mask-reveal]
 palette: ['#FAF9F7', '#111111', '#C8A96A']
 takeaway: «Минимализм — это один акцент на пустом фоне, а не пустой фон без акцента.»
-screenshot: pending
+specimen: REF-08.specimen.html
+screenshot: REF-08.png

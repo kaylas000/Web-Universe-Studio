@@ -1,0 +1,34 @@
+# сгенерировано scripts/upgrade_skills.mjs из SKILL.md — правь SKILL.md или skill.yaml
+name: proof-engine
+id: SK-11
+title: "Система доказательств (Proof Engine)"
+description: "Конструктор блоков социального доказательства, кейсов «Было/Стало» и задокументированных фактов."
+when: "Конструктор блоков социального доказательства, кейсов «Было/Стало» и задокументированных фактов."
+vertical: web_studio
+takeaway: "Конструктор блоков социального доказательства, кейсов «Было/Стало» и задокументированных фактов."
+inputs:
+  - brief
+  - deliverable
+outputs:
+  - deliverable
+steps:
+  - "Применить приём «proof-engine» по правилам студии"
+codes:
+  - "B-14"
+  - "B-15"
+  - "V-02"
+evidence:
+  require:
+    - "alt=\"[^\"]+\""
+  forbid:
+    - "нам доверяют"
+    - "trusted by"
+    - "\d{3,}\+\s*клиент"
+  files:
+    - "site/**/*.{html,css,js,mjs,json,txt,md}"
+checks:
+  - "машинные коды: B-14, B-15, V-02"
+  - "evidence: post_execute.mjs"
+  - "ворота G3: валидатор студии"
+applies_to:
+  - web_studio

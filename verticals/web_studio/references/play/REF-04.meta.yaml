@@ -8,4 +8,5 @@ techniques:
 motion: [sticky-scene]
 palette: ['#14120E', '#F2B705', '#E8E4DA']
 takeaway: «Интерактив оправдан, когда у курсора есть масса и инерция, а не когда всё прыгает.»
-screenshot: pending
+specimen: REF-04.specimen.html
+screenshot: REF-04.png

@@ -317,7 +317,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    min-height: 30px;
+    min-height: 44px; /* Q-08: ссылка рейки — тач-зона ≥44px, а не 30px */
     font-size: 14px;
     color: var(--muted-dark);
     border-left: 3px solid transparent;

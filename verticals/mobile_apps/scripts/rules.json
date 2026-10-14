@@ -484,6 +484,56 @@
       ],
       "ok": "анимации в 60fps: нативный драйвер (useNativeDriver), кадровая модель rAF/Easing, без блокирующих задержек главного потока (V-25)",
       "fail": "анимации вне норм (К-25) · прокси: Animated.timing + useNativeDriver: true + requestAnimationFrame/Easing (regexAbsent рубит setTimeout ≥500мс); 60fps на тире меряет Profiler"
+    },
+    {
+      "code": "V-26",
+      "title": "Биометрия: проверка железа до запроса (К-19)",
+      "kind": "implies",
+      "path": "app/src/App.mjs",
+      "if": "biometric|Biometric|FaceID|TouchID|LocalAuthentication",
+      "then": [
+        "hasHardwareAsync|canAuthenticate|isEnrolledAsync|isSensorAvailable|canPromptBiometric"
+      ],
+      "ok": "биометрия вызывается только после проверки доступности",
+      "fail": "биометрия без проверки железа — на устройстве без датчика поток падает (К-19)"
+    },
+    {
+      "code": "V-27",
+      "title": "Локали ru/en: паритет ключей (К-14)",
+      "kind": "jsonKeysParity",
+      "paths": [
+        "app/locales/ru.json",
+        "app/locales/en.json"
+      ],
+      "ok": "ru и en описывают один и тот же набор строк",
+      "fail": "локали разошлись: ключ есть в одном языке и отсутствует в другом (К-14)"
+    },
+    {
+      "code": "V-28",
+      "title": "Описание в сторе ≥ 60 символов (К-20)",
+      "kind": "jsonStringLength",
+      "path": "app/store.json",
+      "fields": [
+        {
+          "key": "description",
+          "min": 60
+        }
+      ],
+      "ok": "описание стора содержательно, а не заглушка",
+      "fail": "описание стора короче 60 символов — модерация и поиск не поймут приложение (К-20)"
+    },
+    {
+      "code": "V-29",
+      "title": "Флаги платформы в манифесте приложения (К-26)",
+      "kind": "jsonHas",
+      "path": "app/app.json",
+      "keys": [
+        "designSystem",
+        "tabletSupport",
+        "permissionsOnDemand"
+      ],
+      "ok": "манифест объявляет дизайн-систему, планшеты и запрос разрешений по действию",
+      "fail": "в app.json нет designSystem/tabletSupport/permissionsOnDemand (К-26)"
     }
   ]
 }

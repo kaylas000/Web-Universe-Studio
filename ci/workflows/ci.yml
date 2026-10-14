@@ -1,0 +1,25 @@
+# К-15: ошибки ловятся на самом дешёвом слое. PR не мержится без зелёного CI.
+# Прогон без сети и ключей: npm test поднимает движок, платформенный гейт и тесты студий;
+# acceptance-скрипт проходит полную приёмку DoD (§15 ТЗ); hygiene-гейт ловит секреты и битые ссылки.
+name: ci
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Репозиторная гигиена (К-15)
+        run: node scripts/ci-gate.mjs
+      - name: Тесты, гейт и приёмка
+        run: npm test
+      - name: Полная приёмка DoD
+        run: bash scripts/acceptance_test.sh

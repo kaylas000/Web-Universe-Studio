@@ -8,4 +8,5 @@ techniques:
 motion: [sticky-scene, counter-tick]
 palette: ['#0B1F3A', '#FFFFFF', '#3DD68C']
 takeaway: «SaaS-лендинг — это одно обещание в hero и доказательство цифрами ниже, а не каталог фич.»
-screenshot: pending
+specimen: REF-12.specimen.html
+screenshot: REF-12.png

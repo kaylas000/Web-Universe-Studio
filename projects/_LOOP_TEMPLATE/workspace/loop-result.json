@@ -3,8 +3,8 @@
   "reason": "успех на итерации 2",
   "iterations": 2,
   "successIteration": 2,
-  "elapsedMs": 156,
-  "finishedAt": "2026-10-14T08:28:00.487Z",
+  "elapsedMs": 204,
+  "finishedAt": "2026-10-14T12:47:23.777Z",
   "feedback": {
     "ok": true,
     "codes": [
@@ -13,7 +13,7 @@
     "errors": [],
     "metrics": {
       "iteration": 1,
-      "workspace": "/home/agent/Документы/Проект по умолчанию/Web-Universe-Studio/projects/_LOOP_TEMPLATE/workspace",
+      "workspace": "/home/user/Web-Universe-Studio/projects/_LOOP_TEMPLATE/workspace",
       "files": [
         "main.mjs"
       ],
@@ -24,7 +24,7 @@
         "fail": 0,
         "tests": 3,
         "skipped": 0,
-        "durationMs": 59.535137
+        "durationMs": 78.602805
       },
       "testsTarget": "tests/artifact.test.mjs"
     }
@@ -48,7 +48,7 @@
     {
       "iteration": 0,
       "temperature": 0.3,
-      "elapsedMs": 34,
+      "elapsedMs": 49,
       "contextChars": 6604,
       "ok": false,
       "codes": [
@@ -58,7 +58,7 @@
     {
       "iteration": 1,
       "temperature": 0.1,
-      "elapsedMs": 119,
+      "elapsedMs": 153,
       "contextChars": 7150,
       "ok": true,
       "codes": [

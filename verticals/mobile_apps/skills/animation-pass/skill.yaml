@@ -21,3 +21,13 @@ checks:
   - "V-25 (allOf: нативный драйвер + кадровая модель) из validate.mjs"
   - "60fps на тире: Profiler (JS-кадр ≤ 8 мс)"
 applies_to: [mobile_apps]
+codes:
+  - "Q-07"
+  - "V-25"
+evidence:
+  require:
+    - "Animated|AnimationController|withAnimation"
+  forbid:
+    - "setTimeout\([^)]{0,40},\s*[5-9]\d{3}"
+  files:
+    - "app/**/*.{json,js,mjs,ts,tsx,jsx,dart,swift,kt,md}"

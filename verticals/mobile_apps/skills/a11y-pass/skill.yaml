@@ -23,3 +23,13 @@ checks:
   - "V-11"
   - "V-22"
 applies_to: [mobile_apps]
+codes:
+  - "V-03"
+  - "V-08"
+evidence:
+  require:
+    - "accessibilityLabel|semanticLabel|contentDescription"
+  forbid:
+    - "—"
+  files:
+    - "app/**/*.{json,js,mjs,ts,tsx,jsx,dart,swift,kt,md}"

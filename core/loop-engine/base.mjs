@@ -134,6 +134,11 @@ export const DEFAULT_LOOP_CONFIG = Object.freeze({
   throwOnFailure: false,
   /** Писать артефакты/фидбеки итераций в workspace/iterations/. */
   persistIterations: true,
+  /**
+   * Эскалация плато: повтор тех же кодов подряд повышает температуру следующей попытки.
+   * Выключается, когда важно строго соблюсти расписание температур (тесты, воспроизводимость).
+   */
+  plateauEscalation: true,
 });
 
 /**
@@ -192,12 +197,17 @@ export function createArtifact(content, metadata = {}) {
 export function createFeedback(input) {
   const errors = (input.errors ?? []).map((e) => (typeof e === "string" ? e : String(e))).filter(Boolean);
   const codes = (input.codes ?? []).map((c) => String(c)).filter(Boolean);
+  // Расширения валидатора сохраняются как есть: план правок по кодам (repair), отчёт приёмов
+  // студии (skills), разбор по осям. Раньше они молча терялись здесь — и цикл возвращал модели
+  // голый список кодов вместо указаний, что именно править.
+  const { ok: _ok, errors: _errors, codes: _codes, raw: _raw, metrics: _metrics, ...extensions } = input ?? {};
   return {
-    ok: Boolean(input.ok),
+    ok: Boolean(input?.ok),
     errors,
-    codes: codes.length > 0 ? codes : [input.ok ? "OK" : "E-FAIL"],
-    raw: input.raw === undefined ? null : input.raw,
-    metrics: { ...(input.metrics ?? {}) },
+    codes: codes.length > 0 ? codes : [input?.ok ? "OK" : "E-FAIL"],
+    raw: input?.raw === undefined ? null : input.raw,
+    metrics: { ...(input?.metrics ?? {}) },
+    ...extensions,
   };
 }
 
@@ -232,6 +242,7 @@ export function createLoopConfig(input = {}) {
     maxTotalSeconds: Math.max(0, Number(getFirst(input, ["maxTotalSeconds", "max_total_seconds"], DEFAULT_LOOP_CONFIG.maxTotalSeconds)) || 0),
     throwOnFailure: Boolean(getFirst(input, ["throwOnFailure", "throw_on_failure"], DEFAULT_LOOP_CONFIG.throwOnFailure)),
     persistIterations: Boolean(getFirst(input, ["persistIterations", "persist_iterations"], DEFAULT_LOOP_CONFIG.persistIterations)),
+    plateauEscalation: Boolean(getFirst(input, ["plateauEscalation", "plateau_escalation"], DEFAULT_LOOP_CONFIG.plateauEscalation)),
   };
 }
 

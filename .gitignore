@@ -16,3 +16,6 @@ dist/
 .env
 .env.*
 !.env.example
+
+# Дорожка браузера для съёмки скриншотов архива (scripts/shots/install-browser.mjs)
+scripts/shots/.browser/

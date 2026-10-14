@@ -2,3 +2,5 @@ id: ref-04
 style: invoice-initdata
 source: references/sources.yaml#payments
 takeaway: Оплата — только Telegram Payments: openInvoice/sendData вместо внешних ссылок; перед обработкой платежа бэкенд проверяет подпись initData через HMAC-SHA256.
+specimen: ref-04.specimen.html
+screenshot: ref-04.png

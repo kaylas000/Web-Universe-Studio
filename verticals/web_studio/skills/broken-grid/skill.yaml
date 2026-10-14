@@ -1,0 +1,39 @@
+# сгенерировано scripts/upgrade_skills.mjs из SKILL.md — правь SKILL.md или skill.yaml
+name: broken-grid
+id: SK-02
+title: "Broken Grid"
+description: "# Ломаная сетка (SK-02)"
+when: "Страница длиннее трёх секций: нужна асимметрия без хаоса (Q-03)."
+vertical: web_studio
+takeaway: "Табличка проекта на 7 колонок слева, индекс сдвинут в поле на 9-й."
+inputs:
+  - brief
+  - deliverable
+outputs:
+  - deliverable
+steps:
+  - "База — 12 колонок; каждая секция ломает не больше двух"
+  - "Левая рейка-индекс сквозная, контент дышит справа"
+  - "Сдвиг по вертикали ≥ 4vh между соседними блоками"
+  - "Пустое поле — элемент композиции, не «недоделка»"
+  - "Ломается сетка, а не выравнивание текста внутри блока"
+codes:
+  - "B-03"
+  - "Q-03"
+evidence:
+  require:
+    - "grid-template-columns|grid-template-areas"
+  forbid:
+    - "transition:\s*all"
+  files:
+    - "site/**/*.{html,css,js,mjs,json,txt,md}"
+checks:
+  - "машинные коды: B-03, Q-03"
+  - "evidence: post_execute.mjs"
+  - "ворота G3: валидатор студии"
+applies_to:
+  - web_studio
+mistakes:
+  - "Ломать каждую секцию (шум)"
+  - "Сдвиг ради сдвига без причины"
+  - "Центрирование после ломки (B-03)"

@@ -2,3 +2,5 @@ id: ref-16
 style: human-voice
 source: references/sources.yaml#humanizer-ru
 takeaway: Сухой экспертный текст без следов ИИ: факты и числа вместо клише, глагол вместо «представляет собой», ноль артефактов копипаста (oaicite, utm_source=chatgpt.com, 【…†…】); ядро машинизируется детерминированным сканом scripts/lint-copy.mjs (коды A-xx/C-xx/N-xx/R-xx, балл 0-100; источники: smixs/humanizer-ru, ilyautov/humanizer-ru, stop-slop — MIT).
+specimen: ref-16.specimen.html
+screenshot: ref-16.png

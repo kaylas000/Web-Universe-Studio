@@ -26,3 +26,14 @@ checks:
 applies_to:
   - mini_apps
   - telegram-mini-app
+codes:
+  - "V-07"
+  - "V-15"
+evidence:
+  require:
+    - "openInvoice|sendData"
+    - "createHmac|sha256"
+  forbid:
+    - "https://pay\."
+  files:
+    - "app/**/*.{html,css,js,mjs,json,md}"

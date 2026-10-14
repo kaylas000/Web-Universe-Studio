@@ -56,6 +56,36 @@
       "max": 2048,
       "ok": "localStorage в квоте 2MB",
       "fail": "localStorage превышает 2MB (Q-05) · прокси: декларативный объём app/bundle-size.json (localstorage_kb) от лимита CloudStorage/WebApp"
+    },
+    {
+      "code": "Q-06",
+      "title": "Lighthouse performance ≥ 0.9",
+      "kind": "jsonNumberMin",
+      "path": "app/lighthouse.json",
+      "key": "performance",
+      "min": 0.9,
+      "ok": "прогон Lighthouse не ниже 0.9",
+      "fail": "Lighthouse performance ниже 0.9 — скорость не вытянута"
+    },
+    {
+      "code": "Q-07",
+      "title": "TTI ≤ 2000 ms",
+      "kind": "jsonNumberMax",
+      "path": "app/lighthouse.json",
+      "key": "tti_ms",
+      "max": 2000,
+      "ok": "интерактивность укладывается в 2 с",
+      "fail": "TTI больше 2 с — пользователь ждёт"
+    },
+    {
+      "code": "Q-08",
+      "title": "FCP ≤ 1200 ms",
+      "kind": "jsonNumberMax",
+      "path": "app/lighthouse.json",
+      "key": "fcp_ms",
+      "max": 1200,
+      "ok": "первая отрисовка быстрее 1.2 с",
+      "fail": "FCP больше 1.2 с — первый экран пустой слишком долго"
     }
   ]
 }

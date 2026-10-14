@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-17 · concept, poster</title>
+<style>
+:root{--bg:#E0E7FF;--ink:#1E1B4B;--accent:#F59E0B;--deep:#1E1B4B;--light:#E0E7FF;--mid:#898bae;--faint:#c1c6e2;
+    --ink-87:rgba(30, 27, 75, 0.87);--ink-60:rgba(30, 27, 75, 0.6);--ink-38:rgba(30, 27, 75, 0.38);--ink-12:rgba(30, 27, 75, 0.12);--ink-06:rgba(30, 27, 75, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+.cn{height:calc(100vh - 44px);display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:1fr 1fr;gap:1px;background:var(--ink-12)}
+.cn-cell{background:var(--bg);position:relative;overflow:hidden;padding:26px 28px;display:flex;flex-direction:column}
+.cn-cell--title{grid-column:span 1;justify-content:space-between}
+.cn-cell--title h1{margin:auto 0 0;font-size:clamp(36px,3.4vw,54px);line-height:1.04;letter-spacing:-.03em;font-weight:600}
+.cn-cell--title em{font-style:italic;color:var(--accent)}
+.cn-cell--ph{background:var(--tone);justify-content:space-between}
+.cn-index{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:rgba(0, 0, 0, 0.45)}
+.cn-cell--ph::after{content:"";position:absolute;inset:auto 24px 24px auto;width:64px;height:64px;border-radius:50%;
+  border:2px solid rgba(0, 0, 0, 0.25)}
+.cn-cell--note{grid-column:span 2;flex-direction:row;align-items:flex-end;justify-content:space-between;gap:30px}
+.cn-cell--note p{margin:0;max-width:52ch;font-size:17px;line-height:1.6;color:var(--ink-87)}
+.cn-cta{padding:12px 20px;background:var(--accent);color:var(--bg);font-weight:600;white-space:nowrap}
+.cn-cta:hover{filter:brightness(1.1)}
+
+</style>
+
+</head>
+<body>
+
+<div class="cn">
+  <div class="cn-cell cn-cell--title">
+    <span class="kicker">Концепт 07</span>
+    <h1>Один<br>неожиданный<br><em>элемент</em></h1>
+  </div>
+  <div class="cn-cell cn-cell--ph" style="--tone:#1E1B4B">
+      <span class="cn-index">01</span><div class="grain"></div></div><div class="cn-cell cn-cell--ph" style="--tone:#E0E7FF">
+      <span class="cn-index">02</span><div class="grain"></div></div><div class="cn-cell cn-cell--ph" style="--tone:#F59E0B">
+      <span class="cn-index">03</span><div class="grain"></div></div><div class="cn-cell cn-cell--ph" style="--tone:#1E1B4B">
+      <span class="cn-index">04</span><div class="grain"></div></div><div class="cn-cell cn-cell--ph" style="--tone:#E0E7FF">
+      <span class="cn-index">05</span><div class="grain"></div></div>
+  <div class="cn-cell cn-cell--note">
+    <p>Остальное — по правилам: 12-колоночная сетка, две гарнитуры, одна сигнальная деталь на экран.</p>
+    <span class="cn-cta">Смотреть концепт</span>
+  </div>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#1E1B4B;--stamp-ink:#E0E7FF;--stamp-accent:#F59E0B">
+  <span class="shot-stamp__id">REF-17</span>
+  <span class="shot-stamp__text">«Концепт продаёт одна деталь: необычный акцент на привычной сетке, остальное — по правилам.»</span>
+</footer>
+</body>
+</html>

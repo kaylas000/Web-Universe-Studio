@@ -61,12 +61,18 @@ test("registry.mjs каждой вертикали — валидный IVertica
   }
 });
 
-test("RAG-индекс покрывает архив каждой вертикали", () => {
+test("RAG-индекс покрывает архив каждой вертикали", async () => {
+  // `.index.json` — сгенерированный артефакт и в репозиторий не попадает (.gitignore),
+  // поэтому тест не привязывается к файлу: если индекса нет, собираем его в памяти из
+  // того же модуля. Проверяем требование К-04 — каждая запись архива несёт takeaway.
+  const { documentsFromDirectory } = await import("../../core/knowledge/index.mjs");
   for (const dir of listVerticals()) {
     const meta = readVerticalMeta(dir);
-    const indexPath = join(dir, "references", ".index.json");
-    assert.ok(existsSync(indexPath), `${meta.name}: нет .index.json (запусти index_references.mjs)`);
-    const data = JSON.parse(readFileSync(indexPath, "utf8"));
+    const refsDir = join(dir, "references");
+    const indexPath = join(refsDir, ".index.json");
+    const data = existsSync(indexPath)
+      ? JSON.parse(readFileSync(indexPath, "utf8"))
+      : { documents: documentsFromDirectory(refsDir) };
     assert.ok(Array.isArray(data.documents) && data.documents.length > 0, `${meta.name}: пустой индекс`);
     assert.ok(data.documents.every((d) => d.takeaway && d.takeaway.length > 0), `${meta.name}: запись без takeaway (К-04)`);
   }

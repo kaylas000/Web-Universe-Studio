@@ -8,4 +8,5 @@ techniques:
 motion: [sticky-scene, mask-reveal]
 palette: ['#F6F1E7', '#1D3A5F', '#D64533']
 takeaway: «Закрепи сцену на весь экран и меняй в ней ровно одно состояние на шаг текста.»
-screenshot: pending
+specimen: REF-01.specimen.html
+screenshot: REF-01.png

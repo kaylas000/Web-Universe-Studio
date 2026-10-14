@@ -2,3 +2,5 @@ id: ref-02
 style: instant-feedback
 source: references/sources.yaml#single-page-app
 takeaway: Каждое нажатие отвечает в пределах 100 мс — сменой состояния, а не спиннером.
+specimen: ref-02.specimen.html
+screenshot: ref-02.png

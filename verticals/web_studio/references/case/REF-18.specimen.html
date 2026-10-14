@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-18 · case, portfolio</title>
+<style>
+:root{--bg:#FAFAFA;--ink:#0EA5E9;--accent:#18181B;--deep:#0EA5E9;--light:#FAFAFA;--mid:#90d4f2;--faint:#d4ecf7;
+    --ink-87:rgba(14, 165, 233, 0.87);--ink-60:rgba(14, 165, 233, 0.6);--ink-38:rgba(14, 165, 233, 0.38);--ink-12:rgba(14, 165, 233, 0.12);--ink-06:rgba(14, 165, 233, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+.cst{height:calc(100vh - 44px);padding:44px 56px;display:flex;flex-direction:column;gap:22px}
+.cst-head h1{margin:14px 0 0;font-size:48px;line-height:1.08;letter-spacing:-.03em;font-weight:600;max-width:24ch}
+.cst-head h1 em{font-style:normal;color:var(--accent);border-bottom:4px solid var(--accent)}
+.cst-cols{flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:26px;border-top:1px solid var(--ink-12);padding-top:22px}
+.cst-tag{display:inline-block;font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--light);background:var(--deep);padding:4px 9px}
+.cst-col p{margin:14px 0 0;font-size:16px;line-height:1.65;color:var(--ink-87)}
+.cst-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--ink-12);border:1px solid var(--ink-12)}
+.cst-metric{background:var(--bg);padding:18px 22px;display:flex;flex-direction:column;gap:4px}
+.cst-metric b{font-size:34px;letter-spacing:-.02em}
+.cst-metric.is-hot{background:var(--accent);color:var(--bg)}
+.cst-metric.is-hot .meta{color:rgba(255, 255, 255, 0.82)}
+
+</style>
+
+</head>
+<body>
+
+<div class="cst">
+  <header class="cst-head">
+    <div class="kicker">Кейс · Логистика</div>
+    <h1>Сократили простой транспорта<br><em>с 19% до 4%</em> за две смены</h1>
+  </header>
+  <div class="cst-cols">
+    <div class="cst-col"><span class="cst-tag">Задача</span>
+      <p>Парк 84 машины, диспетчер вёл график в таблице. Машина ждала погрузку, потому что заявку подтверждали по телефону.</p></div>
+    <div class="cst-col"><span class="cst-tag">Решение</span>
+      <p>Единая очередь заявок и автоматическое назначение: ближайшая свободная единица техники получает задание в приложении.</p></div>
+    <div class="cst-col"><span class="cst-tag">Результат</span>
+      <p>Простой 4%, 74 рейса в сутки, окупаемость системы — 4,5 месяца по данным бухгалтерии.</p></div>
+  </div>
+  <div class="cst-metrics">
+    <div class="cst-metric"><b>19%</b><span class="meta">простой до</span></div><div class="cst-metric is-hot"><b>4%</b><span class="meta">простой после</span></div><div class="cst-metric"><b>74</b><span class="meta">рейса в сутки</span></div><div class="cst-metric"><b>4,5 мес</b><span class="meta">окупаемость</span></div>
+  </div>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#0EA5E9;--stamp-ink:#FAFAFA;--stamp-accent:#18181B">
+  <span class="shot-stamp__id">REF-18</span>
+  <span class="shot-stamp__text">«Кейс убеждает историей: задача, решение, метрика до/после — а не галереей красивых картинок.»</span>
+</footer>
+</body>
+</html>

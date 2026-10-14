@@ -2,3 +2,5 @@ id: ref-03
 style: focus-visible
 source: references/sources.yaml#a11y-pass
 takeaway: Фокус виден на каждом интерактивном элементе; порядок обхода совпадает с визуальным.
+specimen: ref-03.specimen.html
+screenshot: ref-03.png

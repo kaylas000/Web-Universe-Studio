@@ -2,3 +2,5 @@ id: ref-10
 style: tma-ui-concept
 source: references/sources.yaml#dribbble-tma
 takeaway: Концепт TMA-интерфейса — платформенная сетка плюс одна яркая деталь, а не перерисовка всего с нуля.
+specimen: ref-10.specimen.html
+screenshot: ref-10.png

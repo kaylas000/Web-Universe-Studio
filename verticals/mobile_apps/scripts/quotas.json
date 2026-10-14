@@ -71,6 +71,16 @@
       "max": 100,
       "ok": "кэш не превышает лимит",
       "fail": "кэш на диске больше 100MB (Q-06) · app.json cacheLimitMb"
+    },
+    {
+      "code": "Q-07",
+      "title": "FPS ≥ 55 в активном экране",
+      "kind": "jsonNumberMin",
+      "path": "app/perf.json",
+      "key": "fps",
+      "min": 55,
+      "ok": "кадровая частота в бюджете (≥ 55 fps)",
+      "fail": "FPS ниже 55 — анимации рвутся (К-25)"
     }
   ]
 }

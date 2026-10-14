@@ -47,7 +47,8 @@ test("цикл сходится: провал → фидбек → успех (3
       generator: new MockGenerator({ scripted: ["раз", "два", "GOOD маркер"] }),
       validator: stubValidator("маркер"),
       contextBuilder: contextBuilderSpy(seen),
-      config: { max_iterations: 5, temperature_schedule: [0.4, 0.2, 0.0] },
+      // без эскалации плато: тест проверяет само расписание, стаб валидатора всегда даёт один код
+      config: { max_iterations: 5, temperature_schedule: [0.4, 0.2, 0.0], plateau_escalation: false },
       workspaceDir: join(dir, "workspace"),
       logger: silentLogger,
     });
@@ -87,7 +88,10 @@ test("исчерпание итераций: LoopResult{ok:false}, а не ис�
   const result = await runner.run("задача", tmpdir(), "demo");
   assert.equal(result.ok, false);
   assert.equal(result.iterations, 2);
-  assert.equal(result.artifact, null);
+  // Приёмка не пройдена, но прогон отдаёт наименее сломанную попытку (при равных кодах — первую):
+  // пустой артефакт наружу бесполезен, а так у заказчика есть лучший из полученных вариантов.
+  assert.ok(result.artifact, "наименее сломанная попытка отдана наружу");
+  assert.equal(result.bestIteration, 1);
   assert.match(result.reason, /провал после 2 итераций/);
   assert.deepEqual(result.feedback.codes, ["E-STUB"]);
 });

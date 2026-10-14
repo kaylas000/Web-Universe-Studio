@@ -1,0 +1,32 @@
+# сгенерировано scripts/upgrade_skills.mjs из SKILL.md — правь SKILL.md или skill.yaml
+name: interactive-data
+id: SK-08
+title: "Интерактивные таблицы и матрицы данных"
+description: "Верстка плотных инжеренно-технических таблиц и сравнительных характеристик без вертикального разрыва и со 100% адаптивностью на 320px."
+when: "Верстка плотных инжеренно-технических таблиц и сравнительных характеристик без вертикального разрыва и со 100% адаптивностью на 320px."
+vertical: web_studio
+takeaway: "Верстка плотных инжеренно-технических таблиц и сравнительных характеристик без вертикального разрыва и со 100% адаптивностью на 320px."
+inputs:
+  - brief
+  - deliverable
+outputs:
+  - deliverable
+steps:
+  - "Применить приём «interactive-data» по правилам студии"
+codes:
+  - "B-24"
+  - "V-19"
+evidence:
+  require:
+    - "<table"
+    - "overflow(-x)?:\s*(auto|scroll)"
+  forbid:
+    - "—"
+  files:
+    - "site/**/*.{html,css,js,mjs,json,txt,md}"
+checks:
+  - "машинные коды: B-24, V-19"
+  - "evidence: post_execute.mjs"
+  - "ворота G3: валидатор студии"
+applies_to:
+  - web_studio

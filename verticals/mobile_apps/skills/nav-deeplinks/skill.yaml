@@ -23,3 +23,15 @@ checks:
   - "К-13 Обработка deep links (universal/app links)"
   - "Q-05 ≤5 экранов в одном стеке без навигации"
 applies_to: [mobile_apps]
+codes:
+  - "Q-05"
+  - "V-08"
+  - "V-09"
+evidence:
+  require:
+    - "Navigation|Navigator|go_router|NavigationStack"
+    - "Linking|deepLink|universal"
+  forbid:
+    - "—"
+  files:
+    - "app/**/*.{json,js,mjs,ts,tsx,jsx,dart,swift,kt,md}"

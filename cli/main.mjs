@@ -6,6 +6,7 @@
    Использование:
      node cli/main.mjs loop <project> [--validator ceh_project]
      node cli/main.mjs gate [--vertical web_studio] [--json]
+     node cli/main.mjs gates G4 --studio web_studio --project <имя>
      node cli/main.mjs orchestrate <composition.yaml> | --goal "<текст>"
      node cli/main.mjs api [--port 8787]
      node cli/main.mjs references search "<запрос>" | stats
@@ -25,11 +26,15 @@ const COMMANDS = {
   loop: { script: "core/loop-engine/cli.mjs", desc: "ручной прогон цикла (К-21)" },
   gate: { script: "core/gate.mjs", desc: "платформенный гейт: все вертикали" },
   "gate:web": { script: "core/loop-engine/gate.mjs", desc: "гейт веб-вертикали (эталон)" },
+  gates: { script: "core/loop-engine/gates-cli.mjs", desc: "стадии цикла G1…G4: чек-листы стадий как машинные проверки" },
   orchestrate: { script: "core/orchestrator/cli.mjs", desc: "CEO-агент: композиции (DAG)" },
   api: { script: "core/api/server.mjs", desc: "API Gateway (node:http)" },
   references: { script: "cli/references_cli.mjs", desc: "поиск по архиву референсов (RAG)" },
   "index-references": { script: "scripts/index_references.mjs", desc: "сборка RAG-индекса архива" },
   scrape: { script: "scripts/scrape_references.mjs", desc: "аудит/сбор архива (К-04)" },
+  contract: { script: "scripts/contract.mjs", desc: "контракт студии: закон ↔ коды ↔ приёмы (audit/check/export)" },
+  skills: { script: "scripts/upgrade_skills.mjs", desc: "приёмы студий: собрать/проверить исполнимую часть (--check)" },
+  shots: { script: "scripts/render_reference_screenshots.mjs", desc: "снимки дизайнов из референсов (--check)" },
 };
 
 function help() {

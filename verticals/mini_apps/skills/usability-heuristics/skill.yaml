@@ -28,3 +28,17 @@ applies_to:
   - telegram-mini-app
   - vk-mini-app
   - usability
+codes:
+  - "B-05"
+  - "B-08"
+  - "B-09"
+  - "V-19"
+  - "V-22"
+evidence:
+  require:
+    - "role=\"status\"|aria-live"
+    - "BackButton"
+  forbid:
+    - "—"
+  files:
+    - "app/**/*.{html,css,js,mjs,json,md}"

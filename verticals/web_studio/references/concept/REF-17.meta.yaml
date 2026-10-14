@@ -8,4 +8,5 @@ techniques:
 motion: [mask-reveal, scramble-decode]
 palette: ['#1E1B4B', '#E0E7FF', '#F59E0B']
 takeaway: «Концепт продаёт одна деталь: необычный акцент на привычной сетке, остальное — по правилам.»
-screenshot: pending
+specimen: REF-17.specimen.html
+screenshot: REF-17.png

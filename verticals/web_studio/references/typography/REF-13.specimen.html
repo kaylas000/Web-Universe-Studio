@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-13 · typography, poster</title>
+<style>
+:root{--bg:#F5F2EB;--ink:#FF4B3A;--accent:#111111;--deep:#FF4B3A;--light:#F5F2EB;--mid:#faa79b;--faint:#f7d7cf;
+    --ink-87:rgba(255, 75, 58, 0.87);--ink-60:rgba(255, 75, 58, 0.6);--ink-38:rgba(255, 75, 58, 0.38);--ink-12:rgba(255, 75, 58, 0.12);--ink-06:rgba(255, 75, 58, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+body{display:flex}
+.ts{flex:1;height:calc(100vh - 44px);display:grid;grid-template-columns:260px 1fr 320px}
+.ts-col{padding:36px 32px;border-right:1px solid var(--ink-12)}
+.ts-right{border-right:0;border-left:1px solid var(--ink-12);display:flex;flex-direction:column;justify-content:space-between}
+.ts-weights{display:grid;grid-template-columns:1fr 1fr;gap:18px 10px;margin-top:24px;align-items:baseline}
+.ts-weights span:first-child{font-size:44px;line-height:1}
+.ts-weights span:first-child:nth-of-type(odd){color:var(--accent)}
+.ts-main{display:flex;flex-direction:column;justify-content:center;gap:18px}
+.ts-main h1{margin:0;font-size:min(38vh,340px);line-height:.8;letter-spacing:-.06em;font-weight:800}
+.ts-alphabet{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:14px;line-height:2;color:var(--ink-60)}
+.ts-spec{display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:baseline}
+.ts-spec b{font-size:22px;letter-spacing:-.01em;text-align:right}
+.ts-quote{border-top:1px solid var(--ink-12);padding-top:18px;font-family:Georgia, "Times New Roman", "PT Serif", serif;font-size:19px;line-height:1.5;font-style:italic}
+
+</style>
+
+</head>
+<body>
+
+<div class="ts">
+  <div class="ts-col ts-left">
+    <div class="kicker">Гарнитура · Цех Грот</div>
+    <div class="ts-weights">
+      <span style="font-weight:100">Aa</span><span class="meta">Thin 100</span><span style="font-weight:400">Aa</span><span class="meta">Regular 400</span><span style="font-weight:500">Aa</span><span class="meta">Medium 500</span><span style="font-weight:700">Aa</span><span class="meta">Bold 700</span><span style="font-weight:900">Aa</span><span class="meta">Black 900</span>
+    </div>
+  </div>
+  <div class="ts-col ts-main">
+    <h1>Aa</h1>
+    <div class="ts-alphabet">АБВГДЕЖЗИКЛМНОПРСТУФ<br>абвгдежзиклмнопрстуф<br>0123456789 — « » № % ₽</div>
+  </div>
+  <div class="ts-col ts-right">
+    <div class="ts-spec"><span class="meta">Кегль</span><b>10vw</b><span class="meta">Интерлиньяж</span><b>0.94</b>
+      <span class="meta">Трекинг</span><b>−3,5%</b><span class="meta">Перенос</span><b>по смыслу</b></div>
+    <div class="ts-quote">«Типографика — это дизайн. Размер и вес заменяют любые картинки.»</div>
+  </div>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#FF4B3A;--stamp-ink:#F5F2EB;--stamp-accent:#111111">
+  <span class="shot-stamp__id">REF-13</span>
+  <span class="shot-stamp__text">«Типографика — это дизайн: размер до 10vw и игра весов заменяют любые картинки.»</span>
+</footer>
+</body>
+</html>

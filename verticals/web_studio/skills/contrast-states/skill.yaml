@@ -1,0 +1,32 @@
+# сгенерировано scripts/upgrade_skills.mjs из SKILL.md — правь SKILL.md или skill.yaml
+name: contrast-states
+id: SK-17
+title: "Контрастные состояния тоном, а не прозрачностью"
+description: "Гашение неактивного и свеча активного делаются токенами цвета с проверенным контрастом, потому что opacity композитит текст с фоном и роняет его ниже WCAG AA."
+when: "Гашение неактивного и свеча активного делаются токенами цвета с проверенным контрастом, потому что opacity композитит текст с фоном и роняет его ниже WCAG AA."
+vertical: web_studio
+takeaway: "Гашение неактивного и свеча активного делаются токенами цвета с проверенным контрастом, потому что opacity композитит текст с фоном и роняет его ниже WCAG AA."
+inputs:
+  - brief
+  - deliverable
+outputs:
+  - deliverable
+steps:
+  - "Применить приём «contrast-states» по правилам студии"
+codes:
+  - "B-19"
+  - "Q-07"
+  - "V-17"
+evidence:
+  require:
+    - "color:\s*var\(|--[a-z-]+:"
+  forbid:
+    - "—"
+  files:
+    - "site/**/*.{html,css,js,mjs,json,txt,md}"
+checks:
+  - "машинные коды: B-19, Q-07, V-17"
+  - "evidence: post_execute.mjs"
+  - "ворота G3: валидатор студии"
+applies_to:
+  - web_studio

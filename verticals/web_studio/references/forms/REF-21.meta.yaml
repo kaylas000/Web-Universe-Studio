@@ -10,4 +10,5 @@ techniques:
 motion: []
 palette: []
 takeaway: «Форма сдаётся чек-листом состояний: имя поля, аналитика события, скринридерный статус и живой отклик — иначе это не форма, а декоративный элемент.»
-screenshot: pending
+specimen: REF-21.specimen.html
+screenshot: REF-21.png

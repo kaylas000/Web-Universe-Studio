@@ -18,6 +18,7 @@
 */
 
 import { GeneratorError, createArtifact, getFirst, taskGoal } from "../base.mjs";
+import { loadContract, renderContract } from "../contract.mjs";
 import { renderTemplate } from "../template.mjs";
 import { parseArtifactContent } from "../text.mjs";
 
@@ -62,11 +63,66 @@ export class LlmGenerator {
     this.extraBody = getFirst(opts, ["extraBody", "extra_body"], {}) ?? {};
     this.extraHeaders = getFirst(opts, ["extraHeaders", "extra_headers"], {}) ?? {};
     this.fetchImpl = opts.fetchImpl ?? globalThis.fetch?.bind(globalThis) ?? null;
+    /**
+     * Контракт студии в СИСТЕМНОМ промпте: закон и коды приёмки важнее пользовательского
+     * контекста — модель, которая их «не заметила» в контексте, всё равно обязана их исполнить.
+     * @type {any|null}
+     */
+    this.contract = opts.contract ?? null;
+    this.contractRoot = getFirst(opts, ["contractRoot", "contract_root"], null);
+    this.includeContract = getFirst(opts, ["includeContract", "include_contract"], true) !== false;
+    this.maxPromptCodes = Number(getFirst(opts, ["maxPromptCodes", "max_prompt_codes"], 48));
 
     /** Патч-совместимость: ленивая инициализация клиента без импортных сайд-эффектов. */
     this._clientFactory = typeof opts.clientFactory === "function" ? opts.clientFactory : typeof opts.client === "function" ? opts.client : null;
     this._client = opts.client && typeof opts.client === "object" ? opts.client : null;
     this._logger = opts.logger ?? null;
+  }
+
+  /**
+   * Системный промпт итерации: базовый шаблон + КОНТРАКТ СТУДИИ.
+   * Контракт важнее пользовательского контекста: модель обязана исполнить закон и коды
+   * приёмки, даже если «не заметила» их в контексте. Загрузка — по contractRoot (studioRoot),
+   * либо готовый объект через opts.contract.
+   */
+  systemPromptFor(state, { contract = null } = {}) {
+    const base = this._baseSystemPrompt(state);
+    if (!this.includeContract) return base;
+    const resolved = contract ?? this.contract ?? (this.contractRoot ? this._loadContract(this.contractRoot) : null);
+    if (!resolved) return base;
+    const block = renderContract(resolved, { maxCodes: this.maxPromptCodes });
+    return `${base}\n\n${block}\n\nПРАВИЛО ОТВЕТА: выдача — артефакт целиком, без пояснений и без сокращений вида «…». Правки по кодам применяются внутри артефакта, отчёт о них не нужен.`;
+  }
+
+  /** Кэшированная загрузка контракта по корню студии. */
+  _loadContract(root) {
+    this._contractCache ??= new Map();
+    const key = String(root);
+    if (!this._contractCache.has(key)) {
+      try {
+        this._contractCache.set(key, loadContract(key));
+      } catch {
+        this._contractCache.set(key, null);
+      }
+    }
+    return this._contractCache.get(key);
+  }
+
+  /** Прежняя сигнатура (§4.3 «сигнатуры не меняются»): базовый промпт без контракта. */
+  _resolveSystemPrompt(state) {
+    return this._baseSystemPrompt(state);
+  }
+
+  /** Базовый системный промпт итерации (шаблон либо строка). */
+  _baseSystemPrompt(state) {
+    if (!this.systemPromptTemplate || typeof this.systemPromptTemplate !== "string") return this.systemPrompt;
+    return renderTemplate(this.systemPromptTemplate, {
+      task: taskGoal(state?.taskInput),
+      goal: taskGoal(state?.taskInput),
+      project_name: state?.projectName ?? "",
+      iteration: Number(state?.iteration ?? 0) + 1,
+      temperature: Number(state?.temperature ?? 0),
+    });
   }
 
   /** Ленивый клиент: создаётся при первом обращении (не на этапе импорта/сборки). */
@@ -103,7 +159,7 @@ export class LlmGenerator {
   async generate(context, state) {
     const started = Date.now();
     const temperature = Number.isFinite(state?.temperature) ? Number(state.temperature) : 0;
-    const payload = this._buildPayload(context, temperature, state);
+    const payload = this._buildPayload(context, temperature, state, { contract: this.contract ?? (this.contractRoot ? this._loadContract(this.contractRoot) : null) });
     const client = this.client;
 
     let lastError = null;
@@ -155,19 +211,8 @@ export class LlmGenerator {
   }
 
   /** Системный промпт: шаблон (если задан) рендерится под текущую задачу и итерацию. */
-  _resolveSystemPrompt(state) {
-    if (!this.systemPromptTemplate || typeof this.systemPromptTemplate !== "string") return this.systemPrompt;
-    return renderTemplate(this.systemPromptTemplate, {
-      task: taskGoal(state?.taskInput),
-      goal: taskGoal(state?.taskInput),
-      project_name: state?.projectName ?? "",
-      iteration: Number(state?.iteration ?? 0) + 1,
-      temperature: Number(state?.temperature ?? 0),
-    });
-  }
-
-  _buildPayload(context, temperature, state) {
-    const system = this._resolveSystemPrompt(state);
+  _buildPayload(context, temperature, state, { contract = null } = {}) {
+    const system = this.systemPromptFor(state, { contract });
     if (this.provider === "anthropic") {
       return {
         provider: "anthropic",

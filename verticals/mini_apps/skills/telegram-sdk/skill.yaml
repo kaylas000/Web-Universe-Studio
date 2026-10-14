@@ -23,3 +23,17 @@ applies_to:
   - mini_apps
   - telegram-mini-app
   - telegram-bot-ui
+codes:
+  - "B-03"
+  - "V-02"
+  - "V-03"
+  - "V-06"
+  - "V-16"
+evidence:
+  require:
+    - "telegram-web-app\.js"
+    - "MainButton|BackButton"
+  forbid:
+    - "window\.location\.href"
+  files:
+    - "app/**/*.{html,css,js,mjs,json,md}"

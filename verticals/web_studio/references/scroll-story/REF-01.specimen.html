@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-01 · scroll-story, editorial</title>
+<style>
+:root{--bg:#D64533;--ink:#F6F1E7;--accent:#1D3A5F;--deep:#D64533;--light:#F6F1E7;--mid:#e49284;--faint:#db6150;
+    --ink-87:rgba(246, 241, 231, 0.87);--ink-60:rgba(246, 241, 231, 0.6);--ink-38:rgba(246, 241, 231, 0.38);--ink-12:rgba(246, 241, 231, 0.12);--ink-06:rgba(246, 241, 231, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+.ss{height:calc(100vh - 44px);display:grid;grid-template-columns:1.08fr .92fr}
+.ss-stage{position:relative;background:var(--deep);display:flex;flex-direction:column;justify-content:center;padding:44px}
+.ss-frame{position:relative;aspect-ratio:16/10;background:rgba(255, 255, 255, 0.04);border:1px solid rgba(255, 255, 255, 0.18);overflow:hidden}
+.ss-layers{position:absolute;inset:0;display:flex;align-items:flex-end;gap:12px;padding:22px}
+.ss-layer{flex:1;height:calc(24% + var(--i) * 19%);background:var(--tone);position:relative}
+.ss-layer span{position:absolute;left:6px;bottom:6px;font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:10px;color:rgba(0, 0, 0, 0.55)}
+.ss-caption{position:absolute;right:12px;top:12px}
+.ss-rail{display:flex;gap:6px;margin-top:18px}
+.ss-rail i{flex:1;height:3px;background:rgba(255, 255, 255, 0.18)}
+.ss-rail i:first-child,.ss-rail i:nth-child(2),.ss-rail i:nth-child(3){background:var(--accent)}
+.ss-steps{list-style:none;margin:0;padding:58px 60px;display:flex;flex-direction:column;justify-content:center;gap:8px}
+.ss-steps li{display:flex;gap:20px;padding:20px 0;border-bottom:1px solid var(--ink-12);opacity:.42;transition:opacity .2s}
+.ss-steps li.is-on{opacity:1}
+.ss-num{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--accent);padding-top:6px}
+.ss-steps h3{margin:0 0 6px;font-size:26px;letter-spacing:-.01em}
+.ss-steps p{margin:0;font-size:15px;line-height:1.6;color:var(--ink-60)}
+.ss-steps li.is-on p{color:var(--ink-87)}
+
+</style>
+
+</head>
+<body>
+
+<div class="ss">
+  <div class="ss-stage">
+    <div class="ss-frame">
+      <div class="ss-layers">
+        <div class="ss-layer" style="--i:0;--tone:#F6F1E7"><span>заготовка</span></div><div class="ss-layer" style="--i:1;--tone:#1D3A5F"><span>нагрев</span></div><div class="ss-layer" style="--i:2;--tone:#D64533"><span>прокат</span></div><div class="ss-layer" style="--i:3;--tone:#F6F1E7"><span>контроль</span></div>
+      </div>
+      <div class="ss-caption"><span class="meta">Кадр 3 из 8 · 00:12</span></div>
+    </div>
+    <div class="ss-rail"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </div>
+  <ol class="ss-steps">
+    <li><span class="ss-num">01</span><div><h3>Гудок</h3><p>Смена начинается в 06:40 — фиксируем плавку</p></div></li><li><span class="ss-num">02</span><div><h3>Прокат</h3><p>Клеть №7 даёт допуск 0,08 мм</p></div></li><li class="is-on"><span class="ss-num">03</span><div><h3>Контроль</h3><p>Ультразвук находит дефект до отгрузки</p></div></li><li><span class="ss-num">04</span><div><h3>Смена сдана</h3><p>Наряд закрыт, метрика в отчёте</p></div></li>
+  </ol>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#F6F1E7;--stamp-ink:#D64533;--stamp-accent:#1D3A5F">
+  <span class="shot-stamp__id">REF-01</span>
+  <span class="shot-stamp__text">«Закрепи сцену на весь экран и меняй в ней ровно одно состояние на шаг текста.»</span>
+</footer>
+</body>
+</html>
