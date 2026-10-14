@@ -147,26 +147,61 @@ function docsFiles(root) {
 }
 
 /** CI-гейт: конфигурация обязана существовать и звать реальный прогон проверок. */
+/**
+ * Состояние CI (К-15). Конфигурация живёт в репозитории как данные — `ci/workflows/*.yml`,
+ * а GitHub читает только `.github/workflows/`. Поэтому состояний четыре, и путать их нельзя:
+ *   1) установлено и совпадает с источником → ok;
+ *   2) установлено, но разошлось с `ci/workflows/` → провал: CI судит не то, что в репозитории;
+ *   3) `.github/workflows/` есть, но ни один workflow не зовёт гейт → провал (регрессия К-15);
+ *   4) не установлено вовсе → предупреждение с командой установки, а не провал: путь
+ *      `.github/workflows/` могут закрывать правами (интеграция без права `workflows`).
+ * @param {string} repoRoot
+ * @returns {{ok: boolean, configured: boolean, files: string[], gated: string[], sources: string[], detail: string}}
+ */
 export function ciConfigState(repoRoot) {
-  const dir = join(resolve(String(repoRoot)), ".github", "workflows");
-  // Два разных состояния, которые нельзя путать: «CI ещё не настроен» (предупреждение с
-  // инструкцией — ветка может быть свежей, или залить workflow не даёт право у интеграции)
-  // и «CI есть, но гейт не зовёт» — вот это уже регрессия К-15 и провал.
-  if (!existsSync(dir)) {
-    return { ok: false, configured: false, files: [], detail: "нет .github/workflows — PR нечем блокировать: добавьте .github/workflows/ci.yml (docs/DEPLOY.md)" };
+  const root = resolve(String(repoRoot));
+  const dir = join(root, ".github", "workflows");
+  const srcDir = join(root, "ci", "workflows");
+  const sources = existsSync(srcDir) ? readdirSync(srcDir).filter((name) => /\.ya?ml$/.test(name)).sort() : [];
+  const files = existsSync(dir) ? readdirSync(dir).filter((name) => /\.ya?ml$/.test(name)).sort() : [];
+  const sourcePath = (name) => `ci/workflows/${name}`;
+  const install = "bash scripts/install-ci.sh";
+
+  if (files.length === 0) {
+    return {
+      ok: false,
+      configured: false,
+      files: [],
+      gated: [],
+      sources: sources.map(sourcePath),
+      detail: sources.length > 0
+        ? `CI не установлен: конфигурация лежит в ${sources.map(sourcePath).join(", ")} — поставьте её командой «${install}»`
+        : `нет CI: добавьте конфигурацию в ci/workflows/ci.yml и поставьте командой «${install}» (docs/DEPLOY.md)`,
+    };
   }
-  const files = readdirSync(dir).filter((name) => /\.ya?ml$/.test(name));
+
   const gated = files.filter((name) => {
     const text = readFileSync(join(dir, name), "utf8");
     return /npm (?:run )?test|acceptance_test\.sh|core\/gate\.mjs|ci-gate\.mjs/.test(text);
   });
-  return {
-    ok: gated.length > 0,
-    configured: files.length > 0,
-    files: files.map((name) => `.github/workflows/${name}`),
-    gated,
-    detail: gated.length > 0 ? `CI зовёт гейт: ${gated.join(", ")}` : files.length > 0 ? "workflow есть, но не зовёт ни npm test, ни acceptance_test.sh" : "workflow-файлов нет",
-  };
+
+  // Дрейф: установленный workflow обязан совпадать с источником в репозитории — иначе CI
+  // прогоняет не то, что видит человек в diff'е.
+  const drifted = sources.filter((name) => {
+    const target = join(dir, name);
+    return existsSync(target) && readFileSync(target, "utf8") !== readFileSync(join(srcDir, name), "utf8");
+  });
+
+  const ok = gated.length > 0 && drifted.length === 0 && files.length > 0 && sources.length > 0;
+  const detail = drifted.length > 0
+    ? `CI разошёлся с источником: ${drifted.map(sourcePath).join(", ")} — запустите «${install}»`
+    : gated.length > 0
+      ? sources.length > 0
+        ? `CI зовёт гейт: ${gated.join(", ")} · источник: ${sources.map(sourcePath).join(", ")}`
+        : `CI зовёт гейт: ${gated.join(", ")}, но источника в ci/workflows/ нет`
+      : `workflow есть, но не зовёт ни npm test, ни acceptance_test.sh: ${files.join(", ")}`;
+
+  return { ok, configured: true, files: files.map((name) => `.github/workflows/${name}`), gated, sources: sources.map(sourcePath), detail };
 }
 
 /**
@@ -202,7 +237,7 @@ function main(argv) {
         {
           ok: result.ok,
           checked: result.checked,
-          ci: { ok: result.ci.ok, configured: result.ci.configured, files: result.ci.files, detail: result.ci.detail },
+          ci: { ok: result.ci.ok, configured: result.ci.configured, files: result.ci.files, sources: result.ci.sources, detail: result.ci.detail },
           warnings: result.warnings,
           secrets: result.secrets.map((s) => `${s.file}:${s.line} ${s.code} ${s.what}`),
           links: result.brokenLinks.map((b) => `${b.file}:${b.line} → ${b.target}`),
