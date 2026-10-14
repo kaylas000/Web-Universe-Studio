@@ -1,8 +1,0 @@
-{
-  "period": { "from": "2025-10-01", "to": "2025-12-31" },
-  "metrics": [
-    { "name": "Выручка", "formula": "SUM(amount) WHERE status='paid'", "value": 12840000 },
-    { "name": "Средний чек", "formula": "SUM(amount)/COUNT(order_id) WHERE status='paid'", "value": 6420 },
-    { "name": "Доля возвратов", "formula": "SUM(refunds)/SUM(amount)", "value": 0.031 }
-  ]
-}

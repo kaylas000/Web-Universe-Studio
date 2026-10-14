@@ -1,0 +1,18 @@
+# ЦЕХ · метаплатформа — композиция без HITL: прогоняется офлайн насквозь (CI-демо).
+# Показывает кросс-доменную сборку: мини-приложение питает лендинг-обёртку.
+apiVersion: autogen/v1
+kind: Composition
+metadata:
+  name: app-with-landing
+  goal: "Мини-приложение таймера и лендинг под него"
+tasks:
+  - id: mini
+    vertical: mini
+    gate: G4
+  - id: landing
+    vertical: web
+    gate: G4
+    needs: [mini]
+aggregate:
+  mode: all
+  deliverable: "verticals/*/workspace/loop-result.json"

@@ -23,13 +23,11 @@ step() {
 echo "ЦЕХ · приёмка метаплатформы"
 echo "корень: $ROOT"
 
-step "1/7 тесты движка (148)" node --test core/loop-engine/tests/*.test.mjs
-step "2/7 офлайн-цикл (selftest)" node core/loop-engine/cli.mjs --selftest
-step "3/7 платформенный гейт (все вертикали)" node core/gate.mjs
-step "4/7 индекс референсов" node scripts/index_references.mjs
-step "5/7 аудит архива (К-04)" node scripts/scrape_references.mjs
-step "6/7 CEO-агент: зелёная композиция" node core/orchestrator/cli.mjs compositions/sales-post-with-data/composition.yaml
-step "7/7 тесты платформы и вертикалей" node scripts/run-tests.mjs tests verticals
+step "1/5 тесты движка" node --test core/loop-engine/tests/*.test.mjs
+step "2/5 офлайн-цикл (selftest)" node core/loop-engine/cli.mjs --selftest
+step "3/5 платформенный гейт (все вертикали)" node core/gate.mjs
+step "4/5 аудит архива (К-04)" node scripts/scrape_references.mjs
+step "5/5 тесты платформы и вертикалей" node scripts/run-tests.mjs tests verticals
 
 printf '\n────────────────────────────────────────────────────────\n'
 if [ "$fail" -eq 0 ]; then

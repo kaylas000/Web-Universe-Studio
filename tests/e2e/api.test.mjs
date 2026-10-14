@@ -24,17 +24,17 @@ test("API Gateway: health, роли, generate+идемпотентность, к
 
   const health = await (await fetch(`${base}/health`)).json();
   assert.equal(health.status, "ok");
-  assert.equal(health.verticals, 6);
+  assert.equal(health.verticals, 3);
 
   assert.equal((await fetch(`${base}/v1/verticals`)).status, 401, "без токена — 401");
   assert.equal((await fetch(`${base}/health`)).status, 200, "health открыт");
   assert.equal((await fetch(`${base}/nope`, { headers: H })).status, 404);
 
   const verts = await (await fetch(`${base}/v1/verticals`, { headers: H })).json();
-  assert.equal(verts.verticals.length, 6);
+  assert.equal(verts.verticals.length, 3);
 
-  const gen = await (await fetch(`${base}/v1/generate`, { method: "POST", headers: H, body: JSON.stringify({ vertical: "data", idempotency_key: "k1" }) })).json();
-  const gen2 = await (await fetch(`${base}/v1/generate`, { method: "POST", headers: H, body: JSON.stringify({ vertical: "data", idempotency_key: "k1" }) })).json();
+  const gen = await (await fetch(`${base}/v1/generate`, { method: "POST", headers: H, body: JSON.stringify({ vertical: "mini_apps", idempotency_key: "k1" }) })).json();
+  const gen2 = await (await fetch(`${base}/v1/generate`, { method: "POST", headers: H, body: JSON.stringify({ vertical: "mini_apps", idempotency_key: "k1" }) })).json();
   assert.equal(gen2.idempotent, true);
   assert.equal(gen2.run_id, gen.run_id);
 
@@ -44,7 +44,7 @@ test("API Gateway: health, роли, generate+идемпотентность, к
   const badVertical = await fetch(`${base}/v1/generate`, { method: "POST", headers: H, body: JSON.stringify({ vertical: "nope" }) });
   assert.equal(badVertical.status, 400);
 
-  const comp = await (await fetch(`${base}/v1/compositions/sales-post-with-data`, { method: "POST", headers: H })).json();
+  const comp = await (await fetch(`${base}/v1/compositions/app-with-landing`, { method: "POST", headers: H })).json();
   const compRun = await waitForRun(base, comp.run_id, H);
   assert.equal(compRun.status, "ok", JSON.stringify(compRun.result));
   assert.equal(compRun.result.passed, compRun.result.total);

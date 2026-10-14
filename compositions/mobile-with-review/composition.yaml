@@ -1,0 +1,24 @@
+# ЦЕХ · метаплатформа — композиция (§13.1 ТЗ)
+# Задачи образуют DAG; каждая вершина наследует конституцию своей вертикали.
+# Задача с hitl: true не закрывается без вердикта человека (G4, К-09).
+apiVersion: autogen/v1
+kind: Composition
+metadata:
+  name: mobile-with-review
+  goal: "Мобильное приложение и лендинг-витрина под него"
+tasks:
+  - id: app
+    vertical: mobile
+    gate: G4
+  - id: showcase
+    vertical: web
+    gate: G4
+    needs: [app]
+  - id: review
+    vertical: web
+    gate: G4
+    needs: [showcase]
+    hitl: true
+aggregate:
+  mode: all
+  deliverable: "verticals/*/workspace/loop-result.json"

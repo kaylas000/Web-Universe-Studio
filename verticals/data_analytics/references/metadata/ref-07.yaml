@@ -1,4 +1,0 @@
-id: ref-07
-style: quality-profile
-source: references/sources.yaml#quality-profile
-takeaway: Профиль качества (nulls, duplicates, types, row_count) — база доверия к метрикам.

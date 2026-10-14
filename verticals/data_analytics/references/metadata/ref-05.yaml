@@ -1,4 +1,0 @@
-id: ref-05
-style: schema-first
-source: references/sources.yaml#schema-validate
-takeaway: Схема входа объявляется до загрузки; данные валидируются против неё до записи.

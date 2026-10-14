@@ -1,4 +1,0 @@
-id: ref-04
-style: idempotent-etl
-source: references/sources.yaml#etl-pipeline
-takeaway: ETL идемпотентен: повторный запуск не дублирует строки (ON CONFLICT / MERGE по бизнес-ключу).

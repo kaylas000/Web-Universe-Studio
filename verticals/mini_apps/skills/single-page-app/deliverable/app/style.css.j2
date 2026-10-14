@@ -62,3 +62,13 @@
 @media (max-width: 320px) {
   .timer__value { font-size: 2rem; }
 }
+
+/* Анимации (К-24): лёгкий отклик кнопок, уважение prefers-reduced-motion. */
+.timer__button {
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+.timer__button:active { transform: scale(0.97); }
+@media (prefers-reduced-motion: reduce) {
+  .timer__button { transition: none; }
+  .timer__button:active { transform: none; }
+}

@@ -1,4 +1,0 @@
-id: ref-06
-style: dashboard-question
-source: references/sources.yaml#dashboard-spec
-takeaway: Спека дашборда начинается с решения: каждая метрика отвечает на вопрос владельца и имеет формулу и фильтры.

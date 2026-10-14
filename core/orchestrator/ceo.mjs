@@ -18,18 +18,14 @@ import { normalizeComposition, topologicalOrder, validateComposition } from "./c
 /** Ключевые слова маршрутизации: домен → леммы цели (§13.2, шаг Route). */
 export const DOMAIN_KEYWORDS = Object.freeze({
   web: ["сайт", "лендинг", "страниц", "вёрстк", "верстк", "дизайн", "витрин", "промо"],
-  content: ["пост", "стать", "контент", "текст", "блог", "лонгрид", "рассылк", "копирайт"],
-  data: ["данн", "метрик", "аналит", "отчёт", "отчет", "sql", "дашборд", "продаж", "график"],
-  education: ["курс", "урок", "обучен", "тест", "программ", "лекц", "модул", "школ"],
   mini_apps: ["приложен", "таймер", "сервис", "виджет", "widget", "мини"],
   mobile: ["мобильн", "экран", "ios", "android", "смартфон", "приложени"],
 });
 
-/** Из имени вертикали — короткий алиас для композиций: web_studio → web, content_studio → content. */
+/** Из имени вертикали — короткий алиас для композиций: web_studio → web, mini_apps → mini. */
 export function shortAlias(name) {
-  const base = String(name).replace(/_studio$/, "").replace(/_docs$/, "").replace(/_apps$/, "_apps");
-  const first = base.split("_")[0];
-  return first === "education" ? "education" : first;
+  const base = String(name).replace(/_studio$/, "").replace(/_docs$/, "");
+  return base.split("_")[0];
 }
 
 /** @typedef {{ name: string, title: string, dir: string, deliverable: string, aliases: string[] }} VerticalRef */

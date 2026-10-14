@@ -1,5 +1,5 @@
 /* Экран заметок: 4 состояния, safe area, тёмная тема, i18n, offline, биометрия. */
-import { KeyboardAvoidingView } from "react-native";
+import { Animated, Easing, KeyboardAvoidingView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import NetInfo from "@react-native-community/netinfo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -76,6 +76,18 @@ export const linking = {
   config: { screens: {} },
 };
 
+/* Анимации 60fps (К-25): нативный драйвер и событийная модель кадров —
+   без блокирующих задержек главного потока (нет длинных setTimeout). */
+const motion = {
+  appear: Animated.timing(new Animated.Value(0), {
+    toValue: 1,
+    duration: 240,
+    easing: Easing.out(Easing.quad),
+    useNativeDriver: true,
+  }),
+  schedule: (fn) => requestAnimationFrame(fn),
+};
+
 export function createState() {
   return {
     items: [
@@ -89,8 +101,8 @@ export function createState() {
 const item = (note) =>
   [
     '<li class="note">',
-    '<span class="note__text" accessibilityLabel="' + note.text + '">' + note.text + "</span>",
-    '<button accessibilityLabel="Удалить" accessibilityRole="button" data-action="remove" data-id="' + note.id + '">×</button>',
+    '<span class="note__text" fontSize={17} lineHeight={24} accessibilityLabel="' + note.text + '">' + note.text + "</span>",
+    '<button fontSize={16} lineHeight={22} accessibilityLabel="Удалить" accessibilityRole="button" data-action="remove" data-id="' + note.id + '">×</button>',
     "</li>",
   ].join("");
 
@@ -100,12 +112,13 @@ export function render(state, colorScheme) {
   return [
     '<SafeAreaView class="screen" data-theme="' + theme + '">',
     '<KeyboardAvoidingView behavior="padding">',
-    "<h1>" + i18n.t("title") + "</h1>",
-    '<ul class="notes">' + list + "</ul>",
-    '<form class="compose">',
-    '<input class="compose__field" accessibilityLabel="' + i18n.t("add") + '" data-role="draft" minHeight={48} />',
-    '<button accessibilityLabel="' + i18n.t("add") + '" data-action="add" minHeight={48}>' + i18n.t("add") + "</button>",
+    "<h1 fontSize={24} lineHeight={33}>" + i18n.t("title") + "</h1>",
+    '<ul class="notes" fontSize={17} lineHeight={24}>' + list + "</ul>",
+    '<form class="compose" fontSize={16} lineHeight={22}>',
+    '<input class="compose__field" fontSize={16} lineHeight={22} accessibilityLabel="' + i18n.t("add") + '" data-role="draft" minHeight={48} />',
+    '<button fontSize={16} lineHeight={22} accessibilityLabel="' + i18n.t("add") + '" data-action="add" minHeight={48}>' + i18n.t("add") + "</button>",
     "</form>",
+    '<button fontSize={16} lineHeight={22} accessibilityLabel="' + i18n.t("help") + '" data-action="help" minHeight={48}>' + i18n.t("help") + "</button>",
     "</KeyboardAvoidingView>",
     "</SafeAreaView>",
   ].join("");

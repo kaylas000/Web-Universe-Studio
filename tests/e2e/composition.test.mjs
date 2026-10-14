@@ -8,8 +8,8 @@ import { CeoAgent } from "../../core/orchestrator/ceo.mjs";
 import { loadComposition, validateComposition } from "../../core/orchestrator/composition.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
-const GREEN = resolve(ROOT, "compositions", "sales-post-with-data", "composition.yaml");
-const HITL = resolve(ROOT, "compositions", "launch-landing-with-review", "composition.yaml");
+const GREEN = resolve(ROOT, "compositions", "app-with-landing", "composition.yaml");
+const HITL = resolve(ROOT, "compositions", "mobile-with-review", "composition.yaml");
 
 test("зелёная композиция проходит насквозь (реальные студии)", async () => {
   const agent = new CeoAgent();

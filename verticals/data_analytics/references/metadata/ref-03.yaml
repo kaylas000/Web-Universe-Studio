@@ -1,4 +1,0 @@
-id: ref-03
-style: sql-nullable
-source: references/sources.yaml#sql-audit
-takeaway: Аудит SQL проверяет JOIN на размножение строк и обработку NULL в агрегатах.

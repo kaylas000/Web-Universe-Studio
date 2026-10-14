@@ -1,6 +1,0 @@
-{
-  "row_count": 320000,
-  "nulls": { "id": 0, "user_phone_hash": 0, "status": 5, "created_at": 0 },
-  "duplicates": { "id": 0, "order_id": 0 },
-  "types": { "id": "integer", "user_phone_hash": "text", "status": "text", "created_at": "timestamp" }
-}

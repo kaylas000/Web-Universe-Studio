@@ -12,9 +12,8 @@ const comp = (tasks, aggregate = { mode: "all" }, name = "t") =>
 
 test("shortAlias укорачивает имена вертикалей", () => {
   assert.equal(shortAlias("web_studio"), "web");
-  assert.equal(shortAlias("data_analytics"), "data");
-  assert.equal(shortAlias("content_studio"), "content");
-  assert.equal(shortAlias("education"), "education");
+  assert.equal(shortAlias("mini_apps"), "mini");
+  assert.equal(shortAlias("mobile_apps"), "mobile");
 });
 
 test("route сопоставляет цель с доменами по ключевым словам", () => {
@@ -22,12 +21,11 @@ test("route сопоставляет цель с доменами по ключ�
   const routed = agent.route("Нужен лендинг запуска и пост в блог по запуску");
   const domains = routed.map((r) => r.domain);
   assert.ok(domains.includes("web"));
-  assert.ok(domains.includes("content"));
 });
 
 test("plan строит валидную композицию с needs-цепочкой", () => {
   const agent = new CeoAgent();
-  const plan = agent.plan("сделай лендинг и пост в блог");
+  const plan = agent.plan("сделай лендинг и таймер");
   assert.ok(plan.tasks.length >= 1);
   const withNeeds = plan.tasks.filter((t) => t.needs.length > 0);
   assert.ok(withNeeds.length >= 1);
@@ -41,7 +39,7 @@ test("plan без совпадений → E-COMPOSITION-ROUTE", () => {
 
 test("run: все задачи зелёные → ok, без HITL", async () => {
   const agent = new CeoAgent({ runTask: okRunner });
-  const report = await agent.run(comp([{ id: "a", vertical: "content", gate: "G4" }, { id: "b", vertical: "web", gate: "G4", needs: ["a"] }]));
+  const report = await agent.run(comp([{ id: "a", vertical: "mini_apps", gate: "G4" }, { id: "b", vertical: "web", gate: "G4", needs: ["a"] }]));
   assert.equal(report.ok, true);
   assert.equal(report.passed, 2);
   assert.deepEqual(report.hitl_pending, []);
@@ -49,7 +47,7 @@ test("run: все задачи зелёные → ok, без HITL", async () => 
 
 test("run: HITL-задача не закрывается без человека (К-09)", async () => {
   const agent = new CeoAgent({ runTask: okRunner });
-  const c = comp([{ id: "review", vertical: "content", gate: "G4", hitl: true }]);
+  const c = comp([{ id: "review", vertical: "mini_apps", gate: "G4", hitl: true }]);
   const blocked = await agent.run(c);
   assert.equal(blocked.ok, false);
   assert.deepEqual(blocked.hitl_pending, ["review"]);
@@ -61,7 +59,7 @@ test("run: HITL-задача не закрывается без человека
 test("run: провал зависимости блокирует потомка", async () => {
   const runner = async ({ task }) => (task.id === "a" ? { status: "fail", codes: ["V-01"], iterations: 1, ms: 1 } : { status: "ok", codes: [], iterations: 1, ms: 1 });
   const agent = new CeoAgent({ runTask: runner });
-  const report = await agent.run(comp([{ id: "a", vertical: "web", gate: "G4" }, { id: "b", vertical: "content", gate: "G4", needs: ["a"] }]));
+  const report = await agent.run(comp([{ id: "a", vertical: "web", gate: "G4" }, { id: "b", vertical: "mini_apps", gate: "G4", needs: ["a"] }]));
   assert.equal(report.ok, false);
   assert.equal(report.results.find((r) => r.id === "b").status, "blocked");
 });
@@ -73,7 +71,7 @@ test("run: неизвестная вертикаль → E-COMPOSITION-ROUTE", a
 
 test("aggregate: режимы all / best_effort / quorum", () => {
   const agent = new CeoAgent({ runTask: okRunner });
-  const c = comp([{ id: "a", vertical: "web" }, { id: "b", vertical: "content" }], { mode: "all" });
+  const c = comp([{ id: "a", vertical: "web" }, { id: "b", vertical: "mini_apps" }], { mode: "all" });
   const results = [
     { id: "a", status: "ok", codes: [], hitl: false },
     { id: "b", status: "fail", codes: ["V-01"], hitl: false },
