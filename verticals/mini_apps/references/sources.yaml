@@ -60,3 +60,7 @@ sources:
     title: "motion-reduce"
     source: "references/sources.yaml#wm-3"
     takeaway: "Движение уважает систему: лёгкий CSS-отклик, отключаемый через prefers-reduced-motion, и никаких блокирующих задержек в JS (V-24)."
+  - id: ref-16
+    title: "human-voice"
+    source: "references/sources.yaml#humanizer-ru"
+    takeaway: "Экспертный текст без следов ИИ: факты и числа вместо клише, глагол вместо «представляет собой», ноль артефактов копипаста (oaicite, utm_source=chatgpt.com, 【…†…】); проверяется детерминированным сканом lint-copy (A-xx/C-xx/N-xx/R-xx, балл 0-100; smixs/humanizer-ru, ilyautov/humanizer-ru, stop-slop — MIT)."

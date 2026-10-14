@@ -1,0 +1,59 @@
+# Собрано с каталога: darkmodedesign.com
+# Стиль/семейство: dark
+# Дата сбора: 2026-10-14
+catalog: "darkmodedesign.com"
+style: "dark"
+collected_at: 2026-10-14
+count: 17
+examples:
+  - id: we-001
+    name: "wannathis.one"
+    url: "https://wannathis.one/online-tools/motion-grid"
+  - id: we-002
+    name: "screen.movie"
+    url: "https://screen.movie"
+  - id: we-003
+    name: "byassociationonly.com"
+    url: "https://www.byassociationonly.com"
+  - id: we-004
+    name: "pryzm.design"
+    url: "https://pryzm.design"
+  - id: we-005
+    name: "bridgemoney.co"
+    url: "https://www.bridgemoney.co"
+  - id: we-006
+    name: "dappled.com.au"
+    url: "https://dappled.com.au"
+  - id: we-007
+    name: "raulvbrito.com"
+    url: "https://raulvbrito.com"
+  - id: we-008
+    name: "lazy.so"
+    url: "https://lazy.so"
+  - id: we-009
+    name: "yoin-fragrance.netlify.app"
+    url: "https://yoin-fragrance.netlify.app"
+  - id: we-010
+    name: "loaf.agency"
+    url: "https://loaf.agency"
+  - id: we-011
+    name: "github.com"
+    url: "https://github.com/home"
+  - id: we-012
+    name: "piszczek.pl"
+    url: "https://piszczek.pl"
+  - id: we-013
+    name: "longitudedesign.com"
+    url: "https://longitudedesign.com"
+  - id: we-014
+    name: "tinycomputer.co"
+    url: "https://tinycomputer.co"
+  - id: we-015
+    name: "captureapp.xyz"
+    url: "https://captureapp.xyz"
+  - id: we-016
+    name: "smirnov-artur.github.io"
+    url: "https://smirnov-artur.github.io/webgl"
+  - id: we-017
+    name: "mobbin.com"
+    url: "https://www.mobbin.com"

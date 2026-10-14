@@ -64,6 +64,12 @@ node core/gate.mjs --vertical web_studio --json
 `AGENTS.md`, `anti-slop/`, `skills/`, `references/`, `gates/`, `validators/`, `scripts/{validate,lint-slop}.mjs`,
 `projects/<demo>/`. Общий контракт отчёта и декларативный движок правил — `core/vertical-kit/index.mjs`.
 
+**Тексты и редактура (общий компонент).** Во всех трёх студиях есть навык `expert-copywriter` и
+проверка `lint-copy`: движок `core/vertical-kit/copywriting.mjs` ловит артефакты копипаста из
+чат-ботов (`A-xx`, жёсткий гейт) и считает балл стиля/ритма (`C-xx/N-xx/R-xx`, сводка `[lint-copy]`).
+Раннер — `runCopyLint` в `core/vertical-kit/index.mjs`; правила студии — `scripts/copy.json`.
+Подробно: `docs/COPYWRITING.md`.
+
 Студии `mini_apps` и `mobile_apps` порождены идемпотентным генератором `scripts/bootstrap-verticals.mjs`; `web_studio` — рукописный эталон.
 
 Полные конституции (§9 ТЗ) и анти-слоп (§10 ТЗ) студий лежат в `scripts/tz-verticals.mjs`

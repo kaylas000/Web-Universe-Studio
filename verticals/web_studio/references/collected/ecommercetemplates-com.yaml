@@ -1,0 +1,11 @@
+# Собрано с каталога: ecommercetemplates.com
+# Стиль/семейство: ecommerce
+# Дата сбора: 2026-10-14
+catalog: "ecommercetemplates.com"
+style: "ecommerce"
+collected_at: 2026-10-14
+count: 1
+examples:
+  - id: we-001
+    name: "ectdemostore.com"
+    url: "http://www.ectdemostore.com"

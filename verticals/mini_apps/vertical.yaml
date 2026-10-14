@@ -8,14 +8,14 @@ metadata:
   description: "Собирает Telegram/VK Mini Apps: магазины внутри Telegram, сервисы записи, мини-игры, дашборды. Стек React/Vue + Telegram WebApp SDK / VK Bridge; артефакт — лёгкий бандл app/ (< 300KB gzip), нативные элементы SDK, темы theme_params, safe area, Telegram Payments."
   version: "2.6.0"
   domain: mini_apps
-  tags: [single-page-app, a11y-pass, telegram-sdk, payments, viewport-adaptive, offline-worker, usability-heuristics, conversion, motion-pass]
+  tags: [single-page-app, a11y-pass, telegram-sdk, payments, viewport-adaptive, offline-worker, usability-heuristics, conversion, motion-pass, expert-copywriter]
   deliverable: app
-  checks: [validate, lint-slop]
+  checks: [validate, lint-slop, lint-copy]
 spec:
-  skills: [single-page-app, a11y-pass, telegram-sdk, payments, viewport-adaptive, offline-worker, usability-heuristics, conversion, motion-pass]
+  skills: [single-page-app, a11y-pass, telegram-sdk, payments, viewport-adaptive, offline-worker, usability-heuristics, conversion, motion-pass, expert-copywriter]
   validators: [constitution, anti_slop, schema, llm_judge]
   gates: [G1-direction, G2-structure, G3-artifact, G4-final]
-  tools: [validate_artifact, lint_slop, lint_quotas, initdata_check]
+  tools: [validate_artifact, lint_slop, lint_quotas, lint_copy, initdata_check]
   registry: "registry.mjs"
   models:
     planner: "ollama/llama3.1:8b"

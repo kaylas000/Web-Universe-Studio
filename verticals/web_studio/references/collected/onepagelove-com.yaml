@@ -1,0 +1,32 @@
+# Собрано с каталога: onepagelove.com
+# Стиль/семейство: onepage
+# Дата сбора: 2026-10-14
+catalog: "onepagelove.com"
+style: "onepage"
+collected_at: 2026-10-14
+count: 8
+examples:
+  - id: we-001
+    name: "meliketurgut.com"
+    url: "https://meliketurgut.com"
+  - id: we-002
+    name: "shockingmike.github.io"
+    url: "https://shockingmike.github.io/kern-society"
+  - id: we-003
+    name: "timvandamme.com"
+    url: "https://timvandamme.com"
+  - id: we-004
+    name: "bymayo.co.uk"
+    url: "https://bymayo.co.uk"
+  - id: we-005
+    name: "newmaterial.ai"
+    url: "https://newmaterial.ai"
+  - id: we-006
+    name: "sam-peitz.com"
+    url: "https://www.sam-peitz.com"
+  - id: we-007
+    name: "officecommun.com"
+    url: "https://officecommun.com"
+  - id: we-008
+    name: "screen.movie"
+    url: "https://screen.movie"

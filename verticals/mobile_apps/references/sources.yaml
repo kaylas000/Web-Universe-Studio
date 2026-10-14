@@ -64,3 +64,7 @@ sources:
     title: "rn-animations"
     source: "references/sources.yaml#rn-animations"
     takeaway: "Анимация на 60fps — нативный драйвер и кадровая модель: Animated.timing/spring с useNativeDriver: true, requestAnimationFrame/Easing; длинные setTimeout на главном потоке — тормоза (V-25)."
+  - id: ref-17
+    title: "human-voice"
+    source: "references/sources.yaml#humanizer-ru"
+    takeaway: "Экспертный текст без следов ИИ: факты и числа вместо клише, глагол вместо «представляет собой», ноль артефактов копипаста (oaicite, utm_source=chatgpt.com, 【…†…】); проверяется детерминированным сканом lint-copy (A-xx/C-xx/N-xx/R-xx, балл 0-100; smixs/humanizer-ru, ilyautov/humanizer-ru, stop-slop — MIT)."

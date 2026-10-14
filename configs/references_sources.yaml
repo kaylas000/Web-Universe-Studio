@@ -179,17 +179,24 @@ sources:
   - id: tma-dribbble
     vertical: mini_apps
     kind: concept
-    url: "https://dribbble.com"
+    url: "https://dribbble.com/search/telegram-mini-app"
     enabled: false
     take: Концепты UI/UX
     filters: "Telegram Mini App UI, TMA design"
   - id: tma-behance
     vertical: mini_apps
     kind: concept
-    url: "https://behance.net"
+    url: "https://behance.net/search/telegram-bot-ui"
     enabled: false
     take: Кейсы и портфолио
     filters: "Telegram bot UI, Mini app case study"
+  - id: tma-vk-miniapps
+    vertical: mini_apps
+    kind: catalog
+    url: "https://vk.com/miniapps"
+    enabled: false
+    take: Каталог мини-приложений VK с реальными примерами
+    filters: [категория, пример]
 
   # ── mobile_apps · мобильные приложения iOS/Android (§12.4.7) ─────────────────────
   - id: mob-mobbin
@@ -234,6 +241,19 @@ sources:
     enabled: false
     take: Реальные компоненты
     filters: [Mobile, 2000+ паттернов]
+  - id: mob-appstore-design
+    vertical: mobile_apps
+    kind: gallery
+    url: "https://appstore.design"
+    enabled: false
+    take: Дизайн реальных приложений из App Store
+    filters: [категория, превью]
+
+# ── Минимум референсов на студию (таблица источников, §8 плана) ──────────────────
+minimums:
+  web_studio: 100
+  mini_apps: 50
+  mobile_apps: 80
 
 rules:
   require_takeaway: true      # запись без takeaway не принимается (К-04)

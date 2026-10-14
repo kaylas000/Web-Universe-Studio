@@ -14,7 +14,7 @@ test("listSkills находит скиллы вертикали", () => {
   assert.ok(listSkills(DATA).length >= 6, "стандарт студии: ≥6 приёмов");
   assert.ok(
     listSkills(DATA).every((d) =>
-      /single-page-app|a11y-pass|telegram-sdk|payments|viewport-adaptive|offline-worker|usability-heuristics|conversion|motion-pass$/.test(d),
+      /single-page-app|a11y-pass|telegram-sdk|payments|viewport-adaptive|offline-worker|usability-heuristics|conversion|motion-pass$|expert-copywriter$/.test(d),
     ),
   );
 });

@@ -207,6 +207,19 @@
 | mobile_apps | анимации 60fps: нативный драйвер (Animated + useNativeDriver), rAF/Easing, запрет setTimeout ≥500 мс | V-25 · rules.json (allOf: regexAtLeast + regexAbsent) |
 | mobile_apps | статья К-25 + ТЗ §9.7 (К-01…К-25), скилл animation-pass, ref-16 (rn-animations), декларация motion в демо | CONSTITUTION.md, skills/, references/, projects/ |
 
+**Восьмой проход (P0 общий: экспертный текст без следов ИИ, C-COMMON-02 «тексты»)** — закрыт во всех трёх студиях.
+
+| Студия | Что добавлено | Код/файл |
+|---|---|---|
+| engine | движок редактуры: артефакты копипаста A-xx (гейт) + стиль/ритм C-xx/N-xx/R-xx (балл), жанры | `core/vertical-kit/copywriting.mjs` |
+| engine | раннер `runCopyLint` (тот же контракт «файл:строка код», что у lint-slop) | `core/vertical-kit/index.mjs` |
+| web_studio | скилл SK-22 expert-copywriter + линтер следов ИИ в существующем `lint-copy.mjs` | skills/expert-copywriter/SKILL.md, scripts/copy.json |
+| mini_apps | навык expert-copywriter (4 шаблона + 2 крючка), ref-16, check `lint-copy` в цикле | skills/expert-copywriter/, scripts/lint-copy.mjs, vertical.yaml |
+| mobile_apps | навык expert-copywriter (4 шаблона + 2 крючка), ref-17, check `lint-copy` в цикле | skills/expert-copywriter/, scripts/lint-copy.mjs, vertical.yaml |
+
+Источники правил (MIT): smixs/humanizer-ru, ilyautov/humanizer-ru, hardikpandya/stop-slop,
+petergyang/no-ai-slop, blader/humanizer; атрибуция — `docs/COPYWRITING.md`.
+
 Остаток «✖/◐» в §4-§5 — следующая очередь (P2): анимации mini, i18n web,
 safe-area детально (mobile), конверсия mobile.
 

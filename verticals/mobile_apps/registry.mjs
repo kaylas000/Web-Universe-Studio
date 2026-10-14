@@ -24,7 +24,7 @@ export const vertical = {
   name: "mobile_apps",
   title: "Студия мобильных приложений",
   deliverable: "app",
-  checks: ["validate","lint-slop"],
+  checks: ["validate","lint-slop","lint-copy"],
   validator: "vertical_project",
   gates: ["G1-direction","G2-structure","G3-artifact","G4-final"],
 

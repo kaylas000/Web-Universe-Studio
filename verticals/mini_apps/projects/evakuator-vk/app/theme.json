@@ -1,0 +1,45 @@
+{
+  "designSystem": "REF-10 dark + REF-07 industrial (web_studio/references)",
+  "references": [
+    {
+      "id": "REF-10",
+      "source": "https://darkmodedesign.com",
+      "palette": ["#0E1116", "#E8E6E3", "#7C5CFF"],
+      "takeaway": "Тёмная тема — фон уровня #0E1116, иерархия прозрачностью белого и один яркий акцент."
+    },
+    {
+      "id": "REF-07",
+      "source": "#proekty",
+      "palette": ["#17181C", "#FF6A2B", "#E7E7E2", "#FFB35C"],
+      "takeaway": "Открывай промышленную тему её характерным артефактом (наряд, печь), акцент бери из рабочей палитры отрасли."
+    }
+  ],
+  "themes": {
+    "dark": {
+      "background": "#0E1116",
+      "surface": "#17181C",
+      "text": "#E8E6E3",
+      "textMuted": "#A0A8B4",
+      "textFaint": "#7B8494",
+      "accent": "#FF6A2B",
+      "onAccent": "#17181C",
+      "border": "rgba(232,230,227,0.14)"
+    },
+    "light": {
+      "background": "#E7E7E2",
+      "surface": "#FFFFFF",
+      "text": "#17181C",
+      "textMuted": "#565651",
+      "textFaint": "#6B7280",
+      "accent": "#FF6A2B",
+      "onAccent": "#17181C",
+      "border": "rgba(23,24,28,0.14)"
+    }
+  },
+  "contrast": [
+    { "fg": "text", "bg": "background" },
+    { "fg": "textMuted", "bg": "background" },
+    { "fg": "text", "bg": "surface" },
+    { "fg": "onAccent", "bg": "accent" }
+  ]
+}

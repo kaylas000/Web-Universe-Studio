@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0E1116" />
+    <title>Эвакуатор · Химки и Москва</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js"></script>
+  </head>
+  <body data-state="empty">
+    <main class="app">
+      <!-- Шапка: бренд + статус диспетчера -->
+      <header class="masthead">
+        <div class="masthead__brand">
+          <span class="masthead__logo">ЭВАКУАТОР</span>
+          <span class="masthead__zone">Химки · Москва</span>
+        </div>
+        <span class="masthead__status" id="status" role="status" aria-live="polite">
+          <span class="masthead__dot" aria-hidden="true"></span>
+          24/7 на линии
+        </span>
+      </header>
+
+      <!-- Главный экран: наряд-заказ (REF-07) -->
+      <section class="order" aria-labelledby="order-title">
+        <h1 class="order__title" id="order-title">
+          Эвакуатор<br />в Химках и Москве
+        </h1>
+
+        <!-- Карточка услуги: цена, время, параметры -->
+        <div class="sheet">
+          <div class="sheet__row">
+            <span class="sheet__label">Подача</span>
+            <span class="sheet__value">от 31 мин</span>
+          </div>
+          <div class="sheet__row">
+            <span class="sheet__label">Сдвижная платформа</span>
+            <span class="sheet__value">до 10 т</span>
+          </div>
+          <div class="sheet__row">
+            <span class="sheet__label">Цена</span>
+            <span class="sheet__value">от 2 500 ₽</span>
+          </div>
+          <div class="sheet__row">
+            <span class="sheet__label">График</span>
+            <span class="sheet__value">24/7, без выходных</span>
+          </div>
+        </div>
+
+        <!-- Форма адреса -->
+        <form class="form" id="order-form" novalidate>
+          <label class="form__label" for="address">Откуда везём</label>
+          <input
+            class="form__field"
+            id="address"
+            name="address"
+            type="text"
+            autocomplete="street-address"
+            placeholder="Улица, дом, ориентир"
+          />
+
+          <label class="form__label" for="tech">Тип техники</label>
+          <select class="form__field" id="tech" name="tech">
+            <option value="">Выберите тип машины</option>
+            <option value="light">Легковая до 3,5 т</option>
+            <option value="commercial">Коммерческая до 10 т</option>
+            <option value="special">Спецтехника</option>
+          </select>
+
+          <label class="form__label" for="phone">Телефон для связи</label>
+          <input
+            class="form__field"
+            id="phone"
+            name="phone"
+            type="tel"
+            inputmode="tel"
+            autocomplete="tel"
+            placeholder="+7 900 000-00-00"
+          />
+
+          <button class="form__submit" id="submit" type="button">
+            Вызвать эвакуатор
+          </button>
+        </form>
+
+        <!-- Статус заявки -->
+        <p class="note" id="note" role="status" aria-live="polite">
+          Заполните адрес — назовём цену до выезда.
+        </p>
+
+        <!-- Доказательства: отзывы -->
+        <section class="proof" aria-labelledby="proof-title">
+          <h2 class="proof__title" id="proof-title">Отзывы</h2>
+          <ul class="proof__list">
+            <li class="proof__item">
+              <b class="proof__name">Павел, 4 мая 2025</b>
+              <span class="proof__text">Приехали через 15 минут, цену не ломали.</span>
+            </li>
+            <li class="proof__item">
+              <b class="proof__name">Андрей, 3 июня 2023</b>
+              <span class="proof__text">Быстро погрузил и разгрузил. Сделка состоялась.</span>
+            </li>
+            <li class="proof__item">
+              <b class="proof__name">SRT, 3 октября 2023</b>
+              <span class="proof__text">Договорились, всё нормально.</span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Контакты -->
+        <div class="contacts">
+          <button class="contacts__call" id="call" type="button">
+            Позвонить диспетчеру
+          </button>
+          <button class="contacts__help" id="help" type="button">
+            Как это работает
+          </button>
+        </div>
+      </section>
+    </main>
+    <script src="app.js" type="module"></script>
+  </body>
+</html>

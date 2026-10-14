@@ -1,0 +1,6 @@
+{
+  "vertical": "web_studio",
+  "scan": ["site"],
+  "extensions": [".html", ".md"],
+  "genre": "marketing"
+}

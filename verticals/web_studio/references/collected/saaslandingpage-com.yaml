@@ -1,0 +1,38 @@
+# Собрано с каталога: saaslandingpage.com
+# Стиль/семейство: saas
+# Дата сбора: 2026-10-14
+catalog: "saaslandingpage.com"
+style: "saas"
+collected_at: 2026-10-14
+count: 10
+examples:
+  - id: we-001
+    name: "mobbin.com"
+    url: "https://mobbin.com"
+  - id: we-002
+    name: "giga.ai"
+    url: "https://giga.ai"
+  - id: we-003
+    name: "typesafe.ai"
+    url: "https://typesafe.ai"
+  - id: we-004
+    name: "getmaple.ca"
+    url: "https://www.getmaple.ca"
+  - id: we-005
+    name: "stivio.ai"
+    url: "https://stivio.ai"
+  - id: we-006
+    name: "slite.com"
+    url: "https://slite.com"
+  - id: we-007
+    name: "oxide.computer"
+    url: "https://oxide.computer"
+  - id: we-008
+    name: "tines.com"
+    url: "https://www.tines.com"
+  - id: we-009
+    name: "localcan.com"
+    url: "https://www.localcan.com"
+  - id: we-010
+    name: "x.com"
+    url: "https://x.com/DavidePacilio"

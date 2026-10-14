@@ -1,0 +1,83 @@
+# Собрано с каталога: minimal.gallery
+# Стиль/семейство: minimal
+# Дата сбора: 2026-10-14
+catalog: "minimal.gallery"
+style: "minimal"
+collected_at: 2026-10-14
+count: 25
+examples:
+  - id: we-001
+    name: "x.com"
+    url: "https://x.com/minimal_gallery"
+  - id: we-002
+    name: "pinterest.com"
+    url: "https://pinterest.com/minimal_gallery"
+  - id: we-003
+    name: "davidfiz.com"
+    url: "https://www.davidfiz.com"
+  - id: we-004
+    name: "drasa.uk"
+    url: "https://drasa.uk"
+  - id: we-005
+    name: "spek.app"
+    url: "https://spek.app"
+  - id: we-006
+    name: "odysseeclinic.com.au"
+    url: "https://www.odysseeclinic.com.au"
+  - id: we-007
+    name: "flowlife.com"
+    url: "https://www.flowlife.com"
+  - id: we-008
+    name: "grndwrk.studio"
+    url: "https://grndwrk.studio"
+  - id: we-009
+    name: "offsuit.app"
+    url: "https://offsuit.app"
+  - id: we-010
+    name: "jarcos.work"
+    url: "https://jarcos.work"
+  - id: we-011
+    name: "ogon.es"
+    url: "https://ogon.es"
+  - id: we-012
+    name: "melius.com"
+    url: "https://www.melius.com"
+  - id: we-013
+    name: "wearebou.com"
+    url: "https://wearebou.com"
+  - id: we-014
+    name: "unifygtm.com"
+    url: "https://www.unifygtm.com"
+  - id: we-015
+    name: "michaelgatt.com"
+    url: "https://michaelgatt.com"
+  - id: we-016
+    name: "gionatannese.com"
+    url: "https://www.gionatannese.com"
+  - id: we-017
+    name: "unionboulangerie.com"
+    url: "https://unionboulangerie.com/en"
+  - id: we-018
+    name: "originbrand.io"
+    url: "https://www.originbrand.io"
+  - id: we-019
+    name: "xanvierallison.com"
+    url: "https://xanvierallison.com"
+  - id: we-020
+    name: "provider.studio"
+    url: "http://provider.studio"
+  - id: we-021
+    name: "esrbespoke.au"
+    url: "https://www.esrbespoke.au"
+  - id: we-022
+    name: "nomadlabs.es"
+    url: "https://nomadlabs.es"
+  - id: we-023
+    name: "bswt.tv"
+    url: "https://bswt.tv"
+  - id: we-024
+    name: "thereach.travel"
+    url: "https://thereach.travel"
+  - id: we-025
+    name: "joshuabaker.com"
+    url: "https://www.joshuabaker.com"

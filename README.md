@@ -35,11 +35,15 @@ node core/gate.mjs                     # гейт К-21 по всем 3 верт
 cd verticals/web_studio                              # пример: веб-студия
 node scripts/validate.mjs projects/<имя>             # приёмка V-xx
 node scripts/lint-slop.mjs projects/<имя>            # запреты B-xx
+node scripts/lint-copy.mjs projects/<имя>            # текст: следы ИИ (A-xx — гейт) + балл стиля
 node scripts/lint-quotas.mjs projects/<имя>          # квоты Q-xx
 cd ../.. && node core/loop-engine/cli.mjs projects/<имя> --studio-root verticals/web_studio
 ```
 
 4. Приёмка: `REVIEW.md` артдиректора → G4. Вердикт — за человеком (К-09).
+
+Во всех трёх студиях текст пишет навык **`expert-copywriter`** и проверяет `lint-copy`
+(общий движок `core/vertical-kit/copywriting.mjs`). Подробно — [`docs/COPYWRITING.md`](docs/COPYWRITING.md).
 
 ## Структура
 

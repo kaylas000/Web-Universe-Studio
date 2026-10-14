@@ -9,10 +9,12 @@
      runVerticalChecks(name, list) — печать отчёта + exit code
      runSpec(name, rulesUrl)       — исполнить декларативные правила из rules.json
      runSlopSpec(name, slopUrl)    — исполнить запреты из slop.json
+     runCopyLint(name, copyUrl)    — проверить текст на следы ИИ (copy.json)
 */
 
 import { existsSync, readFileSync, statSync, readdirSync } from "node:fs";
 import { join, relative, resolve } from "node:path";
+import { analyzeText, SOFT_CODES } from "./copywriting.mjs";
 
 /** Каталог проекта: первым аргументом приходит «projects/<имя>» (относительно cwd студии). */
 export function projectDirFromArgv(argv = process.argv.slice(2)) {
@@ -84,6 +86,48 @@ export function runSlopSpec(vertical, slopUrl) {
   process.stdout.write(`${[...new Set(hits)].join("\n")}\n`);
   process.exitCode = 1;
   return false;
+}
+
+/** Проверяет прозу проекта на следы ИИ (движок copywriting.mjs). Спецификация — copy.json.
+ *  Ошибки (артефакты копипаста) печатаются как «файл:строка A-xx …» и блокируют приёмку;
+ *  стилевые замечания идут только в сводку «[lint-copy] …» (ядро такие строки игнорирует). */
+export function runCopyLint(vertical, copyUrl, { strict = false } = {}) {
+  const spec = JSON.parse(readFileSync(copyUrl, "utf8"));
+  const root = projectDirFromArgv();
+  if (!existsSync(root)) {
+    process.stdout.write("[lint-copy] каталог проекта недоступен\n");
+    process.exitCode = 0;
+    return { ok: true, errors: [], warnings: [], files: 0, score: 100 };
+  }
+  const files = collectFiles(root, spec.scan ?? ["."], spec.extensions ?? [".md", ".html", ".js", ".mjs", ".css", ".json"]);
+  const errors = [];
+  const warnings = [];
+  const PROSE = /\.(?:html?|xhtml|md|markdown|txt)$/i;
+  for (const file of files) {
+    // ритм (R-01/R-02) меряем только на прозе: в .js/.css/.json прозы нет — будут ложные срабатывания
+    const res = analyzeText(readFileSync(file, "utf8"), { genre: spec.genre, rhythm: PROSE.test(file) });
+    const rel = relative(root, file);
+    for (const f of res.findings) (f.severity === "error" ? errors : warnings).push({ file: rel, ...f });
+  }
+
+  const maxWarnings = strict ? 0 : (spec.maxWarnings ?? Infinity);
+  const ok = errors.length === 0 && warnings.length <= maxWarnings;
+
+  // печатаем ТОЛЬКО ошибки код-строками: любая код-строка для ядра = провал проверки
+  for (const e of errors) {
+    const tail = e.quote ? ` — ${e.quote}` : "";
+    process.stdout.write(`${e.file}:${e.line} ${e.code} «${e.message}${tail}»\n`);
+  }
+  // мягкие маркеры (C-13/R-01/R-02) показываются, но не понижают балл
+  const hardWarnings = warnings.filter((w) => !SOFT_CODES.includes(w.code)).length;
+  const score = Math.max(0, Math.min(100, 100 - 12 * errors.length - 3 * hardWarnings));
+  const tags = [...new Set(warnings.map((w) => w.code))].sort();
+  process.stdout.write(
+    `[lint-copy] ${ok ? "чисто" : "нарушения"}: файлов ${files.length}, ` +
+      `ошибок ${errors.length}, замечаний стиля ${warnings.length}${tags.length ? ` (${tags.join(", ")})` : ""}, балл ${score}\n`,
+  );
+  process.exitCode = ok ? 0 : 1;
+  return { ok, errors, warnings, files: files.length, score };
 }
 
 /* ————————————————————————— декларативные правила ————————————————————————— */

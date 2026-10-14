@@ -1,0 +1,10 @@
+project_name: evakuator-vk
+task: "срочный вызов эвакуатора (Химки и Москва) как VK Mini App + Telegram Mini App"
+loop:
+  max_iterations: 1
+generator:
+  type: mock
+context_builder:
+  type: studio_default
+validator:
+  type: vertical_project

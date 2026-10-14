@@ -1,0 +1,6 @@
+{
+  "vertical": "mobile_apps",
+  "scan": ["app"],
+  "extensions": [".html", ".js", ".json", ".md"],
+  "genre": "product"
+}

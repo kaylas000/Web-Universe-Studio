@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 /* ЦЕХ lint-copy.mjs — Валидатор копирайтинга и редполитики.
    Node ≥18, ноль npm-зависимостей, exit 0/1.
-   Проверяет B-17, B-18, B-21, B-23 в тексте и HTML. */
+   Проверяет B-17, B-18, B-21, B-23 в тексте и HTML, а также следы машинной генерации
+   (копипаст из чат-ботов и манеру ИИ) через общий движок core/vertical-kit/copywriting.mjs.
+   Гейтят только артефакты (коды A-xx); стилевые маркеры идут в сводку «[lint-copy] …». */
 
 import { readFileSync, existsSync, readdirSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
+
+import { analyzeText } from "../../../core/vertical-kit/copywriting.mjs";
 
 const root = resolve(process.cwd());
 const projectArg = process.argv[2] ?? "projects/pcpolimer";
@@ -57,6 +61,7 @@ function getFiles(dir, exts = [".html", ".md"]) {
 const targetFiles = getFiles(projectDir);
 let violationsCount = 0;
 
+/* 1) исторические правила редполитики цеха (B-17/B-18/B-23) */
 for (const file of targetFiles) {
   const content = readFileSync(file, "utf8");
   const lines = content.split("\n");
@@ -81,10 +86,30 @@ for (const file of targetFiles) {
   });
 }
 
+/* 2) следы машинной генерации (общий движок copywriting.mjs): артефакты гейтят,
+      стиль и ритм идут только в сводку */
+const copySpec = JSON.parse(readFileSync(new URL("./copy.json", import.meta.url), "utf8"));
+let styleWarnings = 0;
+const styleTags = new Set();
+for (const file of targetFiles) {
+  const res = analyzeText(readFileSync(file, "utf8"), { genre: copySpec.genre });
+  const relPath = file.replace(root + "/", "");
+  for (const f of res.findings) {
+    if (f.severity === "error") {
+      console.log(`${relPath}:${f.line} ${f.code} «${f.message}${f.quote ? ` — ${f.quote}` : ""}»`);
+      violationsCount++;
+    } else {
+      styleWarnings++;
+      styleTags.add(f.code);
+    }
+  }
+}
+
+const styleNote = `замечаний стиля ${styleWarnings}${styleTags.size ? ` (${[...styleTags].sort().join(", ")})` : ""}`;
 if (violationsCount > 0) {
-  console.log(`\n[lint-copy] Найдено нарушений редполитики: ${violationsCount}`);
+  console.log(`\n[lint-copy] Найдено нарушений редполитики: ${violationsCount} · ${styleNote}`);
   process.exit(1);
 } else {
-  console.log(`[lint-copy] Проверка редполитики успешна. Нарушений не найдено.`);
+  console.log(`[lint-copy] Проверка редполитики успешна · ${styleNote}`);
   process.exit(0);
 }

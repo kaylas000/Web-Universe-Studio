@@ -15,5 +15,6 @@
 | `usability-heuristics` | Эвристики NN/g: статус, выход, ошибки, распознавание, справка (К-23). | Карта 10 эвристик → Статус (NetInfo) → Стек (выход) → Retry → Подписи → Справка (i18n) → Отчёт heuristics_report.md |
 | `typography-pass` | Типографика: базовый кегль ≥16, контент ≥14, интерлиньяж ≥20 (К-24). | Скан fontSize/lineHeight в App.mjs → Базовый ≥16 → Контент ≥14 → regexAbsent мелких → Точечные правки → Отчёт typography_report.md |
 | `animation-pass` | Анимации 60fps: нативный драйвер, кадровая модель, без блокировок (К-25). | Скан деклараций App.mjs → Animated+useNativeDriver → rAF/Easing → regexAbsent setTimeout≥500 → Отчёт animation_report.md |
+| `expert-copywriter` | Экспертный текст без следов ИИ: факты и числа, глагол вместо связки, ноль артефактов копипаста (REF-17). | Собрать текст → Убрать A-xx → Связка→глагол → Абстракция→число → Снять манеру ИИ → Выровнять ритм → lint-copy (ошибок 0, балл ≥ 80) |
 
 Загрузчик — `core/loop-engine/skills.mjs`; рендер шаблонов — `core/loop-engine/template.mjs`.

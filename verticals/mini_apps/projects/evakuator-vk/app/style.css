@@ -1,0 +1,358 @@
+/* Эвакуатор · дизайн-система на референсах студии:
+   REF-07 (industrial): открытие — наряд-заказ, рабочая палитра, жёсткие рамки.
+   REF-10 (dark): тёмный фон #0E1116, иерархия оттенками белого, один акцент.
+   REF-14 (cta-conversion): один primary CTA, конкретика цифрами.
+   REF-08 (ui-patterns): компонент решает одну задачу, видные состояния. */
+:root {
+  color-scheme: light dark;
+
+  /* Тёмная тема (по умолчанию — ночной вызов, REF-10). */
+  --paper: var(--tg-theme-bg-color, #0e1116);
+  --surface: var(--tg-theme-secondary-bg-color, #17181c);
+  --surface-raised: #1e2128;
+  --ink: var(--tg-theme-text-color, #e8e6e3);
+  --muted: var(--tg-theme-hint-color, #a0a8b4);
+  --faint: #6b7280;
+  --accent: var(--tg-theme-button-color, #ff6a2b);
+  --accent-hover: #ff8552;
+  --on-accent: var(--tg-theme-button-text-color, #17181c);
+  --border: rgba(232, 230, 227, 0.14);
+  --border-strong: rgba(232, 230, 227, 0.24);
+  --success: #3dd68c;
+  --error: #e4572e;
+  --vh: 100vh;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Состояния экрана (V-19) — через data-state на body. */
+body[data-state="loading"] .note { color: var(--muted); }
+body[data-state="empty"] .note { color: var(--muted); }
+body[data-state="error"] .note { color: var(--error); }
+body[data-state="success"] .note { color: var(--success); }
+
+/* Контейнер. */
+.app {
+  max-width: 32rem;
+  width: 100%;
+  min-height: var(--vh);
+  margin: 0 auto;
+  padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
+}
+
+/* Шапка: бренд + статус. */
+.masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.masthead__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.masthead__logo {
+  font-weight: 900;
+  font-size: 1.1rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.masthead__zone {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.masthead__status {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.masthead__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* Заголовок — как наряд-заказ (REF-07): одна строка, один смысл. */
+.order__title {
+  margin: 1.5rem 0 1rem;
+  font-size: 1.8rem;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* Карточка услуги — таблицей, как наряд-строки (REF-07). */
+.sheet {
+  display: grid;
+  gap: 0;
+  margin: 0 0 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.sheet__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.7rem 1rem;
+}
+
+.sheet__row + .sheet__row {
+  border-top: 1px solid var(--border);
+}
+
+.sheet__label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.sheet__value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* Форма. */
+.form {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.form__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.form__field {
+  min-height: 48px;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.form__field:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface-raised);
+}
+
+.form__field::placeholder {
+  color: var(--faint);
+}
+
+.form__submit {
+  min-height: 52px;
+  margin-top: 0.5rem;
+  border: 0;
+  border-radius: 0.7rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.form__submit:hover, .form__submit:active { background: var(--accent); transform: scale(0.97); }
+
+.form__submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Фокус для всех интерактивных элементов (REF-08: видные состояния). */
+.form__field:focus-visible,
+.form__submit:focus-visible,
+.contacts__call:focus-visible,
+.contacts__help:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Статус заявки. */
+.note {
+  margin: 1rem 0;
+  min-height: 1.5em;
+  font-size: 0.9rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Отзывы. */
+.proof {
+  margin-top: 2rem;
+}
+
+.proof__title {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.proof__list {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.proof__item {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.8rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.proof__name {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.proof__text {
+  color: var(--muted);
+}
+
+/* Контакты. */
+.contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.contacts__call {
+  min-height: 48px;
+  padding: 0.7rem 1.2rem;
+  border: 0;
+  border-radius: 0.7rem;
+  background: var(--ink);
+  color: var(--paper);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.contacts__call:hover, .contacts__call:active { opacity: 0.75; transform: scale(0.97); }
+
+.contacts__help {
+  min-height: 44px;
+  padding: 0.7rem 1rem;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Адаптация (К-01). */
+@media (max-width: 420px) {
+  .order__title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .app {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .order__title {
+    font-size: 1.3rem;
+  }
+
+  .masthead__zone {
+    font-size: 0.68rem;
+  }
+}
+
+/* Светлая тема (Telegram light). */
+@media (prefers-color-scheme: light) {
+  :root {
+    --paper: var(--tg-theme-bg-color, #e7e7e2);
+    --surface: var(--tg-theme-secondary-bg-color, #ffffff);
+    --surface-raised: #f5f5f3;
+    --ink: var(--tg-theme-text-color, #17181c);
+    --muted: var(--tg-theme-hint-color, #565651);
+    --faint: #6b7280;
+    --accent: var(--tg-theme-button-color, #ff6a2b);
+    --accent-hover: #e55a1f;
+    --on-accent: var(--tg-theme-button-text-color, #17181c);
+    --border: rgba(23, 24, 28, 0.12);
+    --border-strong: rgba(23, 24, 28, 0.22);
+  }
+}
+
+/* К-24: prefers-reduced-motion. */
+@media (prefers-reduced-motion: reduce) {
+  .masthead__dot {
+    animation: none;
+  }
+
+  .form__submit,
+  .contacts__call {
+    transition: none;
+  }
+
+  .form__submit:active,
+  .contacts__call:active {
+    transform: none;
+  }
+}

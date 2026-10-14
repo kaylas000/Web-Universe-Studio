@@ -1,0 +1,6 @@
+{
+  "vertical": "mini_apps",
+  "scan": ["app"],
+  "extensions": [".html", ".js", ".css", ".md"],
+  "genre": "product"
+}

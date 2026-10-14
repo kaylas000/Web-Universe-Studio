@@ -8,14 +8,14 @@ metadata:
   description: "Собирает экран мобильного приложения: манифест, модуль экрана с состоянием и разметкой, доступные подписи, типографика, анимации 60fps и README."
   version: "1.5.0"
   domain: mobile_apps
-  tags: [screen-composer, a11y-pass, offline-queue, store-release, i18n-pass, nav-deeplinks, usability-heuristics, typography-pass, animation-pass]
+  tags: [screen-composer, a11y-pass, offline-queue, store-release, i18n-pass, nav-deeplinks, usability-heuristics, typography-pass, animation-pass, expert-copywriter]
   deliverable: app
-  checks: [validate, lint-slop]
+  checks: [validate, lint-slop, lint-copy]
 spec:
-  skills: [screen-composer, a11y-pass, offline-queue, store-release, i18n-pass, nav-deeplinks, usability-heuristics, typography-pass, animation-pass]
+  skills: [screen-composer, a11y-pass, offline-queue, store-release, i18n-pass, nav-deeplinks, usability-heuristics, typography-pass, animation-pass, expert-copywriter]
   validators: [constitution, anti_slop, schema]
   gates: [G1-direction, G2-structure, G3-artifact, G4-final]
-  tools: [validate_artifact, lint_slop]
+  tools: [validate_artifact, lint_slop, lint_copy]
   registry: "registry.mjs"
   models:
     planner: "ollama/llama3.1:8b"

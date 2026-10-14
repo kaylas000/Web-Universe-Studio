@@ -12,7 +12,7 @@
 3. `skills/SKILL-INDEX.md` — приёмы студии; папка `skills/<id>/` = skill.yaml + templates/ + hooks/.
 4. `anti-slop/BANNED.md` + `anti-slop/QUOTAS.md` — запреты B-01…B-06 и квоты Q-01…Q-06.
 5. `gates/G1-direction.md … G4-final.md` — как принимается проект.
-6. `scripts/validate.mjs`, `scripts/lint-slop.mjs`, `scripts/lint-quotas.mjs` — приёмка.
+6. `scripts/validate.mjs`, `scripts/lint-slop.mjs`, `scripts/lint-copy.mjs`, `scripts/lint-quotas.mjs` — приёмка.
 
 ## Как устроена студия
 
@@ -30,6 +30,9 @@
 - **Запреты и квоты машинизированы.** B-xx — из `scripts/slop.json`,
   Q-xx — из `scripts/quotas.json`. `lint-slop` обязан печатать `чисто:`,
   `lint-quotas` — `ИТОГ: 6/6 · exit 0`.
+- **Текст пишется как экспертный и проверяется машинно.** Навык `expert-copywriter`
+  (REF-17) держит факты и числа вместо клише; `lint-copy` ловит следы копипаста
+  из чат-ботов (коды `A-xx` — жёсткий провал) и считает балл стиля (`C-xx/N-xx/R-xx`).
 - **Итерации «сборка → ворота» гоняются циклом, а не вручную.** Это цикл
   принуждения платформы (loop-engine, §17 ТЗ): проект не сдаётся, пока цикл
   не вернул `exit 0`.
@@ -42,7 +45,7 @@
 BRIEF → разбор приёмов (skills/) и референсов (references/)
 → DIRECTION.md → G1 → STRUCTURE.md → G2
 → сборка артефакта в projects/<имя>/app/ → G3
-→ ЦИКЛ: validate.mjs + lint-slop.mjs + lint-quotas.mjs → loop-engine
+→ ЦИКЛ: validate.mjs + lint-slop.mjs + lint-copy.mjs + lint-quotas.mjs → loop-engine
 → REVIEW.md (артдиректор) → G4 → приёмка
 ```
 
@@ -53,6 +56,7 @@ BRIEF → разбор приёмов (skills/) и референсов (referen
 ```bash
 node scripts/validate.mjs projects/<имя>      # приёмка V-xx → «ИТОГ: N/N · exit 0»
 node scripts/lint-slop.mjs projects/<имя>     # запреты B-xx → «чисто:»
+node scripts/lint-copy.mjs projects/<имя>     # текст: следы ИИ A-xx (гейт) + балл стиля → «[lint-copy] …»
 node scripts/lint-quotas.mjs projects/<имя>   # квоты Q-xx → «ИТОГ: 6/6 · exit 0»
 node --test tests/*.test.mjs                  # самотесты студии
 ```
@@ -70,7 +74,7 @@ node core/loop-engine/cli.mjs projects/<имя> --studio-root verticals/mobile_a
 
 ## Definition of Done
 
-1. Приёмка студии зелёная: `validate` N/N, `lint-slop` чисто, `lint-quotas` 6/6.
+1. Приёмка студии зелёная: `validate` N/N, `lint-slop` чисто, `lint-copy` без ошибок A-xx, `lint-quotas` 6/6.
 2. Цикл сошёлся: `cli.mjs … --studio-root verticals/mobile_apps` → `exit 0`.
 3. `REVIEW.md` — вердикт артдиректора со ссылками на пункты CONSTITUTION.
 4. Удачный приём возвращается в архив студии: источник → `references/`,
