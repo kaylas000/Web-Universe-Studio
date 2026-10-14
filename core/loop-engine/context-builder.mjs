@@ -19,11 +19,12 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { basename, isAbsolute, join, resolve, sep } from "node:path";
 
 import { taskGoal } from "./base.mjs";
+import { buildRepairPlan, loadContract, renderContract } from "./contract.mjs";
 import { renderTemplateDetailed } from "./template.mjs";
 import { humanNumber, toRelPosix, truncate } from "./text.mjs";
 
 /** Приоритет = порядок: сначала обязательная механика, в конце — примеры (их режем первыми). */
-export const SECTION_ORDER = Object.freeze(["mechanics", "gates", "skills", "references", "motion", "dossier", "docs", "examples"]);
+export const SECTION_ORDER = Object.freeze(["contract", "mechanics", "gates", "skills", "references", "motion", "dossier", "docs", "examples"]);
 
 export const DEFAULT_EXTENSIONS = Object.freeze([".md", ".yaml", ".yml", ".json", ".txt"]);
 
@@ -46,6 +47,13 @@ const SKIP_DIRS = new Set(["node_modules", ".git", "dist", "build", ".next", "wo
 /** @returns {SectionSpec[]} */
 function defaultSections(projectName) {
   return [
+    {
+      // закон студии в машинном виде: статья → код → приём → шаг правки (contract.mjs)
+      name: "contract",
+      title: "КОНТРАКТ СТУДИИ (ЗАКОН + КОДЫ ПРИЁМКИ + ПРИЁМЫ)",
+      contractSource: true,
+      recursive: false,
+    },
     {
       name: "mechanics",
       title: "МЕХАНИКА ЦЕХА (ОБЯЗАТЕЛЬНО К ИСПОЛНЕНИЮ)",
@@ -73,6 +81,9 @@ export const DEFAULT_CONTEXT_TEMPLATE = `# ЗАДАЧА
 
 Проект: {{ project_name }} · итерация {{ iteration }}{% if max_iterations %} из {{ max_iterations }}{% endif %} · temperature {{ temperature }}
 
+{% if contract %}## КОНТРАКТ СТУДИИ (исполняется валидаторами)
+{{ contract }}
+{% endif %}
 {% if mechanics %}## МЕХАНИКА И ПРАВИЛА (ОБЯЗАТЕЛЬНО)
 {{ mechanics }}
 {% endif %}
@@ -99,8 +110,34 @@ export const DEFAULT_CONTEXT_TEMPLATE = `# ЗАДАЧА
 {% endif %}
 {% if history %}## ПРЕДЫДУЩАЯ ПОПЫТКА ПРОВАЛЕНА
 {{ feedback_text }}
+{% if repair_plan %}
+{{ repair_plan }}
+{% endif %}
 {% endif %}
 `;
+
+/** Блок контекста: приёмы студии на артефакте (применено / нарушено / не применено / подсказки). */
+export function renderSkillReport(skills) {
+  if (!skills || typeof skills !== "object") return "";
+  const lines = [];
+  const applied = skills.applied ?? [];
+  const violated = skills.violated ?? [];
+  const notApplied = skills.notApplied ?? [];
+  const hints = skills.hints ?? [];
+  if (applied.length === 0 && violated.length === 0 && notApplied.length === 0 && hints.length === 0) return "";
+  lines.push("### ПРИЁМЫ СТУДИИ НА АРТЕФАКТЕ (проверено по skill.yaml)");
+  if (applied.length > 0) lines.push(`- применено (${applied.length}): ${applied.slice(0, 12).join(", ")}${applied.length > 12 ? " …" : ""}`);
+  for (const row of violated.slice(0, 8)) lines.push(`- нарушено: ${row.skill} — находок ${row.findings}; убери запрещённые признаки и перечитай шаги приёма`);
+  for (const row of notApplied.slice(0, 8)) {
+    const missing = (row.missing ?? []).slice(0, 2).map((m) => `/${m}/`).join(", ");
+    lines.push(`- не применено: ${row.skill} — нет признака ${missing}`);
+  }
+  if (hints.length > 0) {
+    lines.push("- подсказки по кодам:");
+    for (const hint of hints.slice(0, 8)) lines.push(`  · ${hint.code} → приём «${hint.skill}»: ${hint.hint}`);
+  }
+  return lines.join("\n");
+}
 
 export class StudioContextBuilder {
   /** DI-метка для registry.mjs: что injecting в конструктор. */
@@ -127,6 +164,7 @@ export class StudioContextBuilder {
 
     /** Включение секций; имена-алиасы из Python-патча (includeSkills/includeMechanics) поддержаны. */
     this.include = {
+      contract: flag("contract", ["includeContract"]),
       mechanics: flag("mechanics", ["includeMechanics"]),
       gates: flag("gates"),
       skills: flag("skills", ["includeSkills"]),
@@ -149,6 +187,11 @@ export class StudioContextBuilder {
 
     this._listCache = new Map();
     this._contentCache = new Map();
+    /** @type {Map<string, any>} */
+    this._contractCache = new Map();
+    /** Доп. контракты студий-компаньонов (композиции CEO): [{root, title}] */
+    this.extraContracts = Array.isArray(opts.extraContracts) ? opts.extraContracts.map((c) => ({ root: String(c.root ?? c), title: c.title ?? null })) : [];
+    this.maxContractCodes = Number(opts.maxContractCodes ?? 60);
     this._cacheLimit = Number(opts.cacheLimit ?? 256);
     /** @type {Array<{name:string,title:string,files:number,chars:number,truncated:boolean}>} */
     this._lastReport = [];
@@ -235,6 +278,22 @@ export class StudioContextBuilder {
     const report = [];
 
     for (const spec of this._resolveSpecs()) {
+      // контракт собирается не из файлов, а из разобранного закона студии
+      if (spec.contractSource) {
+        const blocks = [this.contract(root), ...this.extraContracts.map((extra) => this.contract(extra.root))].filter(Boolean);
+        if (blocks.length === 0) continue;
+        const body = blocks
+          .map((block, index) =>
+            renderContract(block, {
+              maxCodes: index === 0 ? this.maxContractCodes : Math.max(12, Math.round(this.maxContractCodes / 2)),
+              taskLine: index === 0 ? "Соблюдай все коды ниже: артефакт принимается только при нуле нарушений." : null,
+            }),
+          )
+          .join("\n\n");
+        sections.contract = body;
+        report.push({ name: "contract", title: spec.title, files: blocks.length, chars: body.length, truncated: false });
+        continue;
+      }
       const collected = this._collectSection(spec, root, warnings);
       if (!collected.body) continue;
       sections[spec.name] = collected.body;
@@ -251,6 +310,26 @@ export class StudioContextBuilder {
     const feedback = this._feedbackVars(state);
     const feedbackText = this._renderAttempts(attempts);
     if (feedbackText) sections.feedback_text = feedbackText;
+
+    // К-10: возврат с ворот — точечные правки по кодам, поэтому в контекст идёт
+    // не только «что сломалось», но и план: где искать, чем закрыть, как проверить.
+    const contractForPlan = this.contract(root);
+    const repair = contractForPlan && feedback && feedback.ok === false ? buildRepairPlan(feedback, contractForPlan, { projectDir: this.projectDir }) : null;
+    if (repair?.text && feedbackText) {
+      sections.feedback_text = `${feedbackText}\n\n${repair.text}`;
+    }
+
+    // Плато (runner): те же коды держатся — значит зона правки выбрана неверно, меняем приём,
+    // а не текст. Без этого цикл переписывает то же место до исчерпания итераций.
+    const plateau = feedback?.plateau ?? state?.lastFeedback?.plateau ?? null;
+    if (plateau && feedbackText) {
+      sections.feedback_text = `### ПЛАТО: ТЕ ЖЕ КОДЫ ПОВТОРЯЮТСЯ (${plateau.repeats}×)\n${plateau.codes.join(", ")} — правка в той же зоне не помогает. ${plateau.strategy}.\n\n${sections.feedback_text}`;
+    }
+
+    // Отчёт приёмов (валидатор → withSkillEvidence): какие приёмы студии применены,
+    // какие провалены и каким приёмом закрывается каждый нарушенный код.
+    const skillReport = renderSkillReport(state?.lastFeedback?.skills ?? state?.feedback?.skills ?? null);
+    if (skillReport && feedbackText) sections.feedback_text = `${sections.feedback_text}\n\n${skillReport}`;
 
     // Все секции объявлены заранее (пустой строкой): иначе шаблонные {% if docs %}
     // давали бы warning «неизвестная переменная» на каждой сборке контекста.
@@ -270,6 +349,10 @@ export class StudioContextBuilder {
       feedback,
       feedback_text: feedbackText,
       feedbackText,
+      repair_plan: repair?.text ?? "",
+      repairPlan: repair?.text ?? "",
+      repair_steps: repair?.steps ?? [],
+      repair_codes: repair?.codes ?? [],
       artifact: feedback ? this._lastArtifactVars(state) : null,
       previous_output: attempts.length > 0 ? attempts[attempts.length - 1].output : "",
       errors: feedback?.errors ?? [],
@@ -289,12 +372,49 @@ export class StudioContextBuilder {
     return text;
   }
 
+  /**
+   * Контракт студии (кэш по корню): статьи закона ↔ коды ↔ приёмы.
+   * Модель получает закон не пересказом, а таблицей с машинными кодами и шагами правки.
+   */
+  contract(studioRoot) {
+    const root = resolve(String(studioRoot ?? this.studioRoot ?? process.cwd()));
+    if (!this._contractCache.has(root)) {
+      /** @type {any} */
+      let value = null;
+      try {
+        value = loadContract(root);
+      } catch {
+        value = null; // студии без CONSTITUTION контракта не имеют — секция просто не появится
+      }
+      this._contractCache.set(root, value);
+    }
+    return this._contractCache.get(root);
+  }
+
+  /** Сбросить кэш контракта (закон мог измениться между прогонами). */
+  clearContractCache() {
+    this._contractCache.clear();
+    return this;
+  }
+
   /** Диагностика последнего build(): что попало в контекст (культура evidence). */
   describe() {
+    const contract = this.contract(this.studioRoot);
     return {
       sections: this._lastReport.map((r) => ({ ...r })),
       warnings: [...this._lastWarnings],
       totalChars: this._lastReport.reduce((sum, r) => sum + r.chars, 0),
+      contract: contract
+        ? {
+            vertical: contract.vertical,
+            laws: contract.stats.laws,
+            codes: contract.stats.codes,
+            skills: contract.stats.skills,
+            uncoveredLaws: contract.stats.uncovered,
+            humanLaws: contract.stats.humanLaws,
+            codesWithoutSkill: contract.orphans.length,
+          }
+        : null,
     };
   }
 
@@ -445,7 +565,8 @@ export class StudioContextBuilder {
   /** Жёсткий бюджет: режем хвостовые секции (examples первыми, mechanics последними). */
   _enforceBudget(text, sections, vars, overBudget, warnings) {
     let need = overBudget;
-    for (const name of [...SECTION_ORDER].reverse()) {
+    // контракт — последнее, что подрезаем: без него итерация не знает правил
+    for (const name of [...SECTION_ORDER].filter((n) => n !== "contract").reverse()) {
       if (need <= 0) break;
       const body = sections[name];
       if (!body || body.length < 400) continue;

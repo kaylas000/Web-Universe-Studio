@@ -1,0 +1,40 @@
+# сгенерировано scripts/upgrade_skills.mjs из SKILL.md — правь SKILL.md или skill.yaml
+name: cinema-intro
+id: SK-06
+title: "Cinema Intro"
+description: "# Кинозаставка (intro) (SK-06)"
+when: "Сайт студии или премьерный лендинг: нужен эффект «титров» перед контентом."
+vertical: web_studio
+takeaway: "Заставка ЦЕХа: частицы собирают слово из хаоса, удар, титр, кино-шторки открывают паспорт."
+inputs:
+  - brief
+  - deliverable
+outputs:
+  - deliverable
+steps:
+  - "Длительность ≤4 секунд; кнопка «Пропустить» видна с первой секунды, ESC тоже работает"
+  - "Один показ за сессию: sessionStorage + явный реплей из шапки"
+  - "prefers-reduced-motion — заставка не показывается вообще"
+  - "Таймлайн один: загрузка → сцена → титр → шторки к сайту; никаких параллельных анимаций"
+  - "Звук — синтез Web Audio, только после жеста пользователя, без внешних файлов"
+  - "Пресеты регистрируются в motion/recipes и меняются по кругу при реплее"
+codes:
+  - "Q-01"
+  - "V-06"
+evidence:
+  require:
+    - "@keyframes"
+  forbid:
+    - "transition:\s*all"
+  files:
+    - "site/**/*.{html,css,js,mjs,json,txt,md}"
+checks:
+  - "машинные коды: Q-01, V-06"
+  - "evidence: post_execute.mjs"
+  - "ворота G3: валидатор студии"
+applies_to:
+  - web_studio
+mistakes:
+  - "Заставка при каждом открытии страницы"
+  - "Автозвук без жеста"
+  - "Дольше 4 секунд без skip"

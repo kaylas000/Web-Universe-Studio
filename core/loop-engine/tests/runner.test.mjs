@@ -47,7 +47,8 @@ test("цикл сходится: провал → фидбек → успех (3
       generator: new MockGenerator({ scripted: ["раз", "два", "GOOD маркер"] }),
       validator: stubValidator("маркер"),
       contextBuilder: contextBuilderSpy(seen),
-      config: { max_iterations: 5, temperature_schedule: [0.4, 0.2, 0.0] },
+      // без эскалации плато: тест проверяет само расписание, стаб валидатора всегда даёт один код
+      config: { max_iterations: 5, temperature_schedule: [0.4, 0.2, 0.0], plateau_escalation: false },
       workspaceDir: join(dir, "workspace"),
       logger: silentLogger,
     });

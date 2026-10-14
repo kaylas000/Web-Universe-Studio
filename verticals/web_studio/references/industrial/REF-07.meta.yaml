@@ -11,4 +11,5 @@ techniques:
 motion: [mask-reveal, sticky-scene, conveyor-hooks, counter-tick]
 palette: ['#17181C', '#FF6A2B', '#E7E7E2', '#FFB35C']
 takeaway: «Открывай промышленную тему её характерным артефактом (наряд, печь), акцент бери из рабочей палитры отрасли.»
-screenshot: pending
+specimen: REF-07.specimen.html
+screenshot: REF-07.png

@@ -26,3 +26,14 @@ applies_to:
   - telegram-mini-app
   - vk-mini-app
   - accessibility
+codes:
+  - "V-03"
+  - "V-11"
+evidence:
+  require:
+    - ":focus-visible"
+    - "<label|<button"
+  forbid:
+    - "—"
+  files:
+    - "app/**/*.{html,css,js,mjs,json,md}"

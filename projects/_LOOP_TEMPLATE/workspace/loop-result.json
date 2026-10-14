@@ -1,10 +1,10 @@
 {
   "ok": true,
-  "reason": "успех на итерации 2",
-  "iterations": 2,
-  "successIteration": 2,
-  "elapsedMs": 156,
-  "finishedAt": "2026-10-14T08:28:00.487Z",
+  "reason": "успех на итерации 1",
+  "iterations": 1,
+  "successIteration": 1,
+  "elapsedMs": 141,
+  "finishedAt": "2026-10-14T10:35:57.548Z",
   "feedback": {
     "ok": true,
     "codes": [
@@ -12,54 +12,48 @@
     ],
     "errors": [],
     "metrics": {
-      "iteration": 1,
-      "workspace": "/home/agent/Документы/Проект по умолчанию/Web-Universe-Studio/projects/_LOOP_TEMPLATE/workspace",
+      "iteration": 0,
+      "workspace": "/home/user/Web-Universe-Studio/projects/_LOOP_TEMPLATE/workspace",
       "files": [
         "main.mjs"
       ],
-      "chars": 156,
+      "chars": 143,
       "syntaxChecked": 1,
       "tests": {
         "pass": 3,
         "fail": 0,
         "tests": 3,
         "skipped": 0,
-        "durationMs": 59.535137
+        "durationMs": 54.869898
       },
-      "testsTarget": "tests/artifact.test.mjs"
+      "testsTarget": "tests/artifact.test.mjs",
+      "contract": {
+        "vertical": "web_studio",
+        "codes": 67
+      }
     }
   },
   "artifact": {
     "metadata": {
       "provider": "mock",
       "model": "mock-1",
-      "iteration": 1,
-      "temperature": 0.1,
-      "latencyMs": 0,
-      "promptChars": 7150,
-      "calls": 2,
+      "iteration": 0,
+      "temperature": 0.3,
+      "latencyMs": 1,
+      "promptChars": 58049,
+      "calls": 1,
       "responseFormat": "text",
       "kind": "text",
-      "contextChars": 7150
+      "contextChars": 58049
     },
-    "chars": 156
+    "chars": 143
   },
   "history": [
     {
       "iteration": 0,
       "temperature": 0.3,
-      "elapsedMs": 34,
-      "contextChars": 6604,
-      "ok": false,
-      "codes": [
-        "E-SYN"
-      ]
-    },
-    {
-      "iteration": 1,
-      "temperature": 0.1,
-      "elapsedMs": 119,
-      "contextChars": 7150,
+      "elapsedMs": 140,
+      "contextChars": 58049,
       "ok": true,
       "codes": [
         "OK"

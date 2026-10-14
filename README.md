@@ -51,7 +51,9 @@ cd ../.. && node core/loop-engine/cli.mjs projects/<имя> --studio-root vertic
 core/
   loop-engine/     ядро цикла К-21 (Runner/Orchestrator/валидаторы/sandbox/генераторы,
                    skills.mjs — загрузчик приёмов §4.6, protocols.mjs — контракты §5–§6,
-                   trace.mjs — трейсинг §4.8)
+                   trace.mjs — трейсинг §4.8,
+                   contract.mjs — контракт студии (закон ↔ код ↔ приём) и план точечных правок,
+                   skill-evidence.mjs — проверка признаков приёма на артефакте)
   gate.mjs         платформенный гейт: все вертикали, валидатор vertical_project
   orchestrator/    CEO-агент + композиции (DAG): composition.mjs, ceo.mjs, cli.mjs
   api/             HTTP Gateway (node:http)
@@ -64,6 +66,8 @@ verticals/        каждая студия — оболочка цеха: св�
 compositions/      декларативные сложные задачи (§13)
 configs/           llm.yaml, sandbox_templates.yaml, device-matrix.yaml, references_sources.yaml
 scripts/           bootstrap-verticals, index_references, scrape_references, run-tests,
+                   contract.mjs (CLI контракта), upgrade_skills.mjs (приёмы → исполнимая форма),
+                   render_reference_screenshots.mjs + shots/ (снимки дизайнов из референсов),
                    acceptance_test.sh, deploy.sh
 cli/               единый CLI (main.mjs) и поиск по архиву (references_cli.mjs)
 tests/             kernel, orchestrator, verticals, e2e + fixtures/slop-site (негативная фикстура)
@@ -79,13 +83,17 @@ docs/              ARCHITECTURE.md, API.md, DEPLOY.md, USER_GUIDE.md
 | `node core/orchestrator/cli.mjs compositions/app-with-landing/composition.yaml` | CEO-агент: композиция |
 | `node core/api/server.mjs` | API Gateway |
 | `node cli/references_cli.mjs search "договор"` | поиск по архиву (RAG) |
+| `node cli/main.mjs contract audit` | контракт студии: статьи закона ↔ машинные коды ↔ приёмы (дрейф, покрытие) |
+| `node cli/main.mjs contract check <студия> <проект>` | машинная проверка артефакта по контракту + план правок по кодам |
+| `node cli/main.mjs skills --check` | у каждого приёма есть `skill.yaml`, 4 шаблона ролей и крючки |
+| `node cli/main.mjs shots --check` | снимки дизайнов из референсов: у каждого референса PNG + образец |
 | `npm test` | тесты движка, платформы и вертикалей |
 | `bash scripts/acceptance_test.sh` | приёмка DoD (§15) |
 
 ## Тесты
 
 ```bash
-npm run test:engine      # 148 тестов ядра
+npm run test:engine      # 153 теста ядра
 npm run test:platform    # подсистемы и сквозные сценарии
 npm run test:verticals   # по каждой студии
 ```
@@ -97,6 +105,19 @@ npm run test:verticals   # по каждой студии
 - `docs/API.md` — HTTP API, роли, лимиты.
 - `docs/DEPLOY.md` — развёртывание и CI.
 - `docs/USER_GUIDE.md` — сценарии работы.
+
+## Контур принуждения (как студия заставляет модель соблюдать правила)
+
+1. **До генерации** — в системный промпт и контекст идёт контракт студии: статьи закона,
+   машинные коды, приёмы с шагами и проверяемыми признаками (`core/loop-engine/contract.mjs`,
+   `renderContract`, секция `contract` в `context-builder.mjs`).
+2. **После генерации** — валидатор возвращает не только коды, но и **план точечных правок**
+   (`repair`) и **отчёт приёмов** (`skills`: применено / нарушено / не применено + подсказки
+   «код → приём → шаг»); артефакт проверяют и сами приёмы (`skill.yaml → evidence`).
+3. **На повторе** — если коды не меняются, цикл фиксирует **плато** и меняет стратегию
+   (температуру поиска и совет сменить приём), а не переписывает то же место.
+
+Проверить контур на реальных проектах: `node cli/main.mjs contract check web_studio verticals/web_studio/projects/dezobrabotka`.
 
 ## Правило приёмки
 

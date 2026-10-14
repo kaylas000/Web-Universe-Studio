@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-08 · minimal, whitespace</title>
+<style>
+:root{--bg:#FAF9F7;--ink:#111111;--accent:#C8A96A;--deep:#111111;--light:#FAF9F7;--mid:#919190;--faint:#d5d4d2;
+    --ink-87:rgba(17, 17, 17, 0.87);--ink-60:rgba(17, 17, 17, 0.6);--ink-38:rgba(17, 17, 17, 0.38);--ink-12:rgba(17, 17, 17, 0.12);--ink-06:rgba(17, 17, 17, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+.ma{height:calc(100vh - 44px);padding:64px 96px;display:grid;grid-template-rows:auto 1fr auto}
+.ma-top{text-align:right}
+.ma h1{margin:auto 0;font-family:Georgia, "Times New Roman", "PT Serif", serif;font-weight:400;font-size:clamp(64px,8vw,124px);line-height:1.02;letter-spacing:-.02em}
+.ma h1 em{font-style:italic;color:var(--accent)}
+.ma-bottom{display:flex;justify-content:space-between;align-items:flex-end;gap:60px}
+.ma-bottom p{margin:0;max-width:38ch;font-size:17px;line-height:1.7;color:var(--ink-60)}
+.ma-mark{display:flex;align-items:center;gap:12px}
+
+</style>
+
+</head>
+<body>
+
+<div class="ma">
+  <div class="ma-top kicker">Мастерская · СПб</div>
+  <h1>Делаем<br><em>одну</em> вещь<br>хорошо</h1>
+  <div class="ma-bottom">
+    <p>Столярная мастерская с 2011 года. Серии по 12 предметов, каждая — из одного массива.</p>
+    <div class="ma-mark"><span class="dot"></span><span class="meta">Каталог · Проекты · Контакты</span></div>
+  </div>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#111111;--stamp-ink:#FAF9F7;--stamp-accent:#C8A96A">
+  <span class="shot-stamp__id">REF-08</span>
+  <span class="shot-stamp__text">«Минимализм — это один акцент на пустом фоне, а не пустой фон без акцента.»</span>
+</footer>
+</body>
+</html>

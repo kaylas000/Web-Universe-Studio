@@ -1,0 +1,32 @@
+# сгенерировано scripts/upgrade_skills.mjs из SKILL.md — правь SKILL.md или skill.yaml
+name: usability-heuristics
+id: SK-20
+title: "Эвристики юзабилити NN/g"
+description: "Детерминированное ядро эвристик Нильсена для лендинга: язык, якорная навигация, дизайн-система, распознавание (alt/подписи), канал связи. Машинизировано в lint-heuristics.mjs (V-21, К-25); карта всех 10 эвристик — HEURISTICS.md."
+when: "Детерминированное ядро эвристик Нильсена для лендинга: язык, якорная навигация, дизайн-система, распознавание (alt/подписи), канал связи. Машинизировано в lint-heuristics.mjs (V-21, К-25); карта всех 10 эвристик — HEURISTICS.md."
+vertical: web_studio
+takeaway: "Детерминированное ядро эвристик Нильсена для лендинга: язык, якорная навигация, дизайн-система, распознавание (alt/подписи), канал связи. Машинизировано в lint-heuristics.mjs (V-21, К-25); карта всех 10 эвристик — HEURISTICS.md."
+inputs:
+  - brief
+  - deliverable
+outputs:
+  - deliverable
+steps:
+  - "Применить приём «usability-heuristics» по правилам студии"
+codes:
+  - "B-23"
+  - "V-21"
+evidence:
+  require:
+    - "<html\s+lang="
+    - "<a[^>]+href=\"#"
+  forbid:
+    - "—"
+  files:
+    - "site/**/*.{html,css,js,mjs,json,txt,md}"
+checks:
+  - "машинные коды: B-23, V-21"
+  - "evidence: post_execute.mjs"
+  - "ворота G3: валидатор студии"
+applies_to:
+  - web_studio

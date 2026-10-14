@@ -289,6 +289,43 @@ function rel(path, root = STUDIO_ROOT) {
   return rel || ".";
 }
 
+/**
+ * Приводит фидбек к отчёту: поля сохраняются, объёмы обрезаются.
+ * Отчёт --json — сводка для машины, а не копия workspace: полный план правок и отчёт
+ * приёмов лежат в workspace/iterations/&lt;nn&gt;/feedback.json (их пишет runner).
+ */
+function compactFeedback(feedback) {
+  if (!feedback) return null;
+  const trim = (text, limit) => (typeof text === "string" && text.length > limit ? `${text.slice(0, limit)}…[обрезано ${text.length - limit} симв.]` : text);
+  const compact = { ...feedback };
+  compact.errors = (feedback.errors ?? []).map((e) => trim(String(e), 400));
+  if (feedback.repair) {
+    compact.repair = {
+      codes: feedback.repair.codes ?? [],
+      text: trim(feedback.repair.text ?? "", 1500),
+      steps: (feedback.repair.steps ?? []).map((step) => ({
+        code: step.code,
+        title: trim(step.title, 140),
+        target: step.target,
+        instruction: trim(step.instruction, 200),
+        skill: step.skill ?? null,
+        skillSteps: (step.skillSteps ?? []).slice(0, 2).map((t) => trim(t, 160)),
+        check: step.check,
+      })),
+    };
+  }
+  if (feedback.skills) {
+    compact.skills = {
+      applied: (feedback.skills.applied ?? []).slice(0, 24),
+      violated: (feedback.skills.violated ?? []).slice(0, 12),
+      notApplied: (feedback.skills.notApplied ?? []).slice(0, 12),
+      hints: (feedback.skills.hints ?? []).slice(0, 12),
+    };
+  }
+  compact.raw = typeof feedback.raw === "string" ? trim(feedback.raw, 600) : feedback.raw ?? null;
+  return compact;
+}
+
 function toReportJson(result, saved, meta) {
   return {
     ok: result.ok,
@@ -299,11 +336,16 @@ function toReportJson(result, saved, meta) {
     project: rel(meta.projectDir, meta.studioRoot),
     config: rel(meta.configPath, meta.studioRoot),
     task: taskGoalText(meta.task),
-    feedback: result.feedback ?? null,
+    feedback: compactFeedback(result.feedback),
     artifact: result.artifact
       ? {
           metadata: result.artifact.metadata,
-          content: typeof result.artifact.content === "string" ? result.artifact.content : Object.keys(result.artifact.content),
+          content:
+            typeof result.artifact.content === "string"
+              ? result.artifact.content.length > 8000
+                ? `${result.artifact.content.slice(0, 8000)}…[обрезано ${result.artifact.content.length - 8000} симв. — полностью в workspace]`
+                : result.artifact.content
+              : Object.keys(result.artifact.content),
         }
       : null,
     history: result.state.history.map((entry) => ({
@@ -313,7 +355,8 @@ function toReportJson(result, saved, meta) {
       elapsedMs: entry.elapsedMs,
       ok: entry.feedback?.ok ?? false,
       codes: entry.feedback?.codes ?? [],
-      errors: entry.feedback?.errors ?? [],
+      errors: (entry.feedback?.errors ?? []).map((e) => (String(e).length > 300 ? `${String(e).slice(0, 300)}…` : String(e))),
+      plateau: entry.feedback?.plateau?.repeats ?? null,
     })),
     saved: saved.map((p) => rel(p)),
   };

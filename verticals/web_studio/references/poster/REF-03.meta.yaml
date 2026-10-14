@@ -8,4 +8,5 @@ techniques:
 motion: [mask-reveal, conveyor-marquee]
 palette: ['#F5F2EA', '#1E1E1E', '#D6362B', '#3E7C4F']
 takeaway: «Один тезис — один экран; иллюстрация продолжает фразу, а не украшает её.»
-screenshot: pending
+specimen: REF-03.specimen.html
+screenshot: REF-03.png

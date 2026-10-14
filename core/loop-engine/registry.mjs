@@ -15,6 +15,8 @@ import { basename, dirname, isAbsolute, join, resolve } from "node:path";
 
 import { ConfigError, createLoopConfig, getFirst } from "./base.mjs";
 import { findProjectConfig, loadConfigFile, normalizeProjectConfig, readTextOr } from "./config.mjs";
+import { bestSkillFor, buildRepairPlan, loadContract } from "./contract.mjs";
+import { checkEvidence } from "./skill-evidence.mjs";
 import { DEFAULT_CONTEXT_TEMPLATE, StudioContextBuilder } from "./context-builder.mjs";
 import { GENERATORS, createGeneratorFromConfig } from "./generators/index.mjs";
 import { createLogger, silentLogger } from "./logger.mjs";
@@ -114,16 +116,36 @@ export function buildRunnerFromConfig(config, studioRoot, opts = {}) {
     });
   }
 
+  logger.debug?.("контракт студии", describeContract(di.studioRoot));
+
   return new RunnerClass({
     generator,
     validator,
     contextBuilder,
+    projectDir: norm.projectDir,
     config: loopConfig,
     workspaceDir,
     logger,
     persistContext: Boolean(getFirst(raw, ["persist_context", "persistContext"], false)),
     onIteration: typeof opts.onIteration === "function" ? opts.onIteration : null,
   });
+}
+
+/** Краткая сводка контракта студии для логов (без падения на студии без закона). */
+function describeContract(studioRoot) {
+  try {
+    const contract = loadContract(studioRoot);
+    return {
+      vertical: contract.vertical,
+      laws: contract.stats.laws,
+      codes: contract.stats.codes,
+      skills: contract.stats.skills,
+      uncoveredLaws: contract.stats.uncovered,
+      codesWithoutSkill: contract.orphans.length,
+    };
+  } catch (error) {
+    return { error: String(error?.message ?? error) };
+  }
 }
 
 /** @param {ReturnType<typeof normalizeProjectConfig>} norm */
@@ -170,6 +192,9 @@ function buildGenerator(norm, di) {
     logger: di.logger,
     systemPrompt: DEFAULT_SYSTEM_PROMPT,
     systemPromptTemplate,
+    // закон студии идёт в СИСТЕМНЫЙ промпт, а не только в контекст: так правило нельзя «не заметить»
+    contractRoot: di.studioRoot,
+    includeContract: getFirst(cfg, ["includeContract", "include_contract"], true) !== false,
   };
 
   const type = String(getFirst(cfg, ["type", "provider"], "llm")).toLowerCase();
@@ -223,7 +248,162 @@ function buildValidator(norm, di, generator) {
     }
   }
 
-  return instantiate(Class, opts, di);
+  const instantiated = instantiate(Class, opts, di);
+  const withPlan = withRepairPlan(instantiated, {
+    studioRoot: di.studioRoot,
+    projectDir: di.projectDir,
+    logger: di.logger,
+    enabled: getFirst(cfg, ["attachRepairPlan", "attach_repair_plan", "repairPlan"], true) !== false,
+  });
+  // Приёмы студии проверяют артефакт сами (evidence из skill.yaml) — слой поверх плана правок.
+  return withSkillEvidence(withPlan, {
+    studioRoot: di.studioRoot,
+    projectDir: di.projectDir,
+    logger: di.logger,
+    enabled: getFirst(cfg, ["attachSkillEvidence", "attach_skill_evidence", "skillEvidence"], true) !== false,
+    maxHints: Number(getFirst(cfg, ["skillHintLimit", "skill_hint_limit"], 8)),
+  });
+}
+
+/**
+ * Обёртка валидатора: приёмы студии проверяют артефакт своими признаками (skill.yaml → evidence).
+ *
+ * Зачем поверх плана правок: план говорит «какой код нарушен», приёмы — «как именно это
+ * делается в студии». Обёртка добавляет к фидбеку `skills` (сколько приёмов применено,
+ * сколько не применено и какие) и `hints` — точечные подсказки, привязанные к кодам отказа
+ * через `bestSkillFor`. Вердикт (`ok`, `codes`, `errors`) не меняется: судит студия.
+ *
+ * @param {any} validator
+ * @param {{studioRoot: string, projectDir?: string, logger?: any, enabled?: boolean, maxHints?: number, maxSkills?: number}} opts
+ */
+export function withSkillEvidence(validator, opts = {}) {
+  if (!validator || typeof validator.validate !== "function" || opts.enabled === false) return validator;
+  const original = validator.validate.bind(validator);
+  /** @type {any} */
+  let skills = [];
+  try {
+    skills = loadContract(opts.studioRoot).skills.filter((s) => s.evidence?.require?.length || s.evidence?.forbid?.length);
+  } catch {
+    skills = [];
+  }
+  validator.validate = async (artifact, state) => {
+    const feedback = await original(artifact, state);
+    if (!feedback || skills.length === 0) return feedback;
+    const projectDir = state?.projectDir ?? opts.projectDir ?? null;
+    if (!projectDir || !existsSync(projectDir)) return feedback;
+    try {
+      /** @type {any[]} */
+      const reports = [];
+      for (const skill of skills.slice(0, Number(opts.maxSkills ?? 64))) {
+        const result = checkEvidence({ projectDir, evidence: { ...skill.evidence, id: skill.id, title: skill.title } });
+        reports.push({ skill: skill.id, ok: result.ok, scanned: result.scanned, missing: result.missing, findings: result.findings.length });
+      }
+      // Пустой артефакт не даёт вердикта: «применено» без прочитанных файлов — самообман.
+      if (reports.every((r) => r.scanned === 0)) return feedback;
+      const applied = reports.filter((r) => r.scanned > 0 && r.missing.length === 0 && r.findings === 0).map((r) => r.skill);
+      const violated = reports.filter((r) => r.findings > 0);
+      const notApplied = reports.filter((r) => r.missing.length > 0);
+
+      // подсказки: к каждому нарушенному коду — приём, который его закрывает
+      const failedCodes = [...new Set([...(feedback.codes ?? []), ...(feedback.repair?.codes ?? [])].map(String))];
+      /** @type {Array<{code: string, skill: string, hint: string}>} */
+      const hints = [];
+      for (const code of failedCodes) {
+        const entry = codeEntryFor(opts.studioRoot, code);
+        // bestSkillFor возвращает id — приводим к записи приёма, иначе подсказка останется без шага
+        const named = entry?.skill ? skills.find((s) => s.id === entry.skill) ?? null : null;
+        const matched = named ?? skills.find((s) => s.id === bestSkillFor(`${code} ${feedback.errors?.join?.(" ") ?? ""}`, skills, { minOverlap: 2 })) ?? null;
+        const skill = matched;
+        if (!skill) continue;
+        hints.push({ code, skill: skill.id, hint: (skill.steps?.[0] ?? skill.takeaway ?? skill.title).slice(0, 200) });
+        if (hints.length >= Number(opts.maxHints ?? 8)) break;
+      }
+
+      feedback.metrics = {
+        ...(feedback.metrics ?? {}),
+        skills: {
+          checked: reports.length,
+          applied: applied.length,
+          violated: violated.length,
+          notApplied: notApplied.length,
+          unchecked: reports.filter((r) => r.scanned === 0).length,
+          scanned: reports[0]?.scanned ?? 0,
+        },
+      };
+      if (violated.length > 0 || notApplied.length > 0 || hints.length > 0) {
+        feedback.skills = {
+          applied,
+          violated: violated.map((r) => ({ skill: r.skill, findings: r.findings })),
+          notApplied: notApplied.map((r) => ({ skill: r.skill, missing: r.missing })),
+          hints,
+        };
+      }
+      opts.logger?.info?.("приёмы студии на артефакте", {
+        проверено: reports.length,
+        применено: applied.length,
+        нарушено: violated.length,
+        не_применено: notApplied.length,
+        подсказок: hints.length,
+      });
+    } catch (error) {
+      opts.logger?.warn?.("не удалось проверить приёмы студии", { error: String(error?.message ?? error) });
+    }
+    return feedback;
+  };
+  const baseDescribe = typeof validator.describe === "function" ? validator.describe.bind(validator) : null;
+  validator.describe = () => ({ ...(baseDescribe ? baseDescribe() : {}), skillEvidence: skills.length });
+  return validator;
+}
+
+/** Достаёт запись кода из контракта студии (кэш на процесс: контракт — данные, они не меняются в цикле). */
+const _codeCache = new Map();
+function codeEntryFor(studioRoot, code) {
+  try {
+    const key = String(studioRoot);
+    if (!_codeCache.has(key)) _codeCache.set(key, loadContract(studioRoot));
+    return _codeCache.get(key).codes.find((c) => c.code === String(code)) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Обёртка валидатора: к вердикту добавляется ПЛАН ТОЧЕЧНЫХ ПРАВОК по кодам (К-10).
+ * Контракт (закон ↔ код ↔ приём) остаётся данными студии; обёртка лишь обогащает фидбек,
+ * не меняя ни ok, ни codes, ни errors — их видят существующие потребители.
+ * @param {any} validator
+ * @param {{studioRoot: string, projectDir?: string, logger?: any, enabled?: boolean}} opts
+ */
+export function withRepairPlan(validator, opts = {}) {
+  if (!validator || typeof validator.validate !== "function" || opts.enabled === false) return validator;
+  const original = validator.validate.bind(validator);
+  /** @type {any} */
+  let contract = null;
+  try {
+    contract = loadContract(opts.studioRoot);
+  } catch {
+    contract = null; // студия без CONSTITUTION — обёртка прозрачна
+  }
+  validator.validate = async (artifact, state) => {
+    const feedback = await original(artifact, state);
+    if (!feedback || !contract) return feedback;
+    try {
+      if (feedback.ok === false) {
+        const plan = buildRepairPlan(feedback, contract, { projectDir: state?.projectDir ?? opts.projectDir ?? null });
+        feedback.repair = { codes: plan.codes, steps: plan.steps, text: plan.text };
+        feedback.metrics = { ...(feedback.metrics ?? {}), repairCodes: plan.codes };
+        opts.logger?.info?.("план правок по кодам", { codes: plan.codes.join(",") || "-" });
+      } else {
+        feedback.metrics = { ...(feedback.metrics ?? {}), contract: { vertical: contract.vertical, codes: contract.stats.codes } };
+      }
+    } catch (error) {
+      opts.logger?.warn?.("не удалось собрать план правок", { error: String(error?.message ?? error) });
+    }
+    return feedback;
+  };
+  const baseDescribe = typeof validator.describe === "function" ? validator.describe.bind(validator) : null;
+  validator.describe = () => ({ ...(baseDescribe ? baseDescribe() : {}), repairPlan: true, contract: contract ? { vertical: contract.vertical, codes: contract.stats.codes } : null });
+  return validator;
 }
 
 /**

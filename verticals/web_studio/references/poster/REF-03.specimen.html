@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-03 · poster, illustration</title>
+<style>
+:root{--bg:#F5F2EA;--ink:#D6362B;--accent:#1E1E1E;--deep:#D6362B;--light:#F5F2EA;--mid:#e79d94;--faint:#f0d4cb;
+    --ink-87:rgba(214, 54, 43, 0.87);--ink-60:rgba(214, 54, 43, 0.6);--ink-38:rgba(214, 54, 43, 0.38);--ink-12:rgba(214, 54, 43, 0.12);--ink-06:rgba(214, 54, 43, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+.ps-screen{height:calc(100vh - 44px);display:grid;grid-template-columns:1fr 1.05fr}
+.ps-ill{position:relative;background:var(--deep);overflow:hidden}
+.ps-ill span{position:absolute;left:50%;top:50%;border:1px solid rgba(255, 255, 255, 0.18);border-radius:50%;
+  width:calc(120px + var(--i) * 92px);height:calc(120px + var(--i) * 92px);transform:translate(-50%,-50%);
+  background:radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.04), transparent 62%)}
+.ps-ill span:nth-child(3),.ps-ill span:nth-child(7){border-color:var(--accent);border-width:2px}
+.ps-copy{padding:76px 72px;display:flex;flex-direction:column;justify-content:center;gap:26px}
+.ps-copy h1{margin:0;font-size:62px;line-height:1.04;letter-spacing:-.025em;font-weight:600}
+.ps-copy h1 em{font-style:normal;color:var(--accent)}
+.ps-copy p{margin:0;max-width:46ch;font-size:18px;line-height:1.6;color:var(--ink-60)}
+.ps-nav{display:flex;align-items:center;gap:12px;margin-top:12px}
+
+</style>
+
+</head>
+<body>
+
+<div class="ps-screen">
+  <div class="ps-ill" aria-hidden="true">
+    <span style="--i:0"></span><span style="--i:1"></span><span style="--i:2"></span><span style="--i:3"></span><span style="--i:4"></span><span style="--i:5"></span><span style="--i:6"></span><span style="--i:7"></span><span style="--i:8"></span>
+  </div>
+  <div class="ps-copy">
+    <div class="kicker">Тезис 03 / 08</div>
+    <h1>Сроки сорвались<br>не у подрядчика,<br><em>а у брифа.</em></h1>
+    <p>Один экран — один смысл. Иллюстрация продолжает фразу: девять слоёв графика, как девять недель проекта.</p>
+    <div class="ps-nav"><span class="dot"></span><span class="meta">Скролл · следующий тезис</span></div>
+  </div>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#D6362B;--stamp-ink:#F5F2EA;--stamp-accent:#1E1E1E">
+  <span class="shot-stamp__id">REF-03</span>
+  <span class="shot-stamp__text">«Один тезис — один экран; иллюстрация продолжает фразу, а не украшает её.»</span>
+</footer>
+</body>
+</html>

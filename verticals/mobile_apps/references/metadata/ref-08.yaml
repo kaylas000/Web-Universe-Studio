@@ -2,3 +2,5 @@ id: ref-08
 style: pattern-library
 source: references/sources.yaml#pttrns
 takeaway: Пустые состояния, кнопки и табы берутся из библиотек паттернов, а не придумываются заново.
+specimen: ref-08.specimen.html
+screenshot: ref-08.png

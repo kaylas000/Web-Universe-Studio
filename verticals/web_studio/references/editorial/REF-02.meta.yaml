@@ -8,4 +8,5 @@ techniques:
 motion: [mask-reveal]
 palette: ['#111111', '#F4F2ED', '#E03A24']
 takeaway: «Заменяй сетку карточек плотным индексом: имя проекта крупнее превью.»
-screenshot: pending
+specimen: REF-02.specimen.html
+screenshot: REF-02.png

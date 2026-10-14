@@ -2,3 +2,5 @@ id: ref-05
 style: store-assets
 source: references/sources.yaml#store-release
 takeaway: Стор принимает приложение по трём артефактам: иконка 1024×1024 без прозрачности, скриншоты 6.5" и 5.5", и описание ценности для пользователя (К-20).
+specimen: ref-05.specimen.html
+screenshot: ref-05.png

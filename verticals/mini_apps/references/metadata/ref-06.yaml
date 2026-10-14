@@ -2,3 +2,5 @@ id: ref-06
 style: offline-sw
 source: references/sources.yaml#offline-worker
 takeaway: Базовый offline — кэш оболочки в Service Worker (install → addAll, fetch → cache-first) и его регистрация; состояние переживает закрытие через CloudStorage/sendData.
+specimen: ref-06.specimen.html
+screenshot: ref-06.png

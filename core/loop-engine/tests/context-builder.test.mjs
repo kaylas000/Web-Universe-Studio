@@ -47,7 +47,11 @@ test("порядок секций: механика раньше примеро�
   const builder = new StudioContextBuilder({ studioRoot: STUDIO_ROOT, projectName: "pcpolimer" });
   const ctx = builder.build("задача", createLoopState({ projectName: "pcpolimer" }), STUDIO_ROOT);
   assert.ok(ctx.indexOf("МЕХАНИКА") < ctx.indexOf("СКИЛЫ"));
-  assert.ok(SECTION_ORDER[0] === "mechanics");
+  // приоритет обрезки: закон (contract) и механика — раньше примеров и досье
+  assert.ok(SECTION_ORDER.includes("contract"))
+  assert.ok(SECTION_ORDER.indexOf("contract") < SECTION_ORDER.indexOf("references"))
+  assert.ok(SECTION_ORDER.indexOf("mechanics") < SECTION_ORDER.indexOf("examples"))
+  assert.ok(SECTION_ORDER.indexOf("mechanics") < SECTION_ORDER.indexOf("dossier"));
   assert.ok(SECTION_ORDER[SECTION_ORDER.length - 1] === "examples");
 });
 

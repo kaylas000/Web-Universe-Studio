@@ -25,3 +25,12 @@ checks:
   - "HEURISTICS.md — карта эвристик и их прокси"
   - "B-04 в lint-slop (хардкод строк в разметке) и B-09/B-10 (микрокопи ошибок)"
 applies_to: [mobile_apps]
+codes:
+  - "V-23"
+evidence:
+  require:
+    - "retry|Повторить|повторите"
+  forbid:
+    - "—"
+  files:
+    - "app/**/*.{json,js,mjs,ts,tsx,jsx,dart,swift,kt,md}"

@@ -1,0 +1,40 @@
+# сгенерировано scripts/upgrade_skills.mjs из SKILL.md — правь SKILL.md или skill.yaml
+name: scroll-story
+id: SK-03
+title: "Scroll Story"
+description: "# Скролл-сторителлинг (SK-03)"
+when: "Нарратив из ≥5 шагов: процесс, ворота, данные, регламент."
+vertical: web_studio
+takeaway: "Ворота G1–G4: закреплённая плита меняет номер и чек-лист по шагам."
+inputs:
+  - brief
+  - deliverable
+outputs:
+  - deliverable
+steps:
+  - "Одна сцена — одно состояние; шаг текста меняет ровно одно"
+  - "Сцена закреплена (sticky), текст прокручивается"
+  - "Активный шаг подсвечивается, прошлые гаснут до 25%"
+  - "Между шагами — воздух ≥40vh"
+  - "Финал — артефакт (штамп, цифра, вердикт), не кнопка"
+codes:
+  - "Q-01"
+  - "V-05"
+  - "V-06"
+evidence:
+  require:
+    - "position:\s*sticky"
+  forbid:
+    - "scroll-behavior:\s*smooth"
+  files:
+    - "site/**/*.{html,css,js,mjs,json,txt,md}"
+checks:
+  - "машинные коды: Q-01, V-05, V-06"
+  - "evidence: post_execute.mjs"
+  - "ворота G3: валидатор студии"
+applies_to:
+  - web_studio
+mistakes:
+  - "Пять анимаций на шаг"
+  - "Сцена без закрепа (плывёт)"
+  - "Текст мельче 16px на шаге"

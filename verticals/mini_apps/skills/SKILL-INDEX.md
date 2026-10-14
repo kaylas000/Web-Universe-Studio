@@ -1,20 +1,23 @@
-# SKILL-INDEX — приёмы студии «Студия мини-приложений»
+# SKILL-INDEX — реестр приёмов студии «Студия мини-приложений»
 
-Реестр приёмов вертикали `mini_apps` (§11 ТЗ). Один приём = директория
-`skills/<id>/`: `skill.yaml` (метаданные) + `templates/*.j2` (шаблоны ролей) +
-`hooks/*.mjs` (ESM-крючки `pre_execute`/`post_execute`).
+Один приём = директория `skills/<id>/` с исполнимой частью:
+`skill.yaml` (метаданные, коды приёмки, evidence) · `templates/{planner,coder,verifier,fixer}.j2`
+(роли цикла) · `hooks/{pre_execute,post_execute}.mjs` (объявление целей и evidence-скан).
 
-| Приём | Назначение | Шаги |
-|---|---|---|
-| `single-page-app` | Собирает мини-приложение: разметка, скрипт с addEventListener, стиль. | Разобрать бриф → Собрать разметку → Навесить обработчики → Оформить стиль → Добавить sw.js/server.mjs/отчёты → Проверить анти-слоп и квоты |
-| `a11y-pass` | Доводит доступность: фокус, тач-таргеты ≥ 44px, контраст тем Telegram. | Скан интерактивных элементов → Тач-таргеты и :hover → Контраст тем → Фокус-стиль → Отчёт a11y-report.md |
-| `telegram-sdk` | Интеграция Telegram WebApp SDK: нативные кнопки, темы, высота. | Подключить telegram-web-app.js → MainButton/BackButton/HapticFeedback → var(--tg-theme-*) → safe area и openLink → Проверка приёмки |
-| `payments` | Оплата через Telegram Payments (openInvoice/sendData) + HMAC-проверка initData. | Сценарий оплаты → openInvoice/sendData → Без внешних ссылок → HMAC-SHA256 в server.mjs → Проверка V-07/V-15 |
-| `viewport-adaptive` | Адаптация 320/375/420, safe area клавиатуры, viewportChanged. | Контрольные точки → media-запросы → env(safe-area-inset-bottom) → viewportChanged → --vh → Проверка V-01/V-05/V-06 |
-| `offline-worker` | Базовый offline через Service Worker + сохранение состояния. | Список оболочки → sw.js (cache-first) → регистрация → CloudStorage/sendData → Проверка V-12/V-13 |
-| `usability-heuristics` | Эвристики NN/g: статус, выход, распознавание, отклик, справка (К-22). | Карта 10 эвристик → Статус (aria-live) → Выход (BackButton) → Подписи → HapticFeedback → Справка через SDK → Отчёт heuristics-report.md |
-| `conversion` | Конверсия: одна цель (MainButton), CTA-глагол (К-20), конкретика цифрами (К-23). | Одна цель → MainButton.setText единожды → regexAbsent на дубль → Число на экране → Отчёт conversion-report.md |
-| `motion-pass` | Анимации: лёгкий отклик + prefers-reduced-motion, без длинных задержек (К-24). | Движение в CSS → reduce-motion → regexAbsent setTimeout≥500 → Отчёт motion-report.md |
-| `expert-copywriter` | Экспертный текст без следов ИИ: факты и числа, глагол вместо связки, ноль артефактов копипаста (REF-16). | Собрать текст → Убрать A-xx → Связка→глагол → Абстракция→число → Снять манеру ИИ → Выровнять ритм → lint-copy (ошибок 0, балл ≥ 80) |
+Загрузчик — `core/loop-engine/skills.mjs`; проверка признаков — `core/vertical-kit/skill-evidence.mjs`;
+связь «статья закона ↔ код ↔ приём» собирает `core/loop-engine/contract.mjs`.
 
-Загрузчик — `core/loop-engine/skills.mjs`; рендер шаблонов — `core/loop-engine/template.mjs`.
+| Приём | id | Что делает | Коды приёмки | Ролей | Крючков |
+| --- | --- | --- | --- | --- | --- |
+| `a11y-pass` | — |  | V-03, V-11 | 4 | 2 |
+| `conversion` | — |  | V-20, V-23 | 4 | 2 |
+| `expert-copywriter` | — |  | A-01, A-03, C-01, C-02 | 4 | 2 |
+| `motion-pass` | — |  | V-24 | 4 | 2 |
+| `offline-worker` | — |  | V-12, V-13 | 4 | 2 |
+| `payments` | — |  | V-07, V-15 | 4 | 2 |
+| `single-page-app` | — |  | V-01, V-02 | 4 | 2 |
+| `telegram-sdk` | — |  | V-02, V-03, V-06 | 4 | 2 |
+| `usability-heuristics` | — |  | V-22 | 4 | 2 |
+| `viewport-adaptive` | — |  | V-01, V-05, V-06 | 4 | 2 |
+
+Всего приёмов: 10. Обновлено: 2026-10-14 (scripts/upgrade_skills.mjs).

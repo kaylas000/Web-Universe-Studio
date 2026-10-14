@@ -24,3 +24,18 @@ checks:
   - "C-xx/N-xx/R-xx — стиль и ритм (балл 0-100, сводка lint-copy)"
 applies_to:
   - mini_apps
+codes:
+  - "A-01"
+  - "A-03"
+  - "C-01"
+  - "C-02"
+evidence:
+  require:
+    - "—"
+  forbid:
+    - "oaicite"
+    - "utm_source=chatgpt"
+    - "представляет собой"
+    - "высокое качество"
+  files:
+    - "app/**/*.{html,css,js,mjs,json,md}"

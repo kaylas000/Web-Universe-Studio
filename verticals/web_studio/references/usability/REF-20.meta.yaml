@@ -10,4 +10,5 @@ techniques:
 motion: []
 palette: []
 takeaway: «Сворачивай 10 эвристик NN/g в проверяемое ядро (язык, якоря, токены, alt, контакт), а остальное оставляй артдиректору.»
-screenshot: pending
+specimen: REF-20.specimen.html
+screenshot: REF-20.png

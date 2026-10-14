@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-05 · poster-type</title>
+<style>
+:root{--bg:#EFEBE2;--ink:#0B66C3;--accent:#101010;--deep:#0B66C3;--light:#EFEBE2;--mid:#88afd4;--faint:#cbd6dd;
+    --ink-87:rgba(11, 102, 195, 0.87);--ink-60:rgba(11, 102, 195, 0.6);--ink-38:rgba(11, 102, 195, 0.38);--ink-12:rgba(11, 102, 195, 0.12);--ink-06:rgba(11, 102, 195, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+body{overflow:hidden}
+.pt-wrap{height:calc(100vh - 44px);padding:52px 64px;display:grid;grid-template-rows:auto 1fr auto;position:relative}
+.pt-side{text-align:right;line-height:1.7}
+.pt-h1{margin:auto 0;font-family:"Arial Narrow", "Liberation Sans Narrow", "Helvetica Neue", Arial, sans-serif;font-weight:700;font-size:12.2vw;line-height:.86;
+  letter-spacing:-.035em;text-transform:uppercase;display:flex;flex-direction:column}
+.pt-h1 span{display:block}
+.pt-row2{color:transparent;-webkit-text-stroke:2px var(--ink);margin-left:4vw}
+.pt-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;align-items:end;gap:48px;border-top:1px solid var(--ink-12);padding-top:24px}
+.pt-lead{margin:0;font-size:19px;line-height:1.45;max-width:44ch;color:var(--ink-87)}
+.pt-list{list-style:none;margin:0;padding:0;font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:13px;color:var(--ink-60)}
+.pt-list li{display:flex;gap:12px;padding:5px 0;border-bottom:1px solid var(--ink-06)}
+.pt-list span{color:var(--accent)}
+.pt-mark{font-family:"Arial Narrow", "Liberation Sans Narrow", "Helvetica Neue", Arial, sans-serif;font-weight:700;font-size:52px;text-align:right;letter-spacing:-.03em}
+.pt-mark span{color:var(--accent);font-size:18px;vertical-align:super}
+
+</style>
+
+</head>
+<body>
+
+<div class="pt-wrap">
+  <div class="pt-side kicker">Плакат · набор в две строки<br>Кегль до 10vw · перенос по смыслу</div>
+  <h1 class="pt-h1"><span>ТИХАЯ</span><span class="pt-row2">МЕТАЛЛУРГИЯ</span></h1>
+  <div class="pt-grid">
+    <p class="pt-lead">Мы строим сайты, где текст несёт форму: кегль, вес и паузы заменяют любые картинки.</p>
+    <ul class="pt-list">
+      <li><span>01</span> Размер до 10vw</li>
+      <li><span>02</span> Перенос по смыслу</li>
+      <li><span>03</span> Один акцент на плакат</li>
+    </ul>
+    <div class="pt-mark">ЦЕХ<span>®</span></div>
+  </div>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#0B66C3;--stamp-ink:#EFEBE2;--stamp-accent:#101010">
+  <span class="shot-stamp__id">REF-05</span>
+  <span class="shot-stamp__text">«Набирай заголовок как плакат: размер до 10vw, перенос по смыслу, а не по ширине.»</span>
+</footer>
+</body>
+</html>

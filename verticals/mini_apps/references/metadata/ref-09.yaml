@@ -2,3 +2,5 @@ id: ref-09
 style: tma-niche-charts
 source: references/sources.yaml#tgstat
 takeaway: Нишу проверяй статистикой RU-сегмента: топ-чарты и онбординги, которые реально привели пользователей.
+specimen: ref-09.specimen.html
+screenshot: ref-09.png

@@ -22,6 +22,7 @@ import { pathToFileURL } from "node:url";
 
 import { parseSimpleYaml } from "./config.mjs";
 import { renderTemplate } from "./template.mjs";
+import { checkEvidence, loadEvidence } from "./skill-evidence.mjs";
 
 export const SKILL_ERROR = "E-SKILL";
 
@@ -101,21 +102,51 @@ export function renderSkillTemplate(skill, name, context = {}) {
   return renderTemplate(readFileSync(file, "utf8"), context);
 }
 
-/** Выполняет ESM-крючок скилла, если он объявлен; возвращает ctx (возможно, изменённый). */
+/**
+ * Выполняет ESM-крючок скилла, если он объявлен; возвращает ctx (возможно, изменённый).
+ *
+ * Крючок не должен угадывать, какому приёму он принадлежит: движок всегда кладёт в ctx
+ * `skillDir`/`skillName`/`skillMeta` (а не переданные вызывающим значений не перетирает).
+ * Без этого общие крючки (например, evidence-скан vertical-kit) не находят свой skill.yaml.
+ */
 export async function runSkillHook(skill, name, ctx = {}) {
   const file = skill.hooks?.[name];
   if (!file) return ctx;
   const mod = await import(pathToFileURL(file).href);
   const fn = mod.default;
   if (typeof fn !== "function") throw new SkillError(`крючок ${name} скилла «${skill.id}» не экспортирует функцию`);
-  const out = await fn(ctx);
-  return out === undefined ? ctx : out;
+  const scoped = { skillDir: skill.dir, skillName: skill.id, skillMeta: skill.meta, ...ctx };
+  const out = await fn(scoped);
+  return out === undefined ? scoped : out;
 }
 
-/** Полный прогон приёма: pre_execute → рендер шаблона → post_execute. */
-export async function executeSkill(skill, { template = "planner", context = {} } = {}) {
-  let ctx = await runSkillHook(skill, "pre_execute", context);
+/**
+ * Проверяет признаки приёма в артефакте проекта (evidence из skill.yaml).
+ * Движок делает это сам, чтобы приём был проверяемым, даже если у него нет крючка,
+ * и чтобы все три студии судили одинаково. Крючок, уже положивший ctx.evidence, побеждает.
+ */
+export async function collectSkillEvidence(skill, ctx = {}) {
+  if (ctx.evidence) return ctx;
+  const projectDir = ctx.projectDir ?? ctx.deliverableDir ?? ctx.project_dir ?? null;
+  if (!projectDir) return ctx;
+  let evidence;
+  try {
+    evidence = loadEvidence(skill.dir);
+  } catch {
+    return ctx;
+  }
+  if ((evidence.require ?? []).length === 0 && (evidence.forbid ?? []).length === 0) return ctx;
+  const result = checkEvidence({ skillDir: skill.dir, projectDir, evidence });
+  return { ...ctx, evidence: { ...result, codes: evidence.codes, severity: evidence.severity } };
+}
+
+/** Полный прогон приёма: pre_execute → рендер шаблона → post_execute → evidence-скан. */
+export async function executeSkill(skill, { template = "planner", context = {}, projectDir = null } = {}) {
+  // projectDir нужен крючкам СРАЗУ: именно по нему evidence-скан находит артефакт
+  const seed = projectDir && !context.projectDir ? { ...context, projectDir } : context;
+  let ctx = await runSkillHook(skill, "pre_execute", seed);
   const output = renderSkillTemplate(skill, template, ctx);
   ctx = await runSkillHook(skill, "post_execute", ctx);
-  return { skill: skill.id, template, output, context: ctx, hooks: Object.keys(skill.hooks) };
+  ctx = await collectSkillEvidence(skill, ctx);
+  return { skill: skill.id, template, output, context: ctx, hooks: Object.keys(skill.hooks), evidence: ctx.evidence ?? null };
 }

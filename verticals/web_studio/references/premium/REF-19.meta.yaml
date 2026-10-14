@@ -8,4 +8,5 @@ techniques:
 motion: [intro-assembly, mask-reveal]
 palette: ['#0C0C0C', '#F1EEE9', '#B08D57']
 takeaway: «Премиум — это целостность: типографика, ритм и паузы, и ни одной случайной детали.»
-screenshot: pending
+specimen: REF-19.specimen.html
+screenshot: REF-19.png

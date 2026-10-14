@@ -254,8 +254,11 @@ export function parseSimpleYaml(text) {
         continue;
       }
 
-      // элемент-карта: «- key: value» (+ продолжение более глубоким отступом)
-      if (KEY_RE.test(rest) && !rest.startsWith("[") && !rest.startsWith("{")) {
+      // элемент-карта: «- key: value» (+ продолжение более глубоким отступом).
+      // Закрытая кавычка в начале элемента означает цельный скаляр: «- "текст: с двоеточием"»
+      // — это строка, а не карта (иначе текст приёмов с «: » разваливается на пары).
+      const scalarQuoted = (rest.startsWith('"') && /^"(?:[^"\\]|\\.)*"$/.test(rest)) || (rest.startsWith("'") && /^'[^']*'$/.test(rest));
+      if (!scalarQuoted && KEY_RE.test(rest) && !rest.startsWith("[") && !rest.startsWith("{")) {
         /** @type {YamlNode[]} */
         const virtual = [{ indent: indent + 2, text: rest, lineNo: node.lineNo }];
         while (cursor < list.length && list[cursor].indent > indent) {

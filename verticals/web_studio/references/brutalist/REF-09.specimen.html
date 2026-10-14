@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-09 · brutalist, raw</title>
+<style>
+:root{--bg:#F2F2EA;--ink:#E4572E;--accent:#0D0D0D;--deep:#E4572E;--light:#F2F2EA;--mid:#ecac95;--faint:#f0d9cc;
+    --ink-87:rgba(228, 87, 46, 0.87);--ink-60:rgba(228, 87, 46, 0.6);--ink-38:rgba(228, 87, 46, 0.38);--ink-12:rgba(228, 87, 46, 0.12);--ink-06:rgba(228, 87, 46, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+body{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;padding:24px}
+.bf-frame{border:3px solid var(--ink);height:calc(100vh - 92px);display:grid;grid-template-rows:auto 1fr auto}
+.bf-row{display:flex;border-bottom:3px solid var(--ink)}
+.bf-tag{flex:1;padding:10px 14px;font-size:11px;letter-spacing:.14em;border-right:3px solid var(--ink)}
+.bf-tag:last-child{border-right:0}
+.bf-accent{background:var(--accent);color:var(--bg)}
+.bf-main{display:grid;grid-template-columns:1.25fr 1fr}
+.bf-main h1{margin:0;font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;font-weight:800;font-size:clamp(48px,7vw,104px);line-height:.9;
+  letter-spacing:-.04em;padding:40px 32px;border-right:3px solid var(--ink);display:flex;align-items:flex-end}
+.bf-side{display:grid;grid-template-rows:repeat(3,1fr)}
+.bf-slab{padding:22px 24px;font-size:14px;line-height:1.5;border-bottom:3px solid var(--ink);display:flex;gap:16px;align-items:flex-start}
+.bf-slab:last-child{border-bottom:0}
+.bf-slab b{font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;font-size:26px;color:var(--accent)}
+.bf-slab--accent{border-left:10px solid var(--accent);background:var(--ink-06)}
+.bf-slab--accent b{color:var(--accent)}
+.bf-strip{display:flex;border-top:3px solid var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;font-weight:700;font-size:26px}
+.bf-strip span{flex:1;padding:8px 0;text-align:center;border-right:2px solid var(--ink)}
+.bf-strip span:last-child{border-right:0}
+.bf-strip .is-accent{background:var(--accent);color:var(--bg)}
+
+</style>
+
+</head>
+<body>
+
+<div class="bf-frame">
+  <div class="bf-row bf-top">
+    <span class="bf-tag">BRUTALIST / RAW</span>
+    <span class="bf-tag">FRAMES · SLABS · SYSTEM FONT</span>
+    <span class="bf-tag bf-accent">SIGNAL</span>
+  </div>
+  <div class="bf-main">
+    <h1>ЧЕСТНАЯ<br>КОНСТРУКЦИЯ</h1>
+    <div class="bf-side">
+      <div class="bf-slab"><b>01</b> Рамки вместо теней: граница честно показывает, где кончается блок.</div>
+      <div class="bf-slab"><b>02</b> Плашки-подложки держат контраст без скруглений и градиентов.</div>
+      <div class="bf-slab bf-slab--accent"><b>03</b> Цвет — одна сигнальная деталь, всё остальное ч/б.</div>
+    </div>
+  </div>
+  <div class="bf-strip">
+    <span>1000</span><span>1007</span><span>1014</span><span>1021</span><span class="is-accent">1028</span><span>1035</span><span>1042</span><span>1049</span><span>1056</span><span>1063</span><span>1070</span><span>1077</span>
+  </div>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#E4572E;--stamp-ink:#F2F2EA;--stamp-accent:#0D0D0D">
+  <span class="shot-stamp__id">REF-09</span>
+  <span class="shot-stamp__text">«Брутализм работает, когда честная конструкция сильнее украшения: рамки, плашки, системный шрифт.»</span>
+</footer>
+</body>
+</html>

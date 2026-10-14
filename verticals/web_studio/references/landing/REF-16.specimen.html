@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-16 · landing, fullpage</title>
+<style>
+:root{--bg:#F0F4F8;--ink:#102A43;--accent:#F9A03F;--deep:#102A43;--light:#F0F4F8;--mid:#8b99a7;--faint:#ccd4db;
+    --ink-87:rgba(16, 42, 67, 0.87);--ink-60:rgba(16, 42, 67, 0.6);--ink-38:rgba(16, 42, 67, 0.38);--ink-12:rgba(16, 42, 67, 0.12);--ink-06:rgba(16, 42, 67, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+.fp-nav{display:flex;justify-content:space-between;align-items:center;padding:16px 42px;border-bottom:1px solid var(--ink-12)}
+.fp-brand{font-weight:800;letter-spacing:.1em}
+.fp-links{display:flex;gap:22px;font-size:14px;color:var(--ink-60)}
+.fp-links .is-on{color:var(--ink);border-bottom:2px solid var(--accent);padding-bottom:4px}
+.fp-sec{height:calc(50vh - 44px);min-height:300px;display:grid;grid-template-columns:1.1fr .9fr;border-bottom:1px solid var(--ink-12)}
+.fp-inner{padding:34px 48px;display:flex;flex-direction:column;justify-content:center;gap:14px}
+.fp-inner h2{margin:0;font-size:50px;line-height:1.04;letter-spacing:-.03em}
+.fp-hint{align-self:flex-start;font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:11px;color:var(--accent);letter-spacing:.08em}
+.fp-ill{position:relative;background:var(--deep);overflow:hidden}
+.fp-ill i{position:absolute;left:calc(8% + var(--i) * 17%);bottom:0;width:34px;height:calc(30% + var(--i) * 14%);
+  background:rgba(255, 255, 255, 0.12)}
+.fp-ill i:last-child{background:var(--accent)}
+.fp-b{grid-template-columns:1fr 1fr;align-items:stretch}
+.fp-rows{display:grid;grid-template-rows:repeat(4,1fr);border-left:1px solid var(--ink-12)}
+.fp-rows span{display:flex;align-items:center;padding:0 34px;border-bottom:1px solid var(--ink-12);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:14px;color:var(--ink-87)}
+.fp-rows span:last-child{border-bottom:0;color:var(--accent)}
+
+</style>
+
+</head>
+<body>
+
+<nav class="fp-nav">
+  <span class="fp-brand">ПЕЧЬ №4</span>
+  <span class="fp-links"><a class="is-on">Цех</a><a>Технология</a><a>Объекты</a><a>Контакты</a></span>
+  <span class="meta">RU / EN</span>
+</nav>
+<section class="fp-sec fp-a">
+  <div class="fp-inner">
+    <span class="kicker">Секция 01 · Цех</span>
+    <h2>Металл помнит<br>каждую смену</h2>
+    <span class="fp-hint">↓ якорь «Технология»</span>
+  </div>
+  <div class="fp-ill"><div class="grain"></div><i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i></div>
+</section>
+<section class="fp-sec fp-b">
+  <div class="fp-inner"><span class="kicker">Секция 02 · Технология</span><h2>Плавка, прокат,<br>контроль</h2></div>
+  <div class="fp-rows"><span>Плавка · 1 480 °C</span><span>Прокат · 12 клетей</span><span>Контроль · 100% партии</span><span>Отгрузка · 24 часа</span></div>
+</section>
+<footer class="shot-stamp" style="--stamp-bg:#102A43;--stamp-ink:#F0F4F8;--stamp-accent:#F9A03F">
+  <span class="shot-stamp__id">REF-16</span>
+  <span class="shot-stamp__text">«Одностраничник — это серия полноэкранных секций, каждая с одним смыслом и якорем.»</span>
+</footer>
+</body>
+</html>

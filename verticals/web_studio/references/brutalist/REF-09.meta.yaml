@@ -8,4 +8,5 @@ techniques:
 motion: [scramble-decode, counter-tick]
 palette: ['#F2F2EA', '#0D0D0D', '#E4572E']
 takeaway: «Брутализм работает, когда честная конструкция сильнее украшения: рамки, плашки, системный шрифт.»
-screenshot: pending
+specimen: REF-09.specimen.html
+screenshot: REF-09.png

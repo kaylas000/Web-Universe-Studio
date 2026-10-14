@@ -8,4 +8,5 @@ techniques:
 motion: [sticky-scene, timeline-scrub]
 palette: ['#EDEAE4', '#1C1C1C', '#C9F24B']
 takeaway: «Анимация усиливает рассказ, если на шаг текста — одно движение; хаос из движений убивает доверие.»
-screenshot: pending
+specimen: REF-14.specimen.html
+screenshot: REF-14.png

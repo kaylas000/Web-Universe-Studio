@@ -8,4 +8,5 @@ techniques:
 motion: [scramble-decode, mask-reveal]
 palette: ['#111111', '#F5F2EB', '#FF4B3A']
 takeaway: «Типографика — это дизайн: размер до 10vw и игра весов заменяют любые картинки.»
-screenshot: pending
+specimen: REF-13.specimen.html
+screenshot: REF-13.png

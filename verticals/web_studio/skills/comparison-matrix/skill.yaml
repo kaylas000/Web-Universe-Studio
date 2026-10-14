@@ -1,0 +1,32 @@
+# сгенерировано scripts/upgrade_skills.mjs из SKILL.md — правь SKILL.md или skill.yaml
+name: comparison-matrix
+id: SK-12
+title: "Матрица наглядного сравнения"
+description: "Визуальный блок сравнения «Мы vs Традиционный способ / Конкуренты»."
+when: "Визуальный блок сравнения «Мы vs Традиционный способ / Конкуренты»."
+vertical: web_studio
+takeaway: "Визуальный блок сравнения «Мы vs Традиционный способ / Конкуренты»."
+inputs:
+  - brief
+  - deliverable
+outputs:
+  - deliverable
+steps:
+  - "Колонку нашего решения подсвечивать графическим акцентом и галочками."
+  - "Колонку альтернативы оформлять в приглушенных тонах."
+codes:
+  - "B-04"
+  - "V-19"
+evidence:
+  require:
+    - "<table|<thead|role=\"table\""
+  forbid:
+    - "grid-cols-3"
+  files:
+    - "site/**/*.{html,css,js,mjs,json,txt,md}"
+checks:
+  - "машинные коды: B-04, V-19"
+  - "evidence: post_execute.mjs"
+  - "ворота G3: валидатор студии"
+applies_to:
+  - web_studio

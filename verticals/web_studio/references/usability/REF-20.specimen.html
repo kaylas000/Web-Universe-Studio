@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-20 · usability, heuristics</title>
+<style>
+:root{--bg:#ffffff;--ink:#3390ec;--accent:#0f0f0f;--deep:#3390ec;--light:#ffffff;--mid:#a3cdf6;--faint:#deedfc;
+    --ink-87:rgba(51, 144, 236, 0.87);--ink-60:rgba(51, 144, 236, 0.6);--ink-38:rgba(51, 144, 236, 0.38);--ink-12:rgba(51, 144, 236, 0.12);--ink-06:rgba(51, 144, 236, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+.hc{height:calc(100vh - 44px);display:flex;flex-direction:column}
+.hc-head{display:flex;justify-content:space-between;align-items:flex-end;padding:34px 48px 22px}
+.hc-head h1{margin:12px 0 0;font-size:42px;line-height:1.06;letter-spacing:-.025em}
+.hc-score{text-align:right;display:flex;flex-direction:column;gap:4px}
+.hc-score b{font-size:44px;color:var(--accent);letter-spacing:-.02em}
+.hc-list{list-style:none;margin:0;padding:0;flex:1;border-top:1px solid var(--ink-12)}
+.hc-list li{display:grid;grid-template-columns:56px 1.1fr 1.4fr 60px;align-items:center;gap:18px;
+  padding:0 48px;border-bottom:1px solid var(--ink-12);height:calc((100vh - 44px - 190px)/10)}
+.hc-list li.is-gap{background:rgba(0, 0, 0, 0.05)}
+.hc-num{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-38)}
+.hc-title{font-size:18px;font-weight:600}
+.hc-flag{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:11px;letter-spacing:.1em;text-align:center;padding:4px 0;
+  border:1px solid var(--ink-12);color:var(--ink-60)}
+.hc-flag.is-ok{background:var(--deep);color:var(--light);border-color:var(--deep)}
+
+</style>
+
+</head>
+<body>
+
+<div class="hc">
+  <header class="hc-head">
+    <div><div class="kicker">Ядро эвристик NN/g</div><h1>10 эвристик,<br>которые видит валидатор</h1></div>
+    <div class="hc-score"><b>9,2</b><span class="meta">из 10 выполнено</span></div>
+  </header>
+  <ol class="hc-list">
+    <li>
+        <span class="hc-num">01</span>
+        <span class="hc-title">Видимость статуса</span>
+        <span class="hc-detail meta">role="status" + индикатор обновления</span>
+        <span class="hc-flag is-ok">OK</span></li><li>
+        <span class="hc-num">02</span>
+        <span class="hc-title">Язык пользователя</span>
+        <span class="hc-detail meta">без внутренних терминов</span>
+        <span class="hc-flag is-ok">OK</span></li><li>
+        <span class="hc-num">03</span>
+        <span class="hc-title">Свобода и контроль</span>
+        <span class="hc-detail meta">возврат и отмена на каждом шаге</span>
+        <span class="hc-flag is-ok">OK</span></li><li>
+        <span class="hc-num">04</span>
+        <span class="hc-title">Консистентность</span>
+        <span class="hc-detail meta">токены дизайн-системы</span>
+        <span class="hc-flag is-ok">OK</span></li><li>
+        <span class="hc-num">05</span>
+        <span class="hc-title">Предотвращение ошибок</span>
+        <span class="hc-detail meta">подтверждение необратимого</span>
+        <span class="hc-flag is-ok">OK</span></li><li>
+        <span class="hc-num">06</span>
+        <span class="hc-title">Распознавание вместо припоминания</span>
+        <span class="hc-detail meta">подписи и alt</span>
+        <span class="hc-flag is-ok">OK</span></li><li class="is-gap">
+        <span class="hc-num">07</span>
+        <span class="hc-title">Гибкость</span>
+        <span class="hc-detail meta">быстрые действия для опытных</span>
+        <span class="hc-flag">GAP</span></li><li>
+        <span class="hc-num">08</span>
+        <span class="hc-title">Эстетика и минимализм</span>
+        <span class="hc-detail meta">одно действие на экран</span>
+        <span class="hc-flag is-ok">OK</span></li><li>
+        <span class="hc-num">09</span>
+        <span class="hc-title">Помощь в ошибке</span>
+        <span class="hc-detail meta">текст ошибки с решением</span>
+        <span class="hc-flag is-ok">OK</span></li><li>
+        <span class="hc-num">10</span>
+        <span class="hc-title">Справка</span>
+        <span class="hc-detail meta">канал связи на виду</span>
+        <span class="hc-flag is-ok">OK</span></li>
+  </ol>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#3390ec;--stamp-ink:#ffffff;--stamp-accent:#0f0f0f">
+  <span class="shot-stamp__id">REF-20</span>
+  <span class="shot-stamp__text">«Сворачивай 10 эвристик NN/g в проверяемое ядро (язык, якоря, токены, alt, контакт), а остальное оставляй артдиректору.»</span>
+</footer>
+</body>
+</html>

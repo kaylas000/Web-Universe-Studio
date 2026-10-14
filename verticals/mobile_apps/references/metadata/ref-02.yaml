@@ -2,3 +2,5 @@ id: ref-02
 style: platform-nav
 source: references/sources.yaml#screen-composer
 takeaway: Навигация следует платформе: таб-бар снизу на iOS, системная панель на Android.
+specimen: ref-02.specimen.html
+screenshot: ref-02.png

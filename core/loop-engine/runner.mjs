@@ -65,6 +65,8 @@ export class UniversalLoopRunner {
     this.logger = deps.logger ?? silentLogger;
     this.onIteration = typeof deps.onIteration === "function" ? deps.onIteration : null;
     this.persistContext = deps.persistContext ?? false;
+    /** Каталог проекта: нужен плану правок (машинные проверки правил до валидатора). */
+    this.projectDir = deps.projectDir ? resolve(String(deps.projectDir)) : null;
   }
 
   describe() {
@@ -74,6 +76,7 @@ export class UniversalLoopRunner {
       validator: this.validator.describe?.() ?? { type: this.validator.constructor?.name },
       contextBuilder: this.contextBuilder.describe?.() ?? { type: this.contextBuilder.constructor?.name },
       workspaceDir: this.workspaceDir,
+      projectDir: this.projectDir,
     };
   }
 
@@ -90,6 +93,7 @@ export class UniversalLoopRunner {
 
     const taskData = normalizeTask(taskInput, projectName);
     const state = createLoopState({ taskInput: taskData, studioRoot: root, projectName: String(taskData.project_name ?? projectName) });
+    if (this.projectDir) state.projectDir = this.projectDir;
     /** @type {any} */
     state.maxIterations = this.config.maxIterations;
     const goal = taskGoal(taskData);
@@ -115,11 +119,16 @@ export class UniversalLoopRunner {
     let lastFeedback = null;
     /** @type {number|null} */
     let successIteration = null;
+    /** @type {string} */
+    let prevCodes = "";
+    /** @type {number} */
+    let plateau = 0;
     let reason = "итерации исчерпаны";
 
     for (let i = 0; i < this.config.maxIterations; i += 1) {
       state.iteration = i;
-      state.temperature = temperatureForIteration(this.config.temperatureSchedule, i);
+      // температура = расписание + надбавка за плато: повтор одной и той же ошибки расширяет поиск
+      state.temperature = Math.min(1.2, temperatureForIteration(this.config.temperatureSchedule, i) + Number(state.temperatureBump ?? 0));
       const iterationStarted = Date.now();
       const label = `[${i + 1}/${this.config.maxIterations}]`;
 
@@ -162,6 +171,8 @@ export class UniversalLoopRunner {
       }
 
       const elapsedMs = Date.now() - iterationStarted;
+      // последний вердикт доступен сборщику контекста: план правок и отчёт приёмов идут в следующую попытку
+      state.lastFeedback = lastFeedback;
       const entry = makeEntry(i, state.temperature, artifact, lastFeedback, elapsedMs, context.length);
       state.history.push(entry);
 
@@ -175,6 +186,33 @@ export class UniversalLoopRunner {
       });
       if (!lastFeedback.ok) {
         this.logger.warn(`${label} провал`, { errors: truncate((lastFeedback.errors ?? []).join(" | "), 300) });
+
+        // ПЛАТО: те же коды второй раз подряд означают, что правки не помогают. Цикл не должен
+        // бесконечно переписывать то же место — он меняет стратегию (и температуру поиска)
+        // и прямо говорит об этом следующей попытке (К-10: правка по коду, а не по инерции).
+        const codesKey = [...(lastFeedback.codes ?? [])].sort().join(",");
+        if (codesKey && codesKey === prevCodes) {
+          plateau += 1;
+          lastFeedback.plateau = {
+            repeats: plateau,
+            codes: lastFeedback.codes,
+            strategy: "смени приём и приёмку: те же коды держатся — зона правки выбрана неверно",
+          };
+          lastFeedback.metrics = { ...(lastFeedback.metrics ?? {}), plateau };
+          if (this.config.plateauEscalation) {
+            state.temperatureBump = Number(state.temperatureBump ?? 0) + 0.3;
+            const next = Math.min(1.2, Number(state.temperature ?? 0) + 0.3);
+            this.logger.warn(`${label} плато: те же коды (${codesKey}) — смена стратегии, следующая температура ≥ ${next.toFixed(2)}`);
+          } else {
+            this.logger.warn(`${label} плато: те же коды (${codesKey}) — расписание температур оставлено как есть`);
+          }
+        } else {
+          plateau = 0;
+          prevCodes = codesKey;
+        }
+      } else {
+        plateau = 0;
+        prevCodes = "";
       }
 
       if (this.onIteration) {

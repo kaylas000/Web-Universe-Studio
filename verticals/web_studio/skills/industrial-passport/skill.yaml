@@ -1,0 +1,42 @@
+# сгенерировано scripts/upgrade_skills.mjs из SKILL.md — правь SKILL.md или skill.yaml
+name: industrial-passport
+id: SK-05
+title: "Industrial Passport"
+description: "# Производственный паспорт (SK-05)"
+when: "Промышленная/ремесленная тема: открыть сайт её характерным артефактом, а не hero."
+vertical: web_studio
+takeaway: "Наряд-заказ № + печь 200 °C с таймером; выбранный RAL красит конвейер и кнопку расчёта."
+inputs:
+  - brief
+  - deliverable
+outputs:
+  - deliverable
+steps:
+  - "Первый экран — документ профессии: наряд, паспорт, накладная, пульт (обход B-03)"
+  - "Живой прибор вместо слайдера: печь, станок, таймер цикла — с телеметрией"
+  - "Фирменный акцент — из рабочей палитры отрасли (RAL, Pantone), не градиент"
+  - "Цифры — mono, с единицами измерения, как на шильдике"
+  - "Один сквозной параметр (цвет/температура) связывает hero, калькулятор и галерею"
+codes:
+  - "B-03"
+  - "B-05"
+  - "V-05"
+evidence:
+  require:
+    - "font-variant-numeric|monospace|tabular-nums"
+  forbid:
+    - "backdrop-filter"
+    - "#6366f1"
+    - "#8b5cf6"
+  files:
+    - "site/**/*.{html,css,js,mjs,json,txt,md}"
+checks:
+  - "машинные коды: B-03, B-05, V-05"
+  - "evidence: post_execute.mjs"
+  - "ворота G3: валидатор студии"
+applies_to:
+  - web_studio
+mistakes:
+  - "«Современный» hero с градиентом (B-05)"
+  - "Прибор без цифр — просто картинка"
+  - "Акцент, не связанный с отраслью"

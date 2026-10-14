@@ -25,3 +25,15 @@ checks:
 applies_to:
   - mini_apps
   - telegram-mini-app
+codes:
+  - "V-01"
+  - "V-05"
+  - "V-06"
+evidence:
+  require:
+    - "env\(safe-area-inset"
+    - "@media"
+  forbid:
+    - "height:\s*100vh(?!.*safe-area-inset)"
+  files:
+    - "app/**/*.{html,css,js,mjs,json,md}"

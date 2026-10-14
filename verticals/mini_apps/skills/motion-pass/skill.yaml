@@ -21,3 +21,12 @@ checks:
   - "плавность 60fps на тире: DevTools Performance"
 applies_to:
   - mini_apps
+codes:
+  - "V-24"
+evidence:
+  require:
+    - "prefers-reduced-motion"
+  forbid:
+    - "transition:\s*all"
+  files:
+    - "app/**/*.{html,css,js,mjs,json,md}"

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-21 · forms, conversion</title>
+<style>
+:root{--bg:#FFFFFF;--ink:#2563EB;--accent:#111827;--deep:#2563EB;--light:#FFFFFF;--mid:#9db9f6;--faint:#dce6fc;
+    --ink-87:rgba(37, 99, 235, 0.87);--ink-60:rgba(37, 99, 235, 0.6);--ink-38:rgba(37, 99, 235, 0.38);--ink-12:rgba(37, 99, 235, 0.12);--ink-06:rgba(37, 99, 235, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+.fs{height:calc(100vh - 44px);display:grid;grid-template-columns:1fr 1fr}
+.fs-left{padding:64px 56px;display:flex;flex-direction:column;gap:20px;justify-content:center;border-right:1px solid var(--ink-12)}
+.fs-left h1{margin:0;font-size:48px;line-height:1.06;letter-spacing:-.03em;font-weight:600}
+.fs-notes{list-style:none;margin:12px 0 0;padding:0;font-size:14px;line-height:1.9;color:var(--ink-60);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace}
+.fs-notes li{padding-left:18px;position:relative}
+.fs-notes li::before{content:"";position:absolute;left:0;top:11px;width:7px;height:7px;background:var(--accent)}
+.fs-form{padding:64px 56px;display:flex;flex-direction:column;gap:16px;justify-content:center}
+.fs-field{display:flex;flex-direction:column;gap:7px;font-size:13px;color:var(--ink-60)}
+.fs-field span i{color:var(--accent);font-style:normal}
+.fs-field input{font:inherit;font-size:16px;padding:13px 14px;border:1px solid var(--ink-12);background:var(--bg);color:var(--ink)}
+.fs-field[data-state="error"] input{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.fs-field[data-state="error"] .fs-hint{color:var(--accent)}
+.fs-submit{padding:16px;background:var(--deep);color:var(--light);font:inherit;font-weight:600;font-size:16px;border:0}
+.fs-status{display:flex;align-items:center;gap:10px;font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);
+  border:1px solid var(--ink-12);padding:11px 14px;background:var(--ink-06)}
+.fs-spin{width:12px;height:12px;border:2px solid var(--ink-12);border-top-color:var(--accent);border-radius:50%}
+
+</style>
+
+</head>
+<body>
+
+<div class="fs">
+  <div class="fs-left">
+    <div class="kicker">Заявка на замер</div>
+    <h1>Три поля —<br>и мы звоним<br>в течение часа</h1>
+    <ul class="fs-notes">
+      <li>Каждое поле с name — иначе оно не отправляется</li>
+      <li>data-analytics-event на кнопке submit</li>
+      <li>role="status" + data-state: Error → Loading → Success</li>
+    </ul>
+  </div>
+  <form class="fs-form" id="measure" data-form>
+    <label class="fs-field" data-state="ready"><span>Телефон <i>*</i></span>
+      <input name="phone" value="+7 921 400-11-24"><em class="fs-hint">Позвоним, если сорвётся связь в чате</em></label>
+    <label class="fs-field" data-state="error"><span>Адрес объекта <i>*</i></span>
+      <input name="address" value="наб. Обводного, 108"><em class="fs-hint">Не нашли дом — уточните корпус</em></label>
+    <label class="fs-field" data-state="ready"><span>Метраж, м²</span>
+      <input name="area" value="148"></label>
+    <button type="submit" class="fs-submit" data-analytics-event="lead_submit">Записаться на замер</button>
+    <div class="fs-status" role="status" aria-live="polite" data-state="loading">
+      <span class="fs-spin"></span> Проверяем адрес…
+    </div>
+  </form>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#2563EB;--stamp-ink:#FFFFFF;--stamp-accent:#111827">
+  <span class="shot-stamp__id">REF-21</span>
+  <span class="shot-stamp__text">«Форма сдаётся чек-листом состояний: имя поля, аналитика события, скринридерный статус и живой отклик — иначе это не форма, а декоративный элемент.»</span>
+</footer>
+</body>
+</html>

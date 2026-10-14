@@ -30,6 +30,9 @@ const COMMANDS = {
   references: { script: "cli/references_cli.mjs", desc: "поиск по архиву референсов (RAG)" },
   "index-references": { script: "scripts/index_references.mjs", desc: "сборка RAG-индекса архива" },
   scrape: { script: "scripts/scrape_references.mjs", desc: "аудит/сбор архива (К-04)" },
+  contract: { script: "scripts/contract.mjs", desc: "контракт студии: закон ↔ коды ↔ приёмы (audit/check/export)" },
+  skills: { script: "scripts/upgrade_skills.mjs", desc: "приёмы студий: собрать/проверить исполнимую часть (--check)" },
+  shots: { script: "scripts/render_reference_screenshots.mjs", desc: "снимки дизайнов из референсов (--check)" },
 };
 
 function help() {

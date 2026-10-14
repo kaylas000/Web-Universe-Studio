@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-11 · catalog, ecommerce, cards</title>
+<style>
+:root{--bg:#FFFFFF;--ink:#D94F2B;--accent:#1A1A1A;--deep:#D94F2B;--light:#FFFFFF;--mid:#eeb0a0;--faint:#f9e3dd;
+    --ink-87:rgba(217, 79, 43, 0.87);--ink-60:rgba(217, 79, 43, 0.6);--ink-38:rgba(217, 79, 43, 0.38);--ink-12:rgba(217, 79, 43, 0.12);--ink-06:rgba(217, 79, 43, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+body{display:flex;flex-direction:column;height:100vh}
+.cg-head{display:flex;align-items:center;justify-content:space-between;padding:20px 40px;border-bottom:1px solid var(--ink-12);gap:30px}
+.cg-logo{font-weight:800;letter-spacing:.06em}
+.cg-filters{display:flex;gap:6px;font-size:13px;color:var(--ink-60)}
+.cg-filters span{padding:6px 12px;border:1px solid var(--ink-12)}
+.cg-filters .is-on{background:var(--deep);color:var(--light);border-color:var(--deep)}
+.cg-cart{display:flex;align-items:baseline;gap:10px;font-size:14px;font-weight:600}
+.cg-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;gap:1px;background:var(--ink-12);margin-top:1px}
+.cg-card{background:var(--bg);padding:18px;display:flex;flex-direction:column;gap:8px}
+.cg-photo{position:relative;flex:1;min-height:118px;background:var(--tone);overflow:hidden}
+.cg-photo::after{content:"";position:absolute;inset:16px;border:1px solid rgba(0, 0, 0, 0.14)}
+.cg-badge{position:absolute;left:10px;bottom:10px;background:var(--bg);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:10px;
+  letter-spacing:.1em;text-transform:uppercase;padding:4px 8px;color:var(--ink)}
+.cg-card h3{margin:6px 0 0;font-size:17px;font-weight:600}
+.cg-buy{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:10px;border-top:1px solid var(--ink-06)}
+.cg-buy b{font-size:19px}
+.cg-add{font-size:12px;padding:7px 12px;background:var(--accent);color:var(--bg);font-weight:600}
+
+</style>
+
+</head>
+<body>
+
+<header class="cg-head">
+  <span class="cg-logo">СУХОЙ СКЛАД</span>
+  <div class="cg-filters"><span>Все</span><span>Котлы</span><span class="is-on">Насосы</span><span>Автоматика</span><span>Фитинги</span></div>
+  <span class="cg-cart">Корзина · 3<span class="meta">18 400 ₽</span></span>
+</header>
+<section class="cg-grid" style="flex:1">
+  <article class="cg-card">
+      <div class="cg-photo" style="--tone:#FFFFFF">
+        <div class="grain"></div>
+        <span class="cg-badge">в наличии</span>
+      </div>
+      <h3>Котёл КВ-240</h3>
+      <span class="meta">240 кВт · газ</span>
+      <div class="cg-buy"><b>184 000 ₽</b><span class="cg-add">В корзину</span></div>
+    </article><article class="cg-card">
+      <div class="cg-photo" style="--tone:#1A1A1A">
+        <div class="grain"></div>
+        <span class="cg-badge">в наличии</span>
+      </div>
+      <h3>Насос ЦН-90</h3>
+      <span class="meta">90 м³/ч · чугун</span>
+      <div class="cg-buy"><b>42 400 ₽</b><span class="cg-add">В корзину</span></div>
+    </article><article class="cg-card">
+      <div class="cg-photo" style="--tone:#D94F2B">
+        <div class="grain"></div>
+        <span class="cg-badge">в наличии</span>
+      </div>
+      <h3>Щит АВР-4</h3>
+      <span class="meta">4 линии · IP54</span>
+      <div class="cg-buy"><b>31 900 ₽</b><span class="cg-add">В корзину</span></div>
+    </article><article class="cg-card">
+      <div class="cg-photo" style="--tone:#FFFFFF">
+        <div class="grain"></div>
+        <span class="cg-badge">в наличии</span>
+      </div>
+      <h3>Клапан ДН-50</h3>
+      <span class="meta">сталь · фланец</span>
+      <div class="cg-buy"><b>8 700 ₽</b><span class="cg-add">В корзину</span></div>
+    </article><article class="cg-card">
+      <div class="cg-photo" style="--tone:#1A1A1A">
+        <div class="grain"></div>
+        <span class="cg-badge">в наличии</span>
+      </div>
+      <h3>Горелка Г-7</h3>
+      <span class="meta">7 МВт · модуляция</span>
+      <div class="cg-buy"><b>96 000 ₽</b><span class="cg-add">В корзину</span></div>
+    </article><article class="cg-card">
+      <div class="cg-photo" style="--tone:#D94F2B">
+        <div class="grain"></div>
+        <span class="cg-badge">в наличии</span>
+      </div>
+      <h3>Термометр Т-4</h3>
+      <span class="meta">0—150 °C</span>
+      <div class="cg-buy"><b>2 300 ₽</b><span class="cg-add">В корзину</span></div>
+    </article><article class="cg-card">
+      <div class="cg-photo" style="--tone:#FFFFFF">
+        <div class="grain"></div>
+        <span class="cg-badge">в наличии</span>
+      </div>
+      <h3>Бак Р-2000</h3>
+      <span class="meta">2 м³ · эмаль</span>
+      <div class="cg-buy"><b>54 000 ₽</b><span class="cg-add">В корзину</span></div>
+    </article><article class="cg-card">
+      <div class="cg-photo" style="--tone:#1A1A1A">
+        <div class="grain"></div>
+        <span class="cg-badge">в наличии</span>
+      </div>
+      <h3>Датчик Д-2</h3>
+      <span class="meta">давление · 4—20 мА</span>
+      <div class="cg-buy"><b>6 100 ₽</b><span class="cg-add">В корзину</span></div>
+    </article>
+</section>
+<footer class="shot-stamp" style="--stamp-bg:#D94F2B;--stamp-ink:#FFFFFF;--stamp-accent:#1A1A1A">
+  <span class="shot-stamp__id">REF-11</span>
+  <span class="shot-stamp__text">«Каталог живёт плотностью карточек: фото, название, цена — и корзина всегда на виду.»</span>
+</footer>
+</body>
+</html>

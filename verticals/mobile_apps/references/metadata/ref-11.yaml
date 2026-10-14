@@ -2,3 +2,5 @@ id: ref-11
 style: nav-patterns
 source: references/sources.yaml#uigarage
 takeaway: Навигацию выбирай из проверенных паттернов (Tab Bar, Navigation, Cards), а не изобретай с нуля.
+specimen: ref-11.specimen.html
+screenshot: ref-11.png

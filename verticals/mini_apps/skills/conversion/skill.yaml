@@ -21,3 +21,13 @@ checks:
   - "CTA-глагол и цифры-оффер на тире: A/B и аналитика"
 applies_to:
   - mini_apps
+codes:
+  - "V-20"
+  - "V-23"
+evidence:
+  require:
+    - "MainButton\.setText\("
+  forbid:
+    - "—"
+  files:
+    - "app/**/*.{html,css,js,mjs,json,md}"

@@ -8,4 +8,5 @@ techniques:
 motion: [mask-reveal, scramble-decode]
 palette: ['#101010', '#EFEBE2', '#0B66C3']
 takeaway: «Набирай заголовок как плакат: размер до 10vw, перенос по смыслу, а не по ширине.»
-screenshot: pending
+specimen: REF-05.specimen.html
+screenshot: REF-05.png

@@ -8,4 +8,5 @@ techniques:
 motion: [mask-reveal]
 palette: ['#F7F7F5', '#222222', '#2F6FED']
 takeaway: «Компонент ясен без подписи: одно действие, видные состояния, пустое состояние с подсказкой.»
-screenshot: pending
+specimen: REF-15.specimen.html
+screenshot: REF-15.png

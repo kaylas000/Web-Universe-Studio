@@ -8,4 +8,5 @@ techniques:
 motion: [ken-burns, sticky-scene]
 palette: ['#102A43', '#F0F4F8', '#F9A03F']
 takeaway: «Одностраничник — это серия полноэкранных секций, каждая с одним смыслом и якорем.»
-screenshot: pending
+specimen: REF-16.specimen.html
+screenshot: REF-16.png

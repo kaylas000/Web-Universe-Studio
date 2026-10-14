@@ -21,3 +21,13 @@ checks:
   - "К-14 Локализация минимум на 2 языка (en + ru) через i18n"
   - "B-04 Хардкод строк без i18n"
 applies_to: [mobile_apps]
+codes:
+  - "V-14"
+evidence:
+  require:
+    - "\.json"
+    - "t\(|\"ru\"|\"en\""
+  forbid:
+    - "—"
+  files:
+    - "app/**/*.{json,js,mjs,ts,tsx,jsx,dart,swift,kt,md}"

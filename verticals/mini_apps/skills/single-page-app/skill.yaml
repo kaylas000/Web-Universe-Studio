@@ -33,3 +33,15 @@ applies_to:
   - telegram-mini-app
   - vk-mini-app
   - single-screen
+codes:
+  - "V-01"
+  - "V-02"
+evidence:
+  require:
+    - "<html|<body"
+    - "addEventListener"
+  forbid:
+    - "onclick=\""
+    - "<script>alert"
+  files:
+    - "app/**/*.{html,css,js,mjs,json,md}"

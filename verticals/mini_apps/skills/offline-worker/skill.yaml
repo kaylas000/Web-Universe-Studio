@@ -24,3 +24,14 @@ checks:
 applies_to:
   - mini_apps
   - telegram-mini-app
+codes:
+  - "V-12"
+  - "V-13"
+evidence:
+  require:
+    - "serviceWorker"
+    - "caches\.|addAll"
+  forbid:
+    - "—"
+  files:
+    - "app/**/*.{html,css,js,mjs,json,md}"

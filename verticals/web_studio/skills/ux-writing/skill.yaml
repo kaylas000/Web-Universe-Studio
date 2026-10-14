@@ -1,0 +1,34 @@
+# сгенерировано scripts/upgrade_skills.mjs из SKILL.md — правь SKILL.md или skill.yaml
+name: ux-writing
+id: SK-15
+title: "UX-микрокопия и тексты интерфейсов"
+description: "Написание текстов ошибок, всплывающих подсказок, подтверждений и сообщений форм."
+when: "Написание текстов ошибок, всплывающих подсказок, подтверждений и сообщений форм."
+vertical: web_studio
+takeaway: "Написание текстов ошибок, всплывающих подсказок, подтверждений и сообщений форм."
+inputs:
+  - brief
+  - deliverable
+outputs:
+  - deliverable
+steps:
+  - "Применить приём «ux-writing» по правилам студии"
+codes:
+  - "B-08"
+  - "B-18"
+  - "C-04"
+evidence:
+  require:
+    - "—"
+  forbid:
+    - "нажмите сюда"
+    - "узнать больше"
+    - "свяжитесь с нами"
+  files:
+    - "site/**/*.{html,css,js,mjs,json,txt,md}"
+checks:
+  - "машинные коды: B-08, B-18, C-04"
+  - "evidence: post_execute.mjs"
+  - "ворота G3: валидатор студии"
+applies_to:
+  - web_studio

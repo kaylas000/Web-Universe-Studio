@@ -1,0 +1,31 @@
+# сгенерировано scripts/upgrade_skills.mjs из SKILL.md — правь SKILL.md или skill.yaml
+name: webgpu-codevideo
+id: SK-16
+title: "Программируемое WebGPU/WebCodecs видео"
+description: "Кадровая виртуализация времени, WebGL2/WebGPU Compute Shaders, WebAudio Worklet DSP и клиентский экспорт видео в MP4/WebM без серверов."
+when: "Кадровая виртуализация времени, WebGL2/WebGPU Compute Shaders, WebAudio Worklet DSP и клиентский экспорт видео в MP4/WebM без серверов."
+vertical: web_studio
+takeaway: "Кадровая виртуализация времени, WebGL2/WebGPU Compute Shaders, WebAudio Worklet DSP и клиентский экспорт видео в MP4/WebM без серверов."
+inputs:
+  - brief
+  - deliverable
+outputs:
+  - deliverable
+steps:
+  - "Применить приём «webgpu-codevideo» по правилам студии"
+codes:
+  - "Q-01"
+  - "V-06"
+evidence:
+  require:
+    - "prefers-reduced-motion"
+  forbid:
+    - "—"
+  files:
+    - "site/**/*.{html,css,js,mjs,json,txt,md}"
+checks:
+  - "машинные коды: Q-01, V-06"
+  - "evidence: post_execute.mjs"
+  - "ворота G3: валидатор студии"
+applies_to:
+  - web_studio

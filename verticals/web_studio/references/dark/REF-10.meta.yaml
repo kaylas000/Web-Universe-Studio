@@ -8,4 +8,5 @@ techniques:
 motion: [mask-reveal, ken-burns]
 palette: ['#0E1116', '#E8E6E3', '#7C5CFF']
 takeaway: «Тёмная тема — фон уровня #0E1116, иерархия прозрачностью белого и один яркий акцент.»
-screenshot: pending
+specimen: REF-10.specimen.html
+screenshot: REF-10.png

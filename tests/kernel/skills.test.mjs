@@ -1,13 +1,16 @@
 /* tests/kernel/skills.test.mjs — загрузчик скиллов (§4.6): skill.yaml, шаблоны, ESM-крючки. */
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 
-import { loadSkill, listSkills, findSkill, renderSkillTemplate, runSkillHook, executeSkill, SkillError } from "../../core/loop-engine/skills.mjs";
+import { loadSkill, loadSkills, listSkills, findSkill, renderSkillTemplate, runSkillHook, executeSkill, SkillError } from "../../core/loop-engine/skills.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const DATA = resolve(ROOT, "verticals/mini_apps");
+const MOBILE = resolve(ROOT, "verticals/mobile_apps");
 const WEB = resolve(ROOT, "verticals/web_studio");
 
 test("listSkills находит скиллы вертикали", () => {
@@ -49,8 +52,21 @@ test("крючки — ESM-модули, выполняются по поряд�
   assert.equal(res.hooks.sort().join(","), "post_execute,pre_execute");
 });
 
-test("findSkill: скилл без skill.yaml (только SKILL.md) не исполняем → null", () => {
-  assert.equal(findSkill(WEB, "scroll-story"), null);
+test("findSkill: без skill.yaml приём не исполняем (памятка SKILL.md — не скилл)", () => {
+  // Различие принципиальное: памятку движок не загрузит, поэтому каждая студия обязана
+  // доводить приём до skill.yaml (scripts/upgrade_skills.mjs). Проверяем на стенде.
+  const memo = mkdtempSync(join(tmpdir(), "ceh-memo-"));
+  mkdirSync(join(memo, "skills", "memo-only"), { recursive: true });
+  writeFileSync(join(memo, "skills", "memo-only", "SKILL.md"), "# Памятка\n", "utf8");
+  assert.equal(findSkill(memo, "memo-only"), null);
+
+  // ...а все приёмы трёх студий исполняемы: у каждого skill.yaml и четыре шаблона ролей
+  for (const studio of [WEB, DATA, MOBILE]) {
+    const skills = loadSkills(studio);
+    assert.ok(skills.length >= 10, `${studio}: приёмов ${skills.length}`);
+    for (const skill of skills) assert.ok(skill.templates.length >= 4, `${studio}/${skill.id}: шаблонов ${skill.templates.length}`);
+  }
+  assert.ok(findSkill(WEB, "scroll-story"), "веб-приём теперь загружается движком");
   assert.ok(findSkill(DATA, "conversion"));
   assert.equal(findSkill(DATA, "нет-такого"), null);
 });

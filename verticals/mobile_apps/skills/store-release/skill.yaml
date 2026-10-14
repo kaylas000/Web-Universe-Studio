@@ -24,3 +24,13 @@ checks:
   - "К-05 Тёмная тема"
   - "Q-01 Размер APK / IPA ≤50MB"
 applies_to: [mobile_apps]
+codes:
+  - "V-20"
+evidence:
+  require:
+    - "1024|icon"
+    - "screenshot|6\.5|5\.5"
+  forbid:
+    - "—"
+  files:
+    - "app/**/*.{json,js,mjs,ts,tsx,jsx,dart,swift,kt,md}"

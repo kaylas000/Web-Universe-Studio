@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REF-10 · dark, night</title>
+<style>
+:root{--bg:#7C5CFF;--ink:#E8E6E3;--accent:#0E1116;--deep:#7C5CFF;--light:#E8E6E3;--mid:#ad9af2;--faint:#8d72fb;
+    --ink-87:rgba(232, 230, 227, 0.87);--ink-60:rgba(232, 230, 227, 0.6);--ink-38:rgba(232, 230, 227, 0.38);--ink-12:rgba(232, 230, 227, 0.12);--ink-06:rgba(232, 230, 227, 0.06);}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+img,svg{display:block;max-width:100%}
+
+
+.shot-stamp{position:fixed;left:0;right:0;bottom:0;display:flex;align-items:baseline;gap:14px;
+  padding:10px 22px;background:var(--stamp-bg);color:var(--stamp-ink);font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;
+  font-size:12px;letter-spacing:.04em;z-index:99}
+.shot-stamp__id{font-weight:700;color:var(--stamp-accent);letter-spacing:.1em}
+.shot-stamp__text{opacity:.82;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-bottom:44px}
+.wrap{width:min(1440px,100% - 96px);margin:0 auto}
+.kicker{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mid)}
+.rule{height:1px;background:var(--ink-12);border:0;margin:0}
+.meta{font-family:"SF Mono", "DejaVu Sans Mono", "Liberation Mono", Menlo, Consolas, monospace;font-size:12px;color:var(--ink-60);letter-spacing:.04em}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(0, 0, 0, 0.16) .5px, transparent .6px);background-size:3px 3px}
+.sec-fill{min-height:calc(100vh - 44px);display:flex;flex-direction:column}
+
+.dh{height:calc(100vh - 44px);display:flex;flex-direction:column}
+.dh-nav{display:flex;align-items:center;justify-content:space-between;padding:22px 48px;border-bottom:1px solid var(--ink-12)}
+.dh-logo{font-weight:700;letter-spacing:.08em;font-size:13px}
+.dh-nav nav{display:flex;gap:26px;font-size:14px;color:var(--ink-60)}
+.dh-cta{padding:9px 16px;background:var(--accent);color:var(--bg);font-size:13px;font-weight:600}
+.dh-hero{flex:1;display:grid;grid-template-columns:1.15fr .85fr;gap:60px;align-items:center;padding:0 48px}
+.dh-hero h1{margin:16px 0 18px;font-size:76px;line-height:1.03;letter-spacing:-.03em;font-weight:600}
+.dh-hero p{margin:0 0 30px;max-width:42ch;font-size:17px;line-height:1.65;color:var(--ink-60)}
+.dh-actions{display:flex;gap:14px;align-items:center}
+.dh-btn{padding:13px 24px;background:var(--ink);color:var(--bg);font-weight:600;font-size:15px}
+.dh-ghost{padding:13px 22px;border:1px solid var(--ink-12);font-size:15px;color:var(--ink-87)}
+.dh-panel{border:1px solid var(--ink-12);background:var(--ink-06);padding:26px}
+.dh-panel__row,.dh-panel__foot{display:flex;justify-content:space-between;align-items:baseline}
+.dh-panel__row b{font-size:38px;font-weight:600;letter-spacing:-.02em}
+.dh-panel__foot{border-top:1px solid var(--ink-12);padding-top:14px;margin-top:18px}
+.dh-panel__foot b{font-size:22px}
+.dh-good{color:var(--accent)}
+.dh-bars{display:flex;align-items:flex-end;gap:6px;height:200px;margin:22px 0;position:relative;
+  border-bottom:1px solid var(--ink-12);border-top:1px solid var(--ink-12);padding-top:6px}
+.dh-bars i{flex:1;height:var(--h);background:rgba(255, 255, 255, 0.16);border-radius:2px 2px 0 0}
+.dh-bars i:nth-child(3n){background:var(--accent);opacity:.9}
+
+</style>
+
+</head>
+<body>
+
+<div class="dh">
+  <header class="dh-nav">
+    <span class="dh-logo">НОЧНАЯ СМЕНА</span>
+    <nav><a>Продукт</a><a>Метод</a><a>Кейсы</a><a>Тарифы</a></nav>
+    <span class="dh-cta">Запросить доступ</span>
+  </header>
+  <section class="dh-hero">
+    <div>
+      <div class="kicker">Логистика 24/7</div>
+      <h1>Склад, который<br>не спит</h1>
+      <p>Ночная смена видит остатки, маршруты и потери в одном контуре. Данные обновляются каждые 30 секунд.</p>
+      <div class="dh-actions"><span class="dh-btn">Начать пилот</span><span class="dh-ghost">Смотреть 2 мин</span></div>
+    </div>
+    <div class="dh-panel">
+      <div class="dh-panel__row"><span class="meta">Остатки</span><b>18 402</b></div>
+      <div class="dh-bars"><i style="--h:26%"></i><i style="--h:63%"></i><i style="--h:36%"></i><i style="--h:73%"></i><i style="--h:46%"></i><i style="--h:83%"></i><i style="--h:56%"></i><i style="--h:29%"></i><i style="--h:66%"></i><i style="--h:39%"></i><i style="--h:76%"></i><i style="--h:49%"></i><i style="--h:86%"></i><i style="--h:59%"></i></div>
+      <div class="dh-panel__foot"><span class="meta">Потери за смену</span><b class="dh-good">−12,4%</b></div>
+    </div>
+  </section>
+</div>
+<footer class="shot-stamp" style="--stamp-bg:#E8E6E3;--stamp-ink:#7C5CFF;--stamp-accent:#0E1116">
+  <span class="shot-stamp__id">REF-10</span>
+  <span class="shot-stamp__text">«Тёмная тема — фон уровня</span>
+</footer>
+</body>
+</html>
